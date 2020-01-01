@@ -1,4 +1,4 @@
-import { ValidAngle } from "./parts";
+import { Dynamic, StaticAngle } from "./parts";
 
 export function assert(x: boolean, message: string): asserts x {
   if (!x) {
@@ -7,10 +7,13 @@ export function assert(x: boolean, message: string): asserts x {
 }
 
 export function assertValidAngle(
-  x: number,
+  x: number | Dynamic,
   subject: string,
-): asserts x is ValidAngle {
-  if (x < 0 || x > 360) {
+): asserts x is StaticAngle | Dynamic {
+  if (typeof x === "number" && (x < 0 || x > 360)) {
     throw new Error(`${subject} must be a valid angle from 0 to 360 degrees.`);
+  }
+  if (typeof x === "object" && x.factor < 0) {
+    throw new Error(`${subject} dynamic factor cannot be negative.`);
   }
 }

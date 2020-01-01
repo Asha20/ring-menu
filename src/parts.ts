@@ -8,7 +8,7 @@ enum PartType {
 }
 
 type Brand<T, N> = T & { __brand: N };
-export type ValidAngle = Brand<number, "ValidAngle">;
+export type StaticAngle = Brand<number, "ValidAngle">;
 
 interface Part {
   type: PartType;
@@ -32,7 +32,18 @@ interface Ring extends Part {
 
 interface Sector extends Part {
   type: PartType.Sector;
-  angle: number;
+  angle: Angle;
+}
+
+export interface Dynamic {
+  __dynamic: true;
+  factor: number;
+}
+
+type Angle = number | Dynamic;
+
+function dynamic(factor: number): Dynamic {
+  return { __dynamic: true, factor };
 }
 
 function circle(radius: number): Circle {
@@ -40,15 +51,15 @@ function circle(radius: number): Circle {
   return { type: PartType.Circle, radius };
 }
 
-function gap(width: number) {
+function gap(width: number): Gap {
   return { type: PartType.Gap, width };
 }
 
-function ring(width: number, sectors: Sector[]) {
+function ring(width: number, sectors: Sector[]): Ring {
   return { type: PartType.Ring, width, sectors };
 }
 
-function sector(angle: number) {
+function sector(angle: Angle): Sector {
   assertValidAngle(angle, "Sector angle");
   return { type: PartType.Sector, angle };
 }
