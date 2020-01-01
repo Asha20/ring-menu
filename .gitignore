@@ -105,3 +105,6 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+## Built ES6 files
+es6/
