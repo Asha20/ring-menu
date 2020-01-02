@@ -6,8 +6,8 @@
   "module": "es6/ring-menu.js",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c -- environment BUILD:production",
-    "start": "rollup -c -w"
+    "build": "rollup -c --environment BUILD:production",
+    "start": "rollup -c --watch"
   },
   "keywords": [
     "circle",
@@ -18,8 +18,9 @@
   "author": "Vukašin Stepanović <vukasinstepanovic@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@wessberg/rollup-plugin-ts": "^1.2.0",
     "rollup": "^1.27.14",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "tslib": "^1.10.0",
     "typescript": "^3.7.4"
   }
 }
