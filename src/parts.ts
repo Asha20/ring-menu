@@ -53,7 +53,7 @@ export function dynamic(factor: number): Dynamic {
   return { __dynamic: true, factor };
 }
 
-function resolveAngle(...unresolved: Angle[]) {
+export function resolveAngle(...unresolved: Angle[]) {
   for (const angle of unresolved) {
     if (isNotDynamic(angle)) {
       return angle;
@@ -62,7 +62,7 @@ function resolveAngle(...unresolved: Angle[]) {
   throw new Error("Last angle in resolution chain must be static.");
 }
 
-function resolveSectors(
+export function resolveSectors(
   ringOffset: Angle,
   separator: Angle,
   sectors: Sector[],
@@ -106,7 +106,7 @@ function resolveSectors(
     offset: dynamicAngle(sec.offset ?? separator) as StaticAngle,
   }));
 
-  let currentAngle = resolveAngle(ringOffset, dynamicUnit / 2);
+  let currentAngle = dynamicAngle(ringOffset);
   const sectorsWithAbsoluteOffset = staticSectors.map((sec: StaticSector) => {
     const oldOffset = sec.offset;
     sec.offset = currentAngle as StaticAngle;

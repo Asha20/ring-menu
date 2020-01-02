@@ -7,7 +7,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
-    "start": "rollup -c --watch"
+    "start": "rollup -c --watch",
+    "test": "jest"
   },
   "keywords": [
     "circle",
@@ -18,8 +19,13 @@
   "author": "Vukašin Stepanović <vukasinstepanovic@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^24.0.25",
+    "@types/jest-expect-message": "^1.0.1",
+    "jest": "^24.9.0",
+    "jest-expect-message": "^1.0.2",
     "rollup": "^1.27.14",
     "rollup-plugin-typescript2": "^0.25.3",
+    "ts-jest": "^24.2.0",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
   }
