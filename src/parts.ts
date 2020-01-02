@@ -1,4 +1,4 @@
-import { assertValidAngle } from "./assert";
+import { assert, assertValidAngle } from "./assert";
 import { Brand, isDynamic, isNotDynamic, map, pipe, sum } from "./util";
 
 enum PartType {
@@ -49,6 +49,7 @@ export interface Dynamic {
 type Angle = number | Dynamic;
 
 export function dynamic(factor: number): Dynamic {
+  assert(factor > 0, "A dynamic value must have a positive factor.");
   return { __dynamic: true, factor };
 }
 
@@ -117,11 +118,12 @@ function resolveSectors(
 }
 
 export function circle(radius: number): Circle {
-  assertValidAngle(radius, "Circle radius");
+  assert(radius > 0, "Circle radius must be a positive number.");
   return { type: PartType.Circle, radius };
 }
 
 export function gap(width: number): Gap {
+  assert(width > 0, "Gap width must be a positive number.");
   return { type: PartType.Gap, width };
 }
 
