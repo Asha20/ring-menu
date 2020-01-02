@@ -1,3 +1,1 @@
-export default function test() {
-  return "Hello World";
-}
+export * from "./parts";

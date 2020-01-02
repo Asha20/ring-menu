@@ -1,4 +1,5 @@
 import { assertValidAngle } from "./assert";
+import { Brand, isDynamic, isNotDynamic, map, pipe, sum } from "./util";
 
 enum PartType {
   Circle = "circle",
@@ -7,8 +8,7 @@ enum PartType {
   Sector = "sector",
 }
 
-type Brand<T, N> = T & { __brand: N };
-export type StaticAngle = Brand<number, "ValidAngle">;
+export type StaticAngle = Brand<number, "StaticAngle">;
 
 interface Part {
   type: PartType;
@@ -27,12 +27,18 @@ interface Gap extends Part {
 interface Ring extends Part {
   type: PartType.Ring;
   width: number;
-  sectors: Sector[];
+  sectors: StaticSector[];
 }
 
 interface Sector extends Part {
   type: PartType.Sector;
   angle: Angle;
+  offset?: Angle;
+}
+
+interface StaticSector extends Sector {
+  angle: StaticAngle;
+  offset: StaticAngle;
 }
 
 export interface Dynamic {
@@ -42,24 +48,97 @@ export interface Dynamic {
 
 type Angle = number | Dynamic;
 
-function dynamic(factor: number): Dynamic {
+export function dynamic(factor: number): Dynamic {
   return { __dynamic: true, factor };
 }
 
-function circle(radius: number): Circle {
+function resolveAngle(...unresolved: Angle[]) {
+  for (const angle of unresolved) {
+    if (isNotDynamic(angle)) {
+      return angle;
+    }
+  }
+  throw new Error("Last angle in resolution chain must be static.");
+}
+
+function resolveSectors(
+  ringOffset: Angle,
+  separator: Angle,
+  sectors: Sector[],
+): StaticSector[] {
+  const FULL_ANGLE = 360;
+  const staticAngleSum = pipe(
+    sectors,
+    map(x => resolveAngle(x.angle, 0)),
+    sum,
+  );
+
+  const staticOffsetSum = pipe(
+    sectors,
+    map(x => resolveAngle(x.offset ?? separator, 0)),
+    sum,
+  );
+
+  assertValidAngle(staticAngleSum, "Sum of static angles");
+  assertValidAngle(staticOffsetSum, "Sum of static offsets");
+  assertValidAngle(
+    staticAngleSum + staticOffsetSum,
+    "Sum of static angles and static offsets",
+  );
+
+  const dynamicSectorFactorCount = sectors.reduce((acc, sector) => {
+    acc += isDynamic(sector.angle) ? sector.angle.factor : 0;
+    const offset = sector.offset ?? separator;
+    acc += isDynamic(offset) ? offset.factor : 0;
+    return acc;
+  }, 0);
+  const dynamicAngleSum = FULL_ANGLE - staticAngleSum - staticOffsetSum;
+  const dynamicUnit = (dynamicAngleSum /
+    dynamicSectorFactorCount) as StaticAngle;
+
+  const dynamicAngle = (angle: Angle) =>
+    isDynamic(angle) ? dynamicUnit * angle.factor : angle;
+
+  const staticSectors = sectors.map<StaticSector>(sec => ({
+    ...sec,
+    angle: dynamicAngle(sec.angle) as StaticAngle,
+    offset: dynamicAngle(sec.offset ?? separator) as StaticAngle,
+  }));
+
+  let currentAngle = resolveAngle(ringOffset, dynamicUnit / 2);
+  const sectorsWithAbsoluteOffset = staticSectors.map((sec: StaticSector) => {
+    const oldOffset = sec.offset;
+    sec.offset = currentAngle as StaticAngle;
+    currentAngle += oldOffset + sec.angle;
+    return sec;
+  });
+
+  return sectorsWithAbsoluteOffset;
+}
+
+export function circle(radius: number): Circle {
   assertValidAngle(radius, "Circle radius");
   return { type: PartType.Circle, radius };
 }
 
-function gap(width: number): Gap {
+export function gap(width: number): Gap {
   return { type: PartType.Gap, width };
 }
 
-function ring(width: number, sectors: Sector[]): Ring {
-  return { type: PartType.Ring, width, sectors };
+export function ring(
+  width: number,
+  offset: Angle,
+  separator: Angle,
+  sectors: Sector[],
+): Ring {
+  const staticSectors = resolveSectors(offset, separator, sectors);
+  return { type: PartType.Ring, width, sectors: staticSectors };
 }
 
-function sector(angle: Angle): Sector {
+export function sector(angle: Angle, offset?: Angle): Sector {
   assertValidAngle(angle, "Sector angle");
-  return { type: PartType.Sector, angle };
+  if (offset !== undefined) {
+    assertValidAngle(offset, "Sector offset");
+  }
+  return { type: PartType.Sector, angle, offset };
 }
