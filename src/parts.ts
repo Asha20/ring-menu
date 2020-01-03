@@ -1,7 +1,7 @@
 import { assert, assertValidAngle } from "./assert";
 import { Brand, isDynamic, map, NonEmptyArray, pipe, sum } from "./util";
 
-enum PartType {
+export enum PartType {
   Circle = "circle",
   Gap = "gap",
   Ring = "ring",
@@ -10,12 +10,13 @@ enum PartType {
 }
 
 export type StaticAngle = Brand<number, "StaticAngle">;
+export type MenuPart = Circle | Gap | Ring;
 
 interface Part {
   type: PartType;
 }
 
-interface Circle extends Part {
+export interface Circle extends Part {
   type: PartType.Circle;
   radius: number;
 }
@@ -25,7 +26,7 @@ interface Gap extends Part {
   width: number;
 }
 
-interface Ring extends Part {
+export interface Ring extends Part {
   type: PartType.Ring;
   width: number;
   sectors: StaticSector[];
@@ -37,14 +38,14 @@ interface Sector extends Part {
   offset?: Angle;
 }
 
-interface StaticSector extends Sector {
+export interface StaticSector extends Sector {
   angle: StaticAngle;
   offset: StaticAngle;
 }
 
 type MenuStructure = [Circle, ...Array<Gap | Ring>] | NonEmptyArray<Gap | Ring>;
 
-interface Menu extends Part {
+export interface Menu extends Part {
   type: PartType.Menu;
   structure: MenuStructure;
 }
