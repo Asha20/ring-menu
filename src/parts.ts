@@ -140,8 +140,9 @@ export function ring(
   width: number,
   offset: Angle,
   separator: Angle,
-  sectors: Sector[],
+  sectors: NonEmptyArray<Sector>,
 ): Ring {
+  assert(sectors.length > 0, "A ring must have at least one sector.");
   const staticSectors = resolveSectors(offset, separator, sectors);
   return { type: PartType.Ring, width, sectors: staticSectors };
 }

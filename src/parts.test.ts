@@ -6,6 +6,7 @@ import {
   menu,
   resolveAngle,
   resolveSectors,
+  ring,
   sector,
 } from "./parts";
 
@@ -42,6 +43,10 @@ it("sector()", () => {
   expect(() => sector(100, 20), "Accepts offset in range 0-360").not.toThrow();
   expect(() => sector(100, -3), "Denies negative offset").toThrow(AssertError);
   expect(() => sector(100, 500), "Denies offset over 360").toThrow(AssertError);
+});
+
+it("ring()", () => {
+  expect(() => ring(10, 0, 0, [] as any)).toThrow(AssertError);
 });
 
 it("resolveSectors() with static angles", () => {
