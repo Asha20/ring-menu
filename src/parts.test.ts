@@ -3,6 +3,7 @@ import {
   circle,
   dynamic as d,
   gap,
+  menu,
   resolveAngle,
   resolveSectors,
   sector,
@@ -63,6 +64,18 @@ it("resolveSectors() with static angles", () => {
     resolveSectors(0, 20, [sector(10), sector(30, 50), sector(10)]),
     "Offset of a sector overrides separator when present",
   ).toEqual([sector(10, 0), sector(30, 30), sector(10, 110)]);
+});
+
+it("menu()", () => {
+  expect(() => menu([] as any), "Denies empty structure").toThrow(AssertError);
+  expect(
+    () => menu([circle(10), gap(10)]),
+    "Accepts valid structure",
+  ).not.toThrow(AssertError);
+  expect(
+    () => menu([gap(10), circle(10)] as any),
+    "Circle can only be in the center",
+  ).toThrow(AssertError);
 });
 
 it("resolveSectors() with dynamic angles", () => {

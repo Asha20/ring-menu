@@ -1,11 +1,12 @@
 import { assert, assertValidAngle } from "./assert";
-import { Brand, isDynamic, isNotDynamic, map, pipe, sum } from "./util";
+import { Brand, isDynamic, map, NonEmptyArray, pipe, sum } from "./util";
 
 enum PartType {
   Circle = "circle",
   Gap = "gap",
   Ring = "ring",
   Sector = "sector",
+  Menu = "menu",
 }
 
 export type StaticAngle = Brand<number, "StaticAngle">;
@@ -41,6 +42,13 @@ interface StaticSector extends Sector {
   offset: StaticAngle;
 }
 
+type MenuStructure = [Circle, ...Array<Gap | Ring>] | NonEmptyArray<Gap | Ring>;
+
+interface Menu extends Part {
+  type: PartType.Menu;
+  structure: MenuStructure;
+}
+
 export interface Dynamic {
   __dynamic: true;
   factor: number;
@@ -55,7 +63,7 @@ export function dynamic(factor: number): Dynamic {
 
 export function resolveAngle(...unresolved: Angle[]) {
   for (const angle of unresolved) {
-    if (isNotDynamic(angle)) {
+    if (!isDynamic(angle)) {
       return angle;
     }
   }
@@ -143,4 +151,16 @@ export function sector(angle: Angle, offset?: Angle): Sector {
     assertValidAngle(offset, "Sector offset");
   }
   return { type: PartType.Sector, angle, offset };
+}
+
+export function menu(structure: MenuStructure): Menu {
+  assert(structure.length > 0, "Menu cannot be empty.");
+  structure.forEach((el, i) => {
+    assert(
+      i === 0 || el.type !== PartType.Circle,
+      "A circle can only be found in the center of the menu.",
+    );
+  });
+
+  return { type: PartType.Menu, structure };
 }
