@@ -3,6 +3,7 @@ devDependencies:
   '@types/jest-expect-message': 1.0.1
   jest: 24.9.0
   jest-expect-message: 1.0.2
+  prettier: 1.19.1
   rollup: 1.27.14
   rollup-plugin-typescript2: 0.25.3_rollup@1.27.14+typescript@3.7.4
   ts-jest: 24.2.0_jest@24.9.0
@@ -2709,6 +2710,13 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
+  /prettier/1.19.1:
+    dev: true
+    engines:
+      node: '>=4'
+    hasBin: true
+    resolution:
+      integrity: sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
   /pretty-format/24.9.0:
     dependencies:
       '@jest/types': 24.9.0
@@ -3614,6 +3622,7 @@ specifiers:
   '@types/jest-expect-message': ^1.0.1
   jest: ^24.9.0
   jest-expect-message: ^1.0.2
+  prettier: ^1.19.1
   rollup: ^1.27.14
   rollup-plugin-typescript2: ^0.25.3
   ts-jest: ^24.2.0

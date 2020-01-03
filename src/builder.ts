@@ -5,6 +5,10 @@ function radians(degrees: number) {
   return (degrees / 180) * Math.PI;
 }
 
+function toFixed(x: number, digits: number) {
+  return Number(x.toFixed(digits));
+}
+
 export function renderCircle(el: Circle) {
   return h.circle(0, 0, el.radius);
 }
@@ -27,10 +31,10 @@ export function renderSector(
   const SMALL_VALUE = 0.0001;
   const a = radians(sector.angle) - SMALL_VALUE;
 
-  const x1 = R * Math.sin(a);
-  const y1 = R - R * Math.cos(a);
-  const x2 = width * Math.sin(a);
-  const y2 = width * Math.cos(a);
+  const x1 = toFixed(R * Math.sin(a), 3);
+  const y1 = toFixed(R - R * Math.cos(a), 3);
+  const x2 = toFixed(width * Math.sin(a), 3);
+  const y2 = toFixed(width * Math.cos(a), 3);
   const arc = a > Math.PI ? 1 : 0;
 
   const d = `
@@ -39,7 +43,7 @@ export function renderSector(
     a ${R} ${R} 0 ${arc} 1 ${x1} ${y1}
     l ${-x2} ${y2}
     A ${r} ${r} 0 ${arc} 0 0 ${-r}
-  `;
+  `.trim();
 
   return h.path(d, { transform: `rotate(${sector.offset}, 0, 0)` });
 }
