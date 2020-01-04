@@ -19,10 +19,12 @@ export enum PartType {
 
 export type StaticAngle = Brand<number, "StaticAngle">;
 export type MenuPart = Circle | Gap | Ring;
+export type Content = string;
 
 interface Part {
   type: PartType;
   attrs: Object;
+  content: Content | undefined;
 }
 
 export interface Circle extends Part {
@@ -30,12 +32,12 @@ export interface Circle extends Part {
   radius: number;
 }
 
-interface Gap extends Omit<Part, "attrs"> {
+interface Gap extends Omit<Part, "attrs" | "content"> {
   type: PartType.Gap;
   width: number;
 }
 
-export interface Ring extends Part {
+export interface Ring extends Omit<Part, "content"> {
   type: PartType.Ring;
   width: number;
   sectors: StaticSector[];
@@ -54,7 +56,7 @@ export interface StaticSector extends Sector {
 
 type MenuStructure = [Circle, ...Array<Gap | Ring>] | NonEmptyArray<Gap | Ring>;
 
-export interface Menu extends Part {
+export interface Menu extends Omit<Part, "content"> {
   type: PartType.Menu;
   structure: MenuStructure;
 }
@@ -135,9 +137,13 @@ export function resolveSectors(
   return sectorsWithAbsoluteOffset;
 }
 
-export function circle(radius: number, attrs: AnyObject = {}): Circle {
+export function circle(
+  radius: number,
+  content?: Content,
+  attrs: AnyObject = {},
+): Circle {
   assert(radius > 0, "Circle radius must be a positive number.");
-  return { type: PartType.Circle, radius, attrs };
+  return { type: PartType.Circle, radius, attrs, content };
 }
 
 export function gap(width: number): Gap {
@@ -160,13 +166,14 @@ export function ring(
 export function sector(
   angle: Angle,
   offset?: Angle,
+  content?: Content,
   attrs: AnyObject = {},
 ): Sector {
   assertValidAngle(angle, "Sector angle");
   if (offset !== undefined) {
     assertValidAngle(offset, "Sector offset");
   }
-  return { type: PartType.Sector, angle, offset, attrs };
+  return { type: PartType.Sector, angle, offset, attrs, content };
 }
 
 export function menu(structure: MenuStructure, attrs: AnyObject = {}): Menu {

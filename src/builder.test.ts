@@ -1,16 +1,27 @@
 import { renderCircle, renderMenu, renderRing, renderSector } from "./builder";
 import {
   circle,
+  Content,
   dynamic as d,
   gap,
   menu,
   ring,
   sector,
-  StaticSector
+  StaticSector,
 } from "./parts";
+import { AnyObject } from "./util";
+
+const ssector = (angle: number, offset?: number, content?: Content) =>
+  sector(angle, offset, content) as StaticSector;
+
+const dsector = (
+  angleFactor: number,
+  offsetFactor?: number,
+  content?: Content,
+) => sector(d(angleFactor), offsetFactor && d(offsetFactor), content);
 
 it("renderCircle()", () => {
-  const c1 = renderCircle(circle(30));
+  const c1 = renderCircle(circle(30), 0, 0);
   expect(c1).toMatchInlineSnapshot(`
     <circle
       cx="0"
@@ -20,10 +31,30 @@ it("renderCircle()", () => {
   `);
 });
 
-it("renderSector()", () => {
-  const ssector = (angle: number, offset?: number) =>
-    sector(angle, offset) as StaticSector;
+it("renderCircle() with content", () => {
+  const c1 = renderCircle(circle(30, "Hello"), 0, 0);
+  expect(c1).toMatchInlineSnapshot(`
+    <g>
+      <circle
+        cx="0"
+        cy="0"
+        r="30"
+      />
+      <text
+        dominant-baseline="middle"
+        fill="white"
+        style="user-select: none; webkit-user-select: none;"
+        text-anchor="middle"
+        x="0"
+        y="0"
+      >
+        Hello
+      </text>
+    </g>
+  `);
+});
 
+it("renderSector()", () => {
   const s1 = renderSector(100, 30, ssector(90, 0));
   expect(s1).toMatchInlineSnapshot(`
     <path
@@ -53,10 +84,35 @@ it("renderSector()", () => {
   `);
 });
 
-it("renderRing()", () => {
-  const dsector = (angleFactor: number, offsetFactor?: number) =>
-    sector(d(angleFactor), offsetFactor && d(offsetFactor));
+it("renderSector() with content", () => {
+  const s1 = renderSector(100, 30, ssector(90, 0, "Foo"));
+  expect(s1).toMatchInlineSnapshot(`
+    <g>
+      <path
+        d="
+        M 0 -30
+        L 0 -130
+        a 130 130 0 0 1 130 129.987
+        l -100 0.01
+        A 30 30 0 0 0 0 -30
+      "
+        transform="rotate(0, 0, 0)"
+      />
+      <text
+        dominant-baseline="middle"
+        fill="white"
+        style="user-select: none; webkit-user-select: none;"
+        text-anchor="middle"
+        x="56.569"
+        y="-56.569"
+      >
+        Foo
+      </text>
+    </g>
+  `);
+});
 
+it("renderRing()", () => {
   const r1 = renderRing(ring(100, 0, 0, [dsector(1, 0), dsector(2, 1)]), 0);
   expect(r1).toMatchInlineSnapshot(`
     <g>
@@ -115,8 +171,8 @@ it("build()", () => {
     menu([
       circle(25),
       gap(50),
-      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)])
-    ])
+      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)]),
+    ]),
   );
 
   expect(m1).toMatchInlineSnapshot(`
@@ -170,7 +226,7 @@ it("build()", () => {
   `);
 
   const m2 = renderMenu(
-    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])])
+    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])]),
   );
 
   expect(m2).toMatchInlineSnapshot(`
@@ -215,36 +271,28 @@ it("build()", () => {
 });
 
 it("Rendering a menu part with attributes", () => {
-  const c1 = renderCircle(circle(50, { id: 3, style: "fill: red" }));
-  expect(c1).toMatchInlineSnapshot(`
-    <circle
-      cx="0"
-      cy="0"
-      id="3"
-      r="50"
-      style="fill: red"
-    />
-  `);
-});
+  const circleWithAttributes = (attrs: AnyObject) =>
+    renderCircle(circle(50, undefined, attrs), 0, 0);
 
-it("Rendering a menu part with a class/className property", () => {
-  const c1 = renderCircle(circle(50, { class: "foo bar" }));
-  expect(c1).toMatchInlineSnapshot(`
-    <circle
-      class="foo bar"
-      cx="0"
-      cy="0"
-      r="50"
-    />
-  `);
+  const c1 = circleWithAttributes({ id: 3 });
+  expect(c1.getAttribute("id"), "Plain id attribute").toBe("3");
 
-  const c2 = renderCircle(circle(50, { className: "one    two three-four" }));
-  expect(c2).toMatchInlineSnapshot(`
-    <circle
-      class="one two three-four"
-      cx="0"
-      cy="0"
-      r="50"
-    />
-  `);
+  const c2 = circleWithAttributes({ style: "fill: red;" });
+  expect(c2.getAttribute("style"), "style as a string").toBe("fill: red;");
+
+  const c3 = circleWithAttributes({ style: { stroke: "red" } });
+  expect(c3.getAttribute("style"), "style as an object").toBe("stroke: red;");
+
+  const c4 = circleWithAttributes({ class: "foo bar" });
+  expect(c4.getAttribute("class"), "Classes separated by one space").toBe(
+    "foo bar",
+  );
+
+  const c5 = circleWithAttributes({ className: "one    two three-four" });
+  expect(c5.getAttribute("class"), "Classes separated by multiple spaces").toBe(
+    "one two three-four",
+  );
+
+  const c6 = circleWithAttributes({ textContent: "foo" });
+  expect(c6.textContent, "Special handling of textContent").toBe("foo");
 });

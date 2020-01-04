@@ -1,14 +1,18 @@
 import { renderMenu as build } from "./builder";
-import { dynamic as d, menu, ring, sector } from "./parts";
+import { circle, dynamic as d, menu, ring, sector } from "./parts";
 
-const dsector = (angleFactor: number, offsetFactor?: number) =>
-  sector(d(angleFactor), offsetFactor && d(offsetFactor));
+const dsector = (
+  angleFactor: number,
+  offsetFactor?: number,
+  content?: string,
+) => sector(d(angleFactor), offsetFactor && d(offsetFactor), content);
 
 // prettier-ignore
 const m = menu([
-  ring(100, d(1), 30, [
-    dsector(2),
-    sector(30, 60),
+  circle(50, "Hello"),
+  ring(200, d(1), 30, [
+    dsector(2, undefined, "Foo bar"),
+    sector(30, 60, "Hello"),
   ])
 ]);
 
