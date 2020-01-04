@@ -182,6 +182,20 @@ export function sector(
   return { type: PartType.Sector, angle, offset, attrs, content };
 }
 
+export function dsector(
+  angleFactor: number,
+  offsetFactor?: number,
+  content?: Content,
+  attrs: AnyObject = {},
+): Sector {
+  return sector(
+    dynamic(angleFactor),
+    offsetFactor && dynamic(offsetFactor),
+    content,
+    attrs,
+  );
+}
+
 export function menu(structure: MenuStructure, attrs: AnyObject = {}): Menu {
   assert(structure.length > 0, "Menu cannot be empty.");
   structure.forEach((el, i) => {

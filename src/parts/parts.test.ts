@@ -1,6 +1,7 @@
 import { AssertError } from "../util/assert";
 import {
   circle,
+  dsector,
   dynamic as d,
   gap,
   menu,
@@ -9,16 +10,9 @@ import {
   ring,
   sector,
   calculateDynamicUnit,
-  Content,
 } from "./parts";
 
 const FULL_ANGLE = 360;
-
-const dsector = (
-  angleFactor: number,
-  offsetFactor?: number,
-  content?: Content,
-) => sector(d(angleFactor), offsetFactor && d(offsetFactor), content);
 
 it("dynamic()", () => {
   expect(() => d(1), "Accepts positive factor").not.toThrow(AssertError);

@@ -2,24 +2,19 @@ import { renderCircle, renderMenu, renderRing, renderSector } from "./builder";
 import {
   circle,
   Content,
+  dsector,
   dynamic as d,
   gap,
   menu,
   ring,
   sector,
-  StaticSector
+  StaticSector,
 } from "../parts/parts";
 import * as h from "./h";
 import { AnyObject } from "../util/util";
 
 const ssector = (angle: number, offset?: number, content?: Content) =>
   sector(angle, offset, content) as StaticSector;
-
-const dsector = (
-  angleFactor: number,
-  offsetFactor?: number,
-  content?: Content
-) => sector(d(angleFactor), offsetFactor && d(offsetFactor), content);
 
 it("renderCircle()", () => {
   const c1 = renderCircle(circle(30), 0, 0);
@@ -57,7 +52,7 @@ it("renderCircle() with content", () => {
   const c2 = renderCircle(
     circle(30, h.circle(0, 0, 10, { fill: "red" })),
     0,
-    0
+    0,
   );
   expect(c2).toMatchInlineSnapshot(`
     <g>
@@ -140,7 +135,7 @@ it("renderSector() with content", () => {
   const s2 = renderSector(
     100,
     30,
-    ssector(90, 0, h.circle(0, 0, 10, { fill: "blue" }))
+    ssector(90, 0, h.circle(0, 0, 10, { fill: "blue" })),
   );
   expect(s2).toMatchInlineSnapshot(`
     <g>
@@ -227,8 +222,8 @@ it("build()", () => {
     menu([
       circle(25),
       gap(50),
-      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)])
-    ])
+      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)]),
+    ]),
   );
 
   expect(m1).toMatchInlineSnapshot(`
@@ -282,7 +277,7 @@ it("build()", () => {
   `);
 
   const m2 = renderMenu(
-    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])])
+    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])]),
   );
 
   expect(m2).toMatchInlineSnapshot(`
@@ -341,12 +336,12 @@ it("Rendering a menu part with attributes", () => {
 
   const c4 = circleWithAttributes({ class: "foo bar" });
   expect(c4.getAttribute("class"), "Classes separated by one space").toBe(
-    "foo bar"
+    "foo bar",
   );
 
   const c5 = circleWithAttributes({ className: "one    two three-four" });
   expect(c5.getAttribute("class"), "Classes separated by multiple spaces").toBe(
-    "one two three-four"
+    "one two three-four",
   );
 
   const c6 = circleWithAttributes({ textContent: "foo" });
