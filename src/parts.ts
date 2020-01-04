@@ -82,11 +82,7 @@ export function resolveAngle(...unresolved: Angle[]) {
   throw new Error("Last angle in resolution chain must be static.");
 }
 
-export function resolveSectors(
-  ringOffset: Angle,
-  separator: Angle,
-  sectors: Sector[],
-): StaticSector[] {
+export function calculateDynamicUnit(separator: Angle, sectors: Sector[]) {
   const FULL_ANGLE = 360;
   const staticAngleSum = pipe(
     sectors,
@@ -114,9 +110,19 @@ export function resolveSectors(
     return acc;
   }, 0);
   const dynamicAngleSum = FULL_ANGLE - staticAngleSum - staticOffsetSum;
-  const dynamicUnit = (dynamicAngleSum /
-    dynamicSectorFactorCount) as StaticAngle;
+  const dynamicUnit =
+    dynamicSectorFactorCount > 0
+      ? dynamicAngleSum / dynamicSectorFactorCount
+      : 0;
+  return dynamicUnit as StaticAngle;
+}
 
+export function resolveSectors(
+  ringOffset: Angle,
+  separator: Angle,
+  sectors: Sector[],
+): StaticSector[] {
+  const dynamicUnit = calculateDynamicUnit(separator, sectors);
   const dynamicAngle = (angle: Angle) =>
     isDynamic(angle) ? dynamicUnit * angle.factor : angle;
 

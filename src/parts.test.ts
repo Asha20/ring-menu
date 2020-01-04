@@ -8,7 +8,17 @@ import {
   resolveSectors,
   ring,
   sector,
+  calculateDynamicUnit,
+  Content,
 } from "./parts";
+
+const FULL_ANGLE = 360;
+
+const dsector = (
+  angleFactor: number,
+  offsetFactor?: number,
+  content?: Content,
+) => sector(d(angleFactor), offsetFactor && d(offsetFactor), content);
 
 it("dynamic()", () => {
   expect(() => d(1), "Accepts positive factor").not.toThrow(AssertError);
@@ -49,6 +59,36 @@ it("ring()", () => {
   expect(() => ring(10, 0, 0, [] as any)).toThrow(AssertError);
 });
 
+it("menu()", () => {
+  expect(() => menu([] as any), "Denies empty structure").toThrow(AssertError);
+  expect(
+    () => menu([circle(10), gap(10)]),
+    "Accepts valid structure",
+  ).not.toThrow(AssertError);
+  expect(
+    () => menu([gap(10), circle(10)] as any),
+    "Circle can only be in the center",
+  ).toThrow(AssertError);
+});
+
+it("calculateDynamicUnit()", () => {
+  const u1 = calculateDynamicUnit(10, [sector(30)]);
+  expect(u1, "Dynamic unit is 0 if there are 0 dynamic factors").toBe(0);
+
+  const u2 = calculateDynamicUnit(20, [dsector(1)]);
+  expect(u2, "Claims all space that isn't static 1").toBe(FULL_ANGLE - 20);
+
+  const u3 = calculateDynamicUnit(20, [sector(10), sector(d(1), 30)]);
+  expect(u3, "Claims all space that isn't static 2").toBe(
+    FULL_ANGLE - 10 - 20 - 30,
+  );
+
+  const u4 = calculateDynamicUnit(30, [dsector(2)]);
+  expect(u4, "Distributes equally over all factors").toBe(
+    (FULL_ANGLE - 30) / 2,
+  );
+});
+
 it("resolveSectors() with static angles", () => {
   expect(
     resolveSectors(0, 0, [sector(30), sector(40), sector(50)]),
@@ -71,22 +111,7 @@ it("resolveSectors() with static angles", () => {
   ).toEqual([sector(10, 0), sector(30, 30), sector(10, 110)]);
 });
 
-it("menu()", () => {
-  expect(() => menu([] as any), "Denies empty structure").toThrow(AssertError);
-  expect(
-    () => menu([circle(10), gap(10)]),
-    "Accepts valid structure",
-  ).not.toThrow(AssertError);
-  expect(
-    () => menu([gap(10), circle(10)] as any),
-    "Circle can only be in the center",
-  ).toThrow(AssertError);
-});
-
 it("resolveSectors() with dynamic angles", () => {
-  const dsector = (angleFactor: number, offsetFactor?: number) =>
-    sector(d(angleFactor), offsetFactor && d(offsetFactor));
-
   expect(
     resolveSectors(0, 0, [dsector(1)]),
     "Single sector expands to fill the entire ring",
