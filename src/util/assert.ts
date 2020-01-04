@@ -1,4 +1,4 @@
-import { Dynamic, StaticAngle } from "./parts";
+import { Dynamic, StaticAngle } from "../parts/parts";
 
 export function assert(x: boolean, message: string): asserts x {
   if (!x) {

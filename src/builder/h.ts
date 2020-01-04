@@ -1,4 +1,4 @@
-import { AnyObject } from "./util";
+import { AnyObject } from "../util/util";
 
 function hs<T extends keyof SVGElementTagNameMap>(tagName: T) {
   return function _h(attrs: AnyObject, children: SVGElement[] = []) {

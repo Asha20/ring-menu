@@ -1,4 +1,4 @@
-import { assert, assertValidAngle } from "./assert";
+import { assert, assertValidAngle } from "../util/assert";
 import {
   AnyObject,
   Brand,
@@ -7,7 +7,7 @@ import {
   NonEmptyArray,
   pipe,
   sum,
-} from "./util";
+} from "../util/util";
 
 export enum PartType {
   Circle = "circle",

@@ -1,5 +1,5 @@
-import { renderMenu as build } from "./builder";
-import { circle, dynamic as d, menu, ring, sector } from "./parts";
+import { renderMenu as build } from "./builder/builder";
+import { circle, dynamic as d, menu, ring, sector } from "./parts/parts";
 
 const dsector = (
   angleFactor: number,

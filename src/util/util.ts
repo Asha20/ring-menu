@@ -1,4 +1,4 @@
-import { Dynamic } from "./parts";
+import { Dynamic } from "../parts/parts";
 
 export type Brand<T, N> = T & { __brand: N };
 export type NonEmptyArray<T> = T[] & { 0: T };

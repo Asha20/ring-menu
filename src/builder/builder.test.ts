@@ -8,8 +8,8 @@ import {
   ring,
   sector,
   StaticSector,
-} from "./parts";
-import { AnyObject } from "./util";
+} from "../parts/parts";
+import { AnyObject } from "../util/util";
 
 const ssector = (angle: number, offset?: number, content?: Content) =>
   sector(angle, offset, content) as StaticSector;

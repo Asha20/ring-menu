@@ -1,4 +1,4 @@
-import { AssertError } from "./assert";
+import { AssertError } from "../util/assert";
 import {
   circle,
   dynamic as d,

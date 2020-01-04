@@ -1,5 +1,12 @@
 import * as h from "./h";
-import { Circle, Content, Menu, PartType, Ring, StaticSector } from "./parts";
+import {
+  Circle,
+  Content,
+  Menu,
+  PartType,
+  Ring,
+  StaticSector,
+} from "../parts/parts";
 
 function radians(degrees: number) {
   return (degrees / 180) * Math.PI;
