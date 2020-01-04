@@ -9,7 +9,7 @@ function hs<T extends keyof SVGElementTagNameMap>(tagName: T) {
   };
 }
 
-function setAttributes<T extends SVGElement>(el: T, attrs: AnyObject) {
+export function setAttributes<T extends SVGElement>(el: T, attrs: AnyObject) {
   Object.keys(attrs).forEach(key => {
     const value = attrs[key];
     if (key === "class" || key === "className") {

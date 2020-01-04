@@ -19,7 +19,7 @@ export enum PartType {
 
 export type StaticAngle = Brand<number, "StaticAngle">;
 export type MenuPart = Circle | Gap | Ring;
-export type Content = string;
+export type Content = string | SVGElement;
 
 interface Part {
   type: PartType;

@@ -7,8 +7,9 @@ import {
   menu,
   ring,
   sector,
-  StaticSector,
+  StaticSector
 } from "../parts/parts";
+import * as h from "./h";
 import { AnyObject } from "../util/util";
 
 const ssector = (angle: number, offset?: number, content?: Content) =>
@@ -17,7 +18,7 @@ const ssector = (angle: number, offset?: number, content?: Content) =>
 const dsector = (
   angleFactor: number,
   offsetFactor?: number,
-  content?: Content,
+  content?: Content
 ) => sector(d(angleFactor), offsetFactor && d(offsetFactor), content);
 
 it("renderCircle()", () => {
@@ -50,6 +51,31 @@ it("renderCircle() with content", () => {
       >
         Hello
       </text>
+    </g>
+  `);
+
+  const c2 = renderCircle(
+    circle(30, h.circle(0, 0, 10, { fill: "red" })),
+    0,
+    0
+  );
+  expect(c2).toMatchInlineSnapshot(`
+    <g>
+      <circle
+        cx="0"
+        cy="0"
+        r="30"
+      />
+      <g
+        transform="translate(0, 0)"
+      >
+        <circle
+          cx="0"
+          cy="0"
+          fill="red"
+          r="10"
+        />
+      </g>
     </g>
   `);
 });
@@ -108,6 +134,36 @@ it("renderSector() with content", () => {
       >
         Foo
       </text>
+    </g>
+  `);
+
+  const s2 = renderSector(
+    100,
+    30,
+    ssector(90, 0, h.circle(0, 0, 10, { fill: "blue" }))
+  );
+  expect(s2).toMatchInlineSnapshot(`
+    <g>
+      <path
+        d="
+        M 0 -30
+        L 0 -130
+        a 130 130 0 0 1 130 129.987
+        l -100 0.01
+        A 30 30 0 0 0 0 -30
+      "
+        transform="rotate(0, 0, 0)"
+      />
+      <g
+        transform="translate(56.569, -56.569)"
+      >
+        <circle
+          cx="0"
+          cy="0"
+          fill="blue"
+          r="10"
+        />
+      </g>
     </g>
   `);
 });
@@ -171,8 +227,8 @@ it("build()", () => {
     menu([
       circle(25),
       gap(50),
-      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)]),
-    ]),
+      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)])
+    ])
   );
 
   expect(m1).toMatchInlineSnapshot(`
@@ -226,7 +282,7 @@ it("build()", () => {
   `);
 
   const m2 = renderMenu(
-    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])]),
+    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])])
   );
 
   expect(m2).toMatchInlineSnapshot(`
@@ -285,12 +341,12 @@ it("Rendering a menu part with attributes", () => {
 
   const c4 = circleWithAttributes({ class: "foo bar" });
   expect(c4.getAttribute("class"), "Classes separated by one space").toBe(
-    "foo bar",
+    "foo bar"
   );
 
   const c5 = circleWithAttributes({ className: "one    two three-four" });
   expect(c5.getAttribute("class"), "Classes separated by multiple spaces").toBe(
-    "one two three-four",
+    "one two three-four"
   );
 
   const c6 = circleWithAttributes({ textContent: "foo" });

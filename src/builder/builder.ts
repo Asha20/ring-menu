@@ -17,17 +17,21 @@ function toFixed(x: number, digits: number) {
 }
 
 export function renderContent(content: Content, x: number, y: number) {
-  const el = h.text(content, x, y, {
-    "text-anchor": "middle",
-    "dominant-baseline": "middle",
-    fill: "white",
-    style: {
-      userSelect: "none",
-      msUserSelect: "none",
-      webkitUserSelect: "none",
-    },
-  });
-  return el;
+  if (typeof content === "string") {
+    const el = h.text(content, x, y, {
+      "text-anchor": "middle",
+      "dominant-baseline": "middle",
+      fill: "white",
+      style: {
+        userSelect: "none",
+        msUserSelect: "none",
+        webkitUserSelect: "none",
+      },
+    });
+    return el;
+  }
+
+  return h.g({ transform: `translate(${x}, ${y})` }, [content]);
 }
 
 export function renderCircle(circle: Circle, x: number, y: number) {
