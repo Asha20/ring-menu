@@ -22,7 +22,7 @@ function filterFalsy(array) {
 }
 
 const common = {
-  input: "src/main.ts",
+  input: "src/ring-menu.ts",
   output: {
     sourcemap: true,
   },
