@@ -27,11 +27,13 @@ it("renderSector()", () => {
   const s1 = renderSector(100, 30, ssector(90, 0));
   expect(s1).toMatchInlineSnapshot(`
     <path
-      d="M 0 -30
+      d="
+        M 0 -30
         L 0 -130
         a 130 130 0 0 1 130 129.987
         l -100 0.01
-        A 30 30 0 0 0 0 -30"
+        A 30 30 0 0 0 0 -30
+      "
       transform="rotate(0, 0, 0)"
     />
   `);
@@ -39,11 +41,13 @@ it("renderSector()", () => {
   const s2 = renderSector(50, 0, ssector(120, 60));
   expect(s2).toMatchInlineSnapshot(`
     <path
-      d="M 0 0
+      d="
+        M 0 0
         L 0 -50
         a 50 50 0 0 1 43.304 74.996
         l -43.304 -24.996
-        A 0 0 0 0 0 0 0"
+        A 0 0 0 0 0 0 0
+      "
       transform="rotate(60, 0, 0)"
     />
   `);
@@ -57,19 +61,23 @@ it("renderRing()", () => {
   expect(r1).toMatchInlineSnapshot(`
     <g>
       <path
-        d="M 0 0
+        d="
+        M 0 0
         L 0 -100
         a 100 100 0 0 1 100 99.99
         l -100 0.01
-        A 0 0 0 0 0 0 0"
+        A 0 0 0 0 0 0 0
+      "
         transform="rotate(0, 0, 0)"
       />
       <path
-        d="M 0 0
+        d="
+        M 0 0
         L 0 -100
         a 100 100 0 0 1 0.01 200
         l -0.01 -100
-        A 0 0 0 0 0 0 0"
+        A 0 0 0 0 0 0 0
+      "
         transform="rotate(90, 0, 0)"
       />
     </g>
@@ -79,19 +87,23 @@ it("renderRing()", () => {
   expect(r2).toMatchInlineSnapshot(`
     <g>
       <path
-        d="M 0 0
+        d="
+        M 0 0
         L 0 -100
         a 100 100 0 1 1 -86.598 150.009
         l 86.598 -50.009
-        A 0 0 0 1 0 0 0"
+        A 0 0 0 1 0 0 0
+      "
         transform="rotate(120, 0, 0)"
       />
       <path
-        d="M 0 0
+        d="
+        M 0 0
         L 0 -100
         a 100 100 0 0 1 49.991 13.392
         l -49.991 86.608
-        A 0 0 0 0 0 0 0"
+        A 0 0 0 0 0 0 0
+      "
         transform="rotate(390, 0, 0)"
       />
     </g>
@@ -123,27 +135,33 @@ it("build()", () => {
         />
         <g>
           <path
-            d="M 0 -75
+            d="
+        M 0 -75
         L 0 -125
         a 125 125 0 0 1 125 124.988
         l -50 0.005
-        A 75 75 0 0 0 0 -75"
+        A 75 75 0 0 0 0 -75
+      "
             transform="rotate(0, 0, 0)"
           />
           <path
-            d="M 0 -75
+            d="
+        M 0 -75
         L 0 -125
         a 125 125 0 0 1 62.489 16.741
         l -24.996 43.304
-        A 75 75 0 0 0 0 -75"
+        A 75 75 0 0 0 0 -75
+      "
             transform="rotate(90, 0, 0)"
           />
           <path
-            d="M 0 -75
+            d="
+        M 0 -75
         L 0 -125
         a 125 125 0 0 1 95.748 44.642
         l -38.299 32.143
-        A 75 75 0 0 0 0 -75"
+        A 75 75 0 0 0 0 -75
+      "
             transform="rotate(120, 0, 0)"
           />
         </g>
@@ -171,19 +189,23 @@ it("build()", () => {
         />
         <g>
           <path
-            d="M 0 -50
+            d="
+        M 0 -50
         L 0 -150
         a 150 150 0 0 1 74.987 20.089
         l -49.991 86.608
-        A 50 50 0 0 0 0 -50"
+        A 50 50 0 0 0 0 -50
+      "
             transform="rotate(55, 0, 0)"
           />
           <path
-            d="M 0 -50
+            d="
+        M 0 -50
         L 0 -150
         a 150 150 0 0 1 140.959 201.289
         l -93.973 -34.193
-        A 50 50 0 0 0 0 -50"
+        A 50 50 0 0 0 0 -50
+      "
             transform="rotate(195, 0, 0)"
           />
         </g>

@@ -45,7 +45,7 @@ export function renderSector(
     a ${R} ${R} 0 ${arc} 1 ${x1} ${y1}
     l ${-x2} ${y2}
     A ${r} ${r} 0 ${arc} 0 0 ${-r}
-  `.trim();
+  `;
 
   const el = h.path(d, { transform: `rotate(${sector.offset}, 0, 0)` });
   return h.applyAttributes(el, sector.attrs);
