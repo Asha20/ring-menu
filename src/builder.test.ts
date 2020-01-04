@@ -1,4 +1,4 @@
-import { build, renderCircle, renderRing, renderSector } from "./builder";
+import { renderCircle, renderMenu, renderRing, renderSector } from "./builder";
 import {
   circle,
   dynamic as d,
@@ -99,7 +99,7 @@ it("renderRing()", () => {
 });
 
 it("build()", () => {
-  const m1 = build(
+  const m1 = renderMenu(
     menu([
       circle(25),
       gap(50),
@@ -151,7 +151,7 @@ it("build()", () => {
     </svg>
   `);
 
-  const m2 = build(
+  const m2 = renderMenu(
     menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])])
   );
 
@@ -189,5 +189,40 @@ it("build()", () => {
         </g>
       </g>
     </svg>
+  `);
+});
+
+it("Rendering a menu part with attributes", () => {
+  const c1 = renderCircle(circle(50, { id: 3, style: "fill: red" }));
+  expect(c1).toMatchInlineSnapshot(`
+    <circle
+      cx="0"
+      cy="0"
+      id="3"
+      r="50"
+      style="fill: red"
+    />
+  `);
+});
+
+it("Rendering a menu part with a class/className property", () => {
+  const c1 = renderCircle(circle(50, { class: "foo bar" }));
+  expect(c1).toMatchInlineSnapshot(`
+    <circle
+      class="foo bar"
+      cx="0"
+      cy="0"
+      r="50"
+    />
+  `);
+
+  const c2 = renderCircle(circle(50, { className: "one    two three-four" }));
+  expect(c2).toMatchInlineSnapshot(`
+    <circle
+      class="one two three-four"
+      cx="0"
+      cy="0"
+      r="50"
+    />
   `);
 });

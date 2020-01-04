@@ -1,5 +1,13 @@
 import { assert, assertValidAngle } from "./assert";
-import { Brand, isDynamic, map, NonEmptyArray, pipe, sum } from "./util";
+import {
+  AnyObject,
+  Brand,
+  isDynamic,
+  map,
+  NonEmptyArray,
+  pipe,
+  sum,
+} from "./util";
 
 export enum PartType {
   Circle = "circle",
@@ -14,6 +22,7 @@ export type MenuPart = Circle | Gap | Ring;
 
 interface Part {
   type: PartType;
+  attrs: Object;
 }
 
 export interface Circle extends Part {
@@ -21,7 +30,7 @@ export interface Circle extends Part {
   radius: number;
 }
 
-interface Gap extends Part {
+interface Gap extends Omit<Part, "attrs"> {
   type: PartType.Gap;
   width: number;
 }
@@ -126,9 +135,9 @@ export function resolveSectors(
   return sectorsWithAbsoluteOffset;
 }
 
-export function circle(radius: number): Circle {
+export function circle(radius: number, attrs: AnyObject = {}): Circle {
   assert(radius > 0, "Circle radius must be a positive number.");
-  return { type: PartType.Circle, radius };
+  return { type: PartType.Circle, radius, attrs };
 }
 
 export function gap(width: number): Gap {
@@ -141,21 +150,26 @@ export function ring(
   offset: Angle,
   separator: Angle,
   sectors: NonEmptyArray<Sector>,
+  attrs: AnyObject = {},
 ): Ring {
   assert(sectors.length > 0, "A ring must have at least one sector.");
   const staticSectors = resolveSectors(offset, separator, sectors);
-  return { type: PartType.Ring, width, sectors: staticSectors };
+  return { type: PartType.Ring, width, sectors: staticSectors, attrs };
 }
 
-export function sector(angle: Angle, offset?: Angle): Sector {
+export function sector(
+  angle: Angle,
+  offset?: Angle,
+  attrs: AnyObject = {},
+): Sector {
   assertValidAngle(angle, "Sector angle");
   if (offset !== undefined) {
     assertValidAngle(offset, "Sector offset");
   }
-  return { type: PartType.Sector, angle, offset };
+  return { type: PartType.Sector, angle, offset, attrs };
 }
 
-export function menu(structure: MenuStructure): Menu {
+export function menu(structure: MenuStructure, attrs: AnyObject = {}): Menu {
   assert(structure.length > 0, "Menu cannot be empty.");
   structure.forEach((el, i) => {
     assert(
@@ -164,5 +178,5 @@ export function menu(structure: MenuStructure): Menu {
     );
   });
 
-  return { type: PartType.Menu, structure };
+  return { type: PartType.Menu, structure, attrs };
 }

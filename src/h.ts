@@ -1,15 +1,4 @@
-type AnyObject = Record<string, any>;
-
-function h<T extends keyof HTMLElementTagNameMap>(tagName: T) {
-  return function _h(attrs: AnyObject, children: HTMLElement[] = []) {
-    const el = document.createElement(tagName);
-    for (const key of Object.keys(attrs)) {
-      el.setAttribute(key, attrs[key]);
-    }
-    children.forEach(child => el.appendChild(child));
-    return el;
-  };
-}
+import { AnyObject } from "./util";
 
 function hs<T extends keyof SVGElementTagNameMap>(tagName: T) {
   return function _h(attrs: AnyObject, children: SVGElement[] = []) {
@@ -20,6 +9,18 @@ function hs<T extends keyof SVGElementTagNameMap>(tagName: T) {
     children.forEach(child => el.appendChild(child));
     return el;
   };
+}
+
+export function applyAttributes<T extends Element>(el: T, attrs: AnyObject) {
+  Object.keys(attrs).forEach(key => {
+    const value = attrs[key];
+    if (key === "class" || key === "className") {
+      el.classList.add(...value.split(/\s+/));
+      return;
+    }
+    el.setAttribute(key, value);
+  });
+  return el;
 }
 
 export function circle(cx: number, cy: number, r: number) {

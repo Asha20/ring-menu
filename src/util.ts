@@ -2,6 +2,8 @@ import { Dynamic } from "./parts";
 
 export type Brand<T, N> = T & { __brand: N };
 export type NonEmptyArray<T> = T[] & { 0: T };
+export type AnyObject = { [key: string]: any };
+
 type Fn<A, B> = (x: A) => B;
 
 export function count<T>(xs: T[], condition: Fn<T, boolean>) {
@@ -19,7 +21,7 @@ export function map<U, T>(fn: Fn<T, U>) {
 }
 
 export function filter<T>(fn: Fn<T, boolean>) {
-  return function _map(xs: T[]) {
+  return function _filter(xs: T[]) {
     return xs.filter(fn);
   };
 }

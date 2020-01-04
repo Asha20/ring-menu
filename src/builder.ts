@@ -9,13 +9,15 @@ function toFixed(x: number, digits: number) {
   return Number(x.toFixed(digits));
 }
 
-export function renderCircle(el: Circle) {
-  return h.circle(0, 0, el.radius);
+export function renderCircle(circle: Circle) {
+  const el = h.circle(0, 0, circle.radius);
+  return h.applyAttributes(el, circle.attrs);
 }
 
-export function renderRing(el: Ring, pos: number) {
-  const sectors = el.sectors.map(x => renderSector(el.width, pos, x));
-  return h.g({}, sectors);
+export function renderRing(ring: Ring, pos: number) {
+  const sectors = ring.sectors.map(x => renderSector(ring.width, pos, x));
+  const el = h.g({}, sectors);
+  return h.applyAttributes(el, ring.attrs);
 }
 
 export function renderSector(
@@ -45,10 +47,11 @@ export function renderSector(
     A ${r} ${r} 0 ${arc} 0 0 ${-r}
   `.trim();
 
-  return h.path(d, { transform: `rotate(${sector.offset}, 0, 0)` });
+  const el = h.path(d, { transform: `rotate(${sector.offset}, 0, 0)` });
+  return h.applyAttributes(el, sector.attrs);
 }
 
-export function build(menu: Menu) {
+export function renderMenu(menu: Menu) {
   let pos = 0;
   const elements = [];
   for (const el of menu.structure) {
@@ -68,7 +71,7 @@ export function build(menu: Menu) {
   }
 
   const size = pos * 2;
-  return h.svg(
+  const el = h.svg(
     {
       width: size,
       height: size,
@@ -76,4 +79,5 @@ export function build(menu: Menu) {
     },
     [h.g({ transform: `translate(${size / 2}, ${size / 2})` }, elements)],
   );
+  return h.applyAttributes(el, menu.attrs);
 }
