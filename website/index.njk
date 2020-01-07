@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.18.0/prism.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.18.0/themes/prism.min.css">
+  <link rel="stylesheet" href="index.css">
+  <title>Ring Menu</title>
+</head>
+
+<body>
+  {% macro example(code) %}
+  <article class="example">
+    <pre class="example__code"><code class="language-javascript">{{ code }}</code></pre>
+    <section class="example__result"></section>
+  </article>
+  {% endmacro %}
+
+  <section class="examples">
+    <h2>Simplest possible menu</h2>
+    <p>Menus are assembled from the inside out. Let's take a look at the simplest menu possible; a menu that only contains one <em>circle</em>.</p>
+
+    {{ example('
+      const menu = RM.menu([
+        RM.circle(50, "Circle", {fill: "red"})
+      ]);
+      const svg = RM.build(menu);
+    ') }}
+
+    <p>Circles are optional and can only be found in the very center of a menu.</p>
+  </section>
+
+  <script src="../dist/ring-menu.js"></script>
+  <script src="index.js"></script>
+</body>
+
+</html>

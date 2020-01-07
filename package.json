@@ -8,6 +8,8 @@
   "scripts": {
     "build": "rollup -c --environment BUILD:production",
     "start": "rollup -c --watch",
+    "website:build": "node scripts/build-website.js",
+    "website:watch": "node scripts/watch-website.js",
     "test": "jest"
   },
   "keywords": [
@@ -21,8 +23,10 @@
   "devDependencies": {
     "@types/jest": "^24.0.25",
     "@types/jest-expect-message": "^1.0.1",
+    "chokidar": "^3.3.1",
     "jest": "^24.9.0",
     "jest-expect-message": "^1.0.2",
+    "nunjucks": "^3.2.0",
     "prettier": "^1.19.1",
     "rollup": "^1.27.14",
     "rollup-plugin-typescript2": "^0.25.3",
