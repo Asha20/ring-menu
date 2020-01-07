@@ -186,7 +186,7 @@ it("renderRing()", () => {
     </g>
   `);
 
-  const r2 = renderRing(ring(100, d(1), 30, [dsector(2), sector(30, 60)]), 0);
+  const r2 = renderRing(ring(100, 30, d(1), [dsector(2), sector(30, 60)]), 0);
   expect(r2).toMatchInlineSnapshot(`
     <g>
       <path
@@ -273,7 +273,7 @@ it("build()", () => {
   `);
 
   const m2 = renderMenu(
-    menu([circle(50), ring(100, d(0.5), d(1), [sector(30), sector(d(1))])]),
+    menu([circle(50), ring(100, d(1), d(0.5), [sector(30), sector(d(1))])]),
   );
 
   expect(m2).toMatchInlineSnapshot(`
