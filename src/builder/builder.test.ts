@@ -1,7 +1,6 @@
 import { renderCircle, renderMenu, renderRing, renderSector } from "./builder";
 import {
   circle,
-  Content,
   dsector,
   dynamic as d,
   gap,
@@ -12,9 +11,6 @@ import {
 } from "../parts/parts";
 import * as h from "./h";
 import { AnyObject } from "../util/util";
-
-const ssector = (angle: number, offset?: number, content?: Content) =>
-  sector(angle, offset, content) as StaticSector;
 
 it("renderCircle()", () => {
   const c1 = renderCircle(circle(30), 0, 0);
@@ -76,7 +72,7 @@ it("renderCircle() with content", () => {
 });
 
 it("renderSector()", () => {
-  const s1 = renderSector(100, 30, ssector(90, 0));
+  const s1 = renderSector(100, 30, sector(90, 0) as StaticSector);
   expect(s1).toMatchInlineSnapshot(`
     <path
       d="
@@ -90,7 +86,7 @@ it("renderSector()", () => {
     />
   `);
 
-  const s2 = renderSector(50, 0, ssector(120, 60));
+  const s2 = renderSector(50, 0, sector(120, 60) as StaticSector);
   expect(s2).toMatchInlineSnapshot(`
     <path
       d="
@@ -106,7 +102,7 @@ it("renderSector()", () => {
 });
 
 it("renderSector() with content", () => {
-  const s1 = renderSector(100, 30, ssector(90, 0, "Foo"));
+  const s1 = renderSector(100, 30, sector("Foo", 90, 0) as StaticSector);
   expect(s1).toMatchInlineSnapshot(`
     <g>
       <path
@@ -135,7 +131,7 @@ it("renderSector() with content", () => {
   const s2 = renderSector(
     100,
     30,
-    ssector(90, 0, h.circle(0, 0, 10, { fill: "blue" })),
+    sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector,
   );
   expect(s2).toMatchInlineSnapshot(`
     <g>
@@ -323,7 +319,7 @@ it("build()", () => {
 
 it("Rendering a menu part with attributes", () => {
   const circleWithAttributes = (attrs: AnyObject) =>
-    renderCircle(circle(50, undefined, attrs), 0, 0);
+    renderCircle(circle(50, attrs), 0, 0);
 
   const c1 = circleWithAttributes({ id: 3 });
   expect(c1.getAttribute("id"), "Plain id attribute").toBe("3");

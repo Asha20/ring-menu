@@ -7,7 +7,9 @@ import {
   NonEmptyArray,
   pipe,
   sum,
+  matchTuple,
 } from "../util/util";
+import * as is from "../util/is";
 
 export enum PartType {
   Circle = "circle",
@@ -66,7 +68,7 @@ export interface Dynamic {
   factor: number;
 }
 
-type Angle = number | Dynamic;
+export type Angle = number | Dynamic;
 
 export function dynamic(factor: number): Dynamic {
   assert(factor > 0, "A dynamic value must have a positive factor.");
@@ -143,13 +145,30 @@ export function resolveSectors(
   return sectorsWithAbsoluteOffset;
 }
 
-export function circle(
+function _circle(
   radius: number,
   content?: Content,
   attrs: AnyObject = {},
 ): Circle {
   assert(radius > 0, "Circle radius must be a positive number.");
   return { type: PartType.Circle, radius, attrs, content };
+}
+
+export function circle(radius: number): Circle;
+export function circle(radius: number, attrs?: AnyObject): Circle;
+export function circle(
+  radius: number,
+  content?: Content,
+  attrs?: AnyObject,
+): Circle;
+export function circle(...args: any[]): Circle {
+  const [a, b, c] = args;
+  return matchTuple<Circle>([
+    [[is.number], () => _circle(a)],
+    [[is.number, is.object], () => _circle(a, undefined, b)],
+    [[is.number, is.content], () => _circle(a, b)],
+    [[is.number, is.content, is.object], () => _circle(a, b, c)],
+  ])(args);
 }
 
 export function gap(width: number): Gap {
@@ -169,10 +188,10 @@ export function ring(
   return { type: PartType.Ring, width, sectors: staticSectors, attrs };
 }
 
-export function sector(
-  angle: Angle,
-  offset?: Angle,
+function _sector(
   content?: Content,
+  angle: Angle = dynamic(1),
+  offset?: Angle,
   attrs: AnyObject = {},
 ): Sector {
   assertValidAngle(angle, "Sector angle");
@@ -182,18 +201,70 @@ export function sector(
   return { type: PartType.Sector, angle, offset, attrs, content };
 }
 
+export function sector(): Sector;
+export function sector(content: Content, attrs?: AnyObject): Sector;
+export function sector(angle: Angle, offset?: Angle, attrs?: AnyObject): Sector;
+export function sector(
+  content?: Content,
+  angle?: Angle,
+  offset?: Angle,
+  attrs?: AnyObject,
+): Sector;
+export function sector(...args: any[]): Sector {
+  const [a, b, c, d] = args;
+  return matchTuple<Sector>([
+    [[], () => _sector()],
+    [[is.content], () => _sector(a)],
+    [[is.content, is.object], () => _sector(a, undefined, undefined, b)],
+    [[is.angle], () => _sector(undefined, a)],
+    [[is.angle, is.angle], () => _sector(undefined, a, b)],
+    [[is.angle, is.angle, is.object], () => _sector(undefined, a, b, c)],
+    [[is.content, is.angle], () => _sector(a, b)],
+    [[is.content, is.angle, is.angle], () => _sector(a, b, c)],
+    [[is.content, is.angle, is.angle, is.object], () => _sector(a, b, c, d)],
+  ])(args);
+}
+
+function _dsector(
+  content?: Content,
+  angleFactor: number = 1,
+  offsetFactor?: number,
+  attrs: AnyObject = {},
+): Sector {
+  return _sector(
+    content,
+    dynamic(angleFactor),
+    offsetFactor && dynamic(offsetFactor),
+    attrs,
+  );
+}
+
+export function dsector(): Sector;
+export function dsector(content: Content, attrs?: AnyObject): Sector;
 export function dsector(
   angleFactor: number,
   offsetFactor?: number,
+  attrs?: AnyObject,
+): Sector;
+export function dsector(
   content?: Content,
-  attrs: AnyObject = {},
-): Sector {
-  return sector(
-    dynamic(angleFactor),
-    offsetFactor && dynamic(offsetFactor),
-    content,
-    attrs,
-  );
+  angleFactor?: number,
+  offsetFactor?: number,
+  attrs?: AnyObject,
+): Sector;
+export function dsector(...args: any[]): Sector {
+  const [a, b, c, d] = args;
+  return matchTuple<Sector>([
+    [[], () => _dsector()],
+    [[is.content], () => _dsector(a)],
+    [[is.content, is.object], () => _dsector(a, undefined, undefined, b)],
+    [[is.number], () => _dsector(undefined, a)],
+    [[is.number, is.number], () => _dsector(undefined, a, b)],
+    [[is.number, is.number, is.object], () => _dsector(undefined, a, b, c)],
+    [[is.content, is.number], () => _dsector(a, b)],
+    [[is.content, is.number, is.number], () => _dsector(a, b, c)],
+    [[is.content, is.number, is.number, is.object], () => _dsector(a, b, c, d)],
+  ])(args);
 }
 
 export function menu(structure: MenuStructure, attrs: AnyObject = {}): Menu {
