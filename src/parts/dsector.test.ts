@@ -1,5 +1,5 @@
-import { dsector, dynamic as d, PartType } from "./parts";
 import { circle as hCircle } from "../builder/h";
+import { PartType, dsector, dynamic as d } from "./parts";
 
 it("Correct usage", () => {
   const defaults = {

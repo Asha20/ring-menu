@@ -21,11 +21,3 @@ export function angle(x: any): x is Angle {
 export function content(x: any): x is Content {
   return typeof x === "string" || x instanceof SVGElement;
 }
-
-export function tuple<T>(xs: any, tuple: Function[]): xs is T {
-  return (
-    Array.isArray(xs) &&
-    xs.length === tuple.length &&
-    xs.every((x, i) => tuple[i](x))
-  );
-}

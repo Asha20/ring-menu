@@ -1,7 +1,8 @@
-import { sector, dynamic as d, PartType } from "./parts";
 import { circle as hCircle } from "../builder/h";
+import { PartType, sector, dynamic as d } from "./parts";
+import { AssertError } from "../util/assert";
 
-it("Correct usage", () => {
+it("Correct function overloading", () => {
   const defaults = {
     type: PartType.Sector,
     angle: d(1),
@@ -78,7 +79,7 @@ it("Correct usage", () => {
   });
 });
 
-it("Incorrect usage", () => {
+it("Incorrect function overloading", () => {
   // We're intentionally passing wrong arguments for these tests,
   // so this function helps supress TS errors.
   const sector1 = (...args: any[]) => sector(...args);
@@ -87,4 +88,14 @@ it("Incorrect usage", () => {
   expect(() => sector1(1, 2, 3, 4), "Content of incorrect type").toThrow();
   expect(() => sector1("Hi", {}, 3), "Too many arguments").toThrow();
   expect(() => sector1(2, 3, "Hi", {}), "Arguments in wrong order").toThrow();
+});
+
+it("Usage", () => {
+  expect(() => sector(100), "Accepts angle in range 0-360").not.toThrow();
+  expect(() => sector(-10), "Denies negative angle").toThrow(AssertError);
+  expect(() => sector(400), "Denies angle over 360").toThrow(AssertError);
+
+  expect(() => sector(100, 20), "Accepts offset in range 0-360").not.toThrow();
+  expect(() => sector(100, -3), "Denies negative offset").toThrow(AssertError);
+  expect(() => sector(100, 500), "Denies offset over 360").toThrow(AssertError);
 });

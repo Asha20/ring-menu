@@ -1,5 +1,4 @@
 import { Dynamic } from "../parts/parts";
-import { tuple as isTuple } from "./is";
 
 export type Brand<T, N> = T & { __brand: N };
 export type NonEmptyArray<T> = T[] & { 0: T };
@@ -40,7 +39,7 @@ export function isDynamic<T>(x: T | Dynamic): x is Dynamic {
 export function matchTuple<T>(pairs: Array<[Function[], () => T]>) {
   return function _matchTuple(xs: any[]) {
     for (const [tests, val] of pairs) {
-      if (isTuple(xs, tests)) {
+      if (xs.length === tests.length && xs.every((x, i) => tests[i](x))) {
         return val();
       }
     }

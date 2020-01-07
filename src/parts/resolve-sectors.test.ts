@@ -1,23 +1,11 @@
-import { AssertError } from "../util/assert";
 import {
-  circle,
-  dsector,
-  dynamic as d,
-  gap,
-  menu,
   resolveAngle,
-  resolveSectors,
-  ring,
-  sector,
   calculateDynamicUnit,
-} from "./parts";
+  resolveSectors,
+} from "./resolve-sectors";
+import { sector, dsector, dynamic as d } from "./parts";
 
 const FULL_ANGLE = 360;
-
-it("dynamic()", () => {
-  expect(() => d(1), "Accepts positive factor").not.toThrow(AssertError);
-  expect(() => d(0), "Denies non-positive factor").toThrow(AssertError);
-});
 
 it("resolveAngle()", () => {
   expect(resolveAngle(d(1), 2), "2 item long resolution chain").toBe(2);
@@ -27,42 +15,6 @@ it("resolveAngle()", () => {
     () => resolveAngle(d(1), d(2)),
     "Last angle in chain must be static",
   ).toThrow();
-});
-
-it("circle()", () => {
-  expect(() => circle(100), "Accepts positive radius").not.toThrow();
-  expect(() => circle(0), "Denies non-positive radius").toThrow(AssertError);
-});
-
-it("gap()", () => {
-  expect(() => gap(100), "Accepts positive width").not.toThrow();
-  expect(() => gap(0), "Denies non-positive width").toThrow(AssertError);
-});
-
-it("sector()", () => {
-  expect(() => sector(100), "Accepts angle in range 0-360").not.toThrow();
-  expect(() => sector(-10), "Denies negative angle").toThrow(AssertError);
-  expect(() => sector(400), "Denies angle over 360").toThrow(AssertError);
-
-  expect(() => sector(100, 20), "Accepts offset in range 0-360").not.toThrow();
-  expect(() => sector(100, -3), "Denies negative offset").toThrow(AssertError);
-  expect(() => sector(100, 500), "Denies offset over 360").toThrow(AssertError);
-});
-
-it("ring()", () => {
-  expect(() => ring(10, 0, 0, [] as any)).toThrow(AssertError);
-});
-
-it("menu()", () => {
-  expect(() => menu([] as any), "Denies empty structure").toThrow(AssertError);
-  expect(
-    () => menu([circle(10), gap(10)]),
-    "Accepts valid structure",
-  ).not.toThrow(AssertError);
-  expect(
-    () => menu([gap(10), circle(10)] as any),
-    "Circle can only be in the center",
-  ).toThrow(AssertError);
 });
 
 it("calculateDynamicUnit()", () => {

@@ -1,7 +1,8 @@
-import { circle, PartType } from "./parts";
 import { circle as hCircle } from "../builder/h";
+import { circle, PartType } from "./parts";
+import { AssertError } from "../util/assert";
 
-it("Correct usage", () => {
+it("Correct function overloading", () => {
   const defaults = {
     type: PartType.Circle,
     content: undefined,
@@ -37,4 +38,9 @@ it("Correct usage", () => {
     content: "Hi",
     attrs: { stroke: "black" },
   });
+});
+
+it("Usage", () => {
+  expect(() => circle(100), "Accepts positive radius").not.toThrow();
+  expect(() => circle(0), "Denies non-positive radius").toThrow(AssertError);
 });
