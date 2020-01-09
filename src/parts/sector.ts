@@ -28,6 +28,11 @@ export function sector(angle: Angle, offset?: Angle, attrs?: AnyObject): Sector;
 export function sector(
   content?: Content,
   angle?: Angle,
+  attrs?: AnyObject,
+): Sector;
+export function sector(
+  content?: Content,
+  angle?: Angle,
   offset?: Angle,
   attrs?: AnyObject,
 ): Sector;
@@ -42,6 +47,7 @@ export function sector(...args: any[]): Sector {
     [[is.angle, is.angle, is.object], () => _sector(undefined, a, b, c)],
     [[is.content, is.angle], () => _sector(a, b)],
     [[is.content, is.angle, is.angle], () => _sector(a, b, c)],
+    [[is.content, is.angle, is.object], () => _sector(a, b, undefined, c)],
     [[is.content, is.angle, is.angle, is.object], () => _sector(a, b, c, d)],
   ])(args);
 }

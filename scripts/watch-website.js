@@ -14,11 +14,14 @@ function log(...msgs) {
   console.log(timestamp(), ...msgs);
 }
 
-const websiteDir = path.resolve(__dirname, "..", "website");
-const watcher = chokidar.watch(websiteDir);
-watcher.on("change", () => {
+function update() {
   log("Change detected. Rebuilding website...");
   build();
-});
+}
+
+const websiteDir = path.resolve(__dirname, "..", "website");
+const watcher = chokidar.watch(websiteDir);
+watcher.on("add", update);
+watcher.on("change", update);
 
 console.log("Watching website/ for changes...");

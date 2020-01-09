@@ -2,6 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-size: 18px;
 }
 
 *, *:before, *:after {
@@ -36,4 +37,17 @@ pre.example__code {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+path {
+  stroke: black;
+  fill: light
+}
+
+text {
+  fill: black;
+}
+
+.permalink {
+  text-decoration: none;
 }

@@ -14,8 +14,14 @@ function build() {
     fs.mkdirSync("public");
   }
 
-  nunjucks.configure({ autoescape: false });
-  const rendered = nunjucks.render(input);
+  const env = new nunjucks.Environment(new nunjucks.FileSystemLoader(), {
+    autoescape: false,
+  });
+  env.addFilter("joinStr", (str, sep = "_") => {
+    return str.split(" ").join(sep);
+  });
+
+  const rendered = env.render(input);
   fs.writeFileSync(output, rendered);
   fs.copyFileSync(
     fromRoot("website", "index.css"),
