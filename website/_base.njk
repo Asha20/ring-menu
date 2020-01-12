@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.18.0/prism.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.18.0/themes/prism.min.css">
+  <link rel="stylesheet" href="index.css">
+  <title>Ring Menu</title>
+</head>
+
+<body>
+  {% macro example(code) %}
+  <article class="example">
+    <pre class="example__code"><code class="language-javascript">{{ code }}</code></pre>
+    <section class="example__result"></section>
+  </article>
+  {% endmacro %}
+
+  {% macro heading(type, title) %}
+    <{{type}} id="{{title | joinStr}}">
+      <a class="permalink" href="#{{title | joinStr}}">#</a> {{ title }}
+    </{{type}}>
+  {% endmacro %}
+
+  {% macro navLink(link, text, currentPage) %}
+    {% if link == currentPage %}
+      <li>{{ text }}</li>
+    {% else %}
+      <li><a href="{{ link }}">{{ text }}</a></li>
+    {% endif %}
+  {% endmacro %}
+
+  {% macro nav(currentPage) %}
+    <nav>
+      <ul>
+        {{ navLink('anatomy.html', 'Anatomy', currentPage) }}
+        {{ navLink('angles-and-offsets.html', 'Angles and offsets', currentPage) }}
+        {{ navLink('dynamic-values.html', 'Dynamic values', currentPage) }}
+      </ul>
+    </nav>
+  {% endmacro %}
+
+
+  
+  {{ nav(page) }}
+
+  <main>
+    {% block page %}{% endblock %}
+  </main>
+
+  {{ nav(page) }}
+
+  <script src="../dist/ring-menu.js"></script>
+  <script src="index.js"></script>
+</body>
+
+</html>

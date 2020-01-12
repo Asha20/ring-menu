@@ -1,6 +1,6 @@
 const path = require("path");
 const chokidar = require("chokidar");
-const { build } = require("./build-website");
+const { processFile, getEnv } = require("./build-website");
 
 function timestamp() {
   const now = new Date();
@@ -14,13 +14,25 @@ function log(...msgs) {
   console.log(timestamp(), ...msgs);
 }
 
-function update() {
-  log("Change detected. Rebuilding website...");
-  build();
+const nunjucksEnv = getEnv();
+function update(filename) {
+  const processed = processFile(filename, nunjucksEnv);
+  if (!processed) {
+    return;
+  }
+
+  const extension = path.extname(filename);
+  if (extension === ".njk") {
+    log(`Rendered template ${filename}`);
+  } else {
+    log(`Copied asset ${filename}`);
+  }
 }
 
 const websiteDir = path.resolve(__dirname, "..", "website");
-const watcher = chokidar.watch(websiteDir);
+const watcher = chokidar.watch(websiteDir, {
+  cwd: websiteDir,
+});
 watcher.on("add", update);
 watcher.on("change", update);
 

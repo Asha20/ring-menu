@@ -51,3 +51,17 @@ text {
 .permalink {
   text-decoration: none;
 }
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav a {
+  text-decoration: none;
+}
+
+.token.operator {
+  background: none;
+}
