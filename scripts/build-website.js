@@ -1,11 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const nunjucks = require("nunjucks");
+const minify = require("html-minifier").minify;
 
-const PROJECT_ROOT = path.resolve(__dirname, "..");
-const WEBSITE = path.resolve(PROJECT_ROOT, "website");
-const PUBLIC = path.resolve(PROJECT_ROOT, "public");
 const { resolve } = path;
+const PROJECT_ROOT = resolve(__dirname, "..");
+const WEBSITE = resolve(PROJECT_ROOT, "website");
+const PUBLIC = resolve(PROJECT_ROOT, "public");
+const DIST = resolve(PROJECT_ROOT, "dist");
 
 function mkdir(dir) {
   if (!fs.existsSync(dir)) {
@@ -13,21 +15,25 @@ function mkdir(dir) {
   }
 }
 
-function build() {
+function build(mode) {
   const filenames = fs.readdirSync(WEBSITE);
   for (const filename of filenames) {
-    processFile(filename);
+    processFile(mode, filename);
   }
+  fs.copyFileSync(
+    resolve(DIST, "ring-menu.js"),
+    resolve(PUBLIC, "ring-menu.js"),
+  );
 }
 
-function processFile(filename, nunjucksEnv = getEnv()) {
+function processFile(mode, filename, nunjucksEnv = getEnv()) {
   if (filename.startsWith("_")) {
     return false;
   }
 
   switch (path.extname(filename)) {
     case ".njk":
-      renderTemplate(filename, nunjucksEnv);
+      renderTemplate(mode, filename, nunjucksEnv);
       break;
     default:
       copyAsset(filename);
@@ -53,21 +59,46 @@ function filenameIntoParts(filename) {
   return [name, extension];
 }
 
-function renderTemplate(filename, env) {
-  mkdir(PUBLIC);
+const minifyOptions = {
+  collapseWhitespace: true,
+  removeComments: true,
+  removeRedundantAttributes: true,
+  removeScriptTypeAttributes: true,
+  removeTagWhitespace: true,
+  useShortDoctype: true,
+  minifyCSS: true,
+  minifyJS: true,
+};
+function getHtml(mode, filename, env) {
   const content = fs.readFileSync(resolve(WEBSITE, filename), "utf8");
   const html = env.renderString(content);
+  if (mode !== "production") {
+    return html;
+  }
+  return minify(html, minifyOptions);
+}
+
+function renderTemplate(mode, filename, env) {
+  mkdir(PUBLIC);
+  const html = getHtml(mode, filename, env);
   const [outputName, _] = filenameIntoParts(filename);
   fs.writeFileSync(resolve(PUBLIC, outputName + ".html"), html);
 }
 
-function copyAsset(filename) {
+function copyAsset(filePath) {
   mkdir(PUBLIC);
-  fs.copyFileSync(resolve(WEBSITE, filename), resolve(PUBLIC, filename));
+  const filename = path.basename(filePath);
+  fs.copyFileSync(resolve(WEBSITE, filePath), resolve(PUBLIC, filename));
 }
 
-module.exports = { processFile, getEnv };
+module.exports = { processFile, getEnv, DIST, WEBSITE };
 
 if (!module.parent) {
-  build();
+  const mode = process.argv[2] || "production";
+  if (mode !== "development" && mode !== "production") {
+    return console.log(
+      "Provide a mode of either 'development' or 'production'.",
+    );
+  }
+  build(mode);
 }

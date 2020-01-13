@@ -1,6 +1,8 @@
 const path = require("path");
 const chokidar = require("chokidar");
-const { processFile, getEnv } = require("./build-website");
+const { processFile, getEnv, DIST, WEBSITE } = require("./build-website");
+
+const resolve = path.resolve;
 
 function timestamp() {
   const now = new Date();
@@ -16,7 +18,7 @@ function log(...msgs) {
 
 const nunjucksEnv = getEnv();
 function update(filename) {
-  const processed = processFile(filename, nunjucksEnv);
+  const processed = processFile("development", filename, nunjucksEnv);
   if (!processed) {
     return;
   }
@@ -29,10 +31,9 @@ function update(filename) {
   }
 }
 
-const websiteDir = path.resolve(__dirname, "..", "website");
-const watcher = chokidar.watch(websiteDir, {
-  cwd: websiteDir,
-});
+const watcher = chokidar.watch(WEBSITE, { cwd: WEBSITE });
+watcher.add(resolve(DIST, "ring-menu.js"));
+
 watcher.on("add", update);
 watcher.on("change", update);
 

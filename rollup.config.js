@@ -21,27 +21,32 @@ function filterFalsy(array) {
   return array.filter(x => x);
 }
 
-const common = {
-  input: "src/ring-menu.ts",
-  output: {
-    sourcemap: true,
-  },
-  plugins: [ts()],
-};
+export default async function() {
+  const common = {
+    input: "src/ring-menu.ts",
+    output: {
+      sourcemap: true,
+    },
+    plugins: filterFalsy([
+      ts(),
+      PRODUCTION && (await import("rollup-plugin-terser")).terser(),
+    ]),
+  };
 
-const umd = merge(common, {
-  output: {
-    name: "RM",
-    file: pkg.browser,
-    format: "umd",
-  },
-});
+  const iife = merge(common, {
+    output: {
+      name: "RM",
+      file: pkg.browser,
+      format: "iife",
+    },
+  });
 
-const es6 = merge(common, {
-  output: {
-    file: pkg.module,
-    format: "es",
-  },
-});
+  const es6 = merge(common, {
+    output: {
+      file: pkg.module,
+      format: "es",
+    },
+  });
 
-export default filterFalsy([umd, PRODUCTION && es6]);
+  return filterFalsy([iife, PRODUCTION && es6]);
+}
