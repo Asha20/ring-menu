@@ -1,5 +1,5 @@
 {% set page = 'anatomy.html' %}
-{% set page = 'Anatomy | RingMenu' %}
+{% set title = 'Anatomy | RingMenu' %}
 {% set description = 'Description of the various parts used to build a RingMenu.' %}
 {% extends '_base.njk' %}
 
@@ -14,7 +14,7 @@
     const menu = RM.menu([
       RM.circle(50, "Circle", {fill: "red"}),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ') }}
 
   <p>Circles are optional and can only be found in the very center of a menu.</p>
@@ -31,7 +31,7 @@
         RM.sector("Sector 2", {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>Here we specified a ring with a width of 100 pixels that consists of two sectors. Notice how we didn't need to specify the size of our sectors; they split the ring into equal parts by themselves. What if we wanted our ring to have six sectors instead? Also, we've already mentioned that circles are optional, so how about a menu without a circle? Let's give it a try:</p>
@@ -47,7 +47,7 @@
         RM.sector("Sector 6", {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>As you might have expected, the six sectors will divide the ring equally. Also, because menus are always built from the inside out and we didn't use a circle in this menu, it means that the ring will start from the very center of the menu, resulting in a menu that looks kind of like a pie chart.</p>
@@ -66,7 +66,7 @@
         RM.sector("Outer 2", {fill: "yellowgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   {{ heading('h2', 'Gaps') }}
@@ -87,7 +87,7 @@
           RM.sector("Outer 2", {fill: "yellowgreen"}),
         ]),
       ]);
-      const svg = RM.build(menu);
+      const { el } = RM.build(menu);
     ')}}
 
   <p>Here we've added a 50 pixel wide gap between the two rings. Notice how we've also added a 40 pixel wide gap before the first ring. If you don't need a <em>circle</em> in the center of your menu, but you also don't want your first ring to start from the center, then use a <em>gap</em>.</p>

@@ -1,5 +1,5 @@
 {% set page = 'dynamic-values.html' %}
-{% set page = 'Dynamic values | RingMenu' %}
+{% set title = 'Dynamic values | RingMenu' %}
 {% set description = 'Explaining the concept of dynamic values which allow you to define menu parts of self-adjusting sizes.' %}
 {% extends '_base.njk' %}
 
@@ -19,7 +19,7 @@
         RM.sector("Sector 2", d(1), {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>The resulting ring might look familiar; in the beginning of this page, we created a ring with sectors that didn't have defined angles:</p>
@@ -33,7 +33,7 @@
         RM.sector("Sector 2", {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>If you don't specify the angle of a sector, it will default to a dynamic value of factor 1. If all sectors in a ring have the same dynamic factor, they will all have equal angles.</p>
@@ -49,7 +49,7 @@
         RM.sector("Sector 2", d(1), {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>Sector offsets can be dynamic as well.</p>
@@ -63,7 +63,7 @@
         RM.sector("Sector 2", d(1), d(2), {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>Sector 1 is twice as big as sector 2, while the space from sector 1 to sector 2 is twice as small as the space from sector 2 to sector 1. Sectors or offsets of the same dynamic factor will have the same angle.</p>
@@ -79,7 +79,7 @@
         RM.dsector("Sector 2", 1, 2, {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>A ring offset can also be a dynamic value.</p>
@@ -95,7 +95,7 @@
         RM.sector("Sector 4", {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   {{ heading('h2', 'Mixing dynamic and static values') }}
@@ -114,7 +114,7 @@
         RM.sector("100", 100, {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>Remember that dynamic values represent parts of a whole. This whole is the entire 360 degrees minus any static angles or offsets your sector might have. If you were to calculate the offsets manually, you'd first have to calculate the whole and divide it by the number of sectors. Using dynamic values does all of that for you under the hood.</p>
@@ -133,7 +133,7 @@
         RM.sector("4", {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>We've ensured that the space between each sector is exactly 30 degrees, while also making sector 3 twice as large as the others.</p>

@@ -1,5 +1,5 @@
 {% set page = 'angles-and-offsets.html' %}
-{% set page = 'Angles and offsets | RingMenu' %}
+{% set title = 'Angles and offsets | RingMenu' %}
 {% set description = 'Explaining the concept of angles and offsets used when defining sectors and rings.' %}
 {% extends '_base.njk' %}
 
@@ -19,7 +19,7 @@
         RM.sector("50", 50, {fill: "lightsalmon"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>Here we've constructed sectors of angles of 30, 40 and 50 degrees. The sum of the sector angles doesn't have to be equal to 360 degrees for them to render, but it must not be larger than 360.</p>
@@ -37,7 +37,7 @@
         RM.sector("3", 50, {fill: "lightsalmon"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>In this example we have two offsets, one of 20 degrees and the other one of 50 degrees; resulting in a 20 degree gap between sectors 1 and 2, as well as a 50 degree gap between sectors 2 and 3.</p>
@@ -53,7 +53,7 @@
         RM.sector("3", 50, {fill: "lightsalmon"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 
   <p>Here, the offsets of sectors 1 and 3 are unspecified, so they inherit the ring's separator of 20 degrees, while sector 2 uses its own offset of 100 degrees.</p>
@@ -67,6 +67,6 @@
         RM.sector("2", {fill: "lightgreen"}),
       ]),
     ]);
-    const svg = RM.build(menu);
+    const { el } = RM.build(menu);
   ')}}
 {% endblock %}

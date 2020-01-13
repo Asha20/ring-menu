@@ -19,13 +19,11 @@
   }
 
   async function renderExample(root, code) {
-    const exported = await esm`
+    const { el } = await esm`
       function _render() {}
       ${code}
-      _render(svg);
-      export {svg};
+      export { el };
     `;
-    const el = exported.svg.el;
     qs(".example__result", root).appendChild(el);
   }
 
