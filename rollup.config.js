@@ -1,4 +1,4 @@
-import ts from "rollup-plugin-typescript2";
+import ts from "@wessberg/rollup-plugin-ts";
 import pkg from "./package.json";
 
 const PRODUCTION = process.env.BUILD === "production";

@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.25",
     "@types/jest-expect-message": "^1.0.1",
+    "@wessberg/rollup-plugin-ts": "^1.2.12",
     "chokidar": "^3.3.1",
     "html-minifier": "^4.0.0",
     "jest": "^24.9.0",
@@ -30,9 +31,8 @@
     "nunjucks": "^3.2.0",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
-    "rollup": "^1.27.14",
+    "rollup": "^1.29.0",
     "rollup-plugin-terser": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.25.3",
     "ts-jest": "^24.2.0",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
