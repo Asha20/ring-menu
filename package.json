@@ -6,7 +6,7 @@
   "module": "es6/ring-menu.js",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c --environment BUILD:production",
+    "build": "rimraf dist/ es6/ && rollup -c --environment BUILD:production && node scripts/build-website.js",
     "start": "rollup -c --watch",
     "website:build": "node scripts/build-website.js",
     "website:watch": "node scripts/watch-website.js",
@@ -29,6 +29,7 @@
     "jest-expect-message": "^1.0.2",
     "nunjucks": "^3.2.0",
     "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
     "rollup": "^1.27.14",
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.25.3",

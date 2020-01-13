@@ -7,6 +7,7 @@ devDependencies:
   jest-expect-message: 1.0.2
   nunjucks: 3.2.0
   prettier: 1.19.1
+  rimraf: 3.0.0
   rollup: 1.27.14
   rollup-plugin-terser: 5.2.0_rollup@1.27.14
   rollup-plugin-typescript2: 0.25.3_rollup@1.27.14+typescript@3.7.4
@@ -3286,6 +3287,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==
+  /rimraf/3.0.0:
+    dependencies:
+      glob: 7.1.6
+    dev: true
+    hasBin: true
+    resolution:
+      integrity: sha512-NDGVxTsjqfunkds7CqsOiEnxln4Bo7Nddl3XhS4pXg5OzwkLqJ971ZVAAnB+DDLnF76N+VnDEiBHaVV8I06SUg==
   /rollup-plugin-terser/5.2.0_rollup@1.27.14:
     dependencies:
       '@babel/code-frame': 7.8.0
@@ -4109,6 +4117,7 @@ specifiers:
   jest-expect-message: ^1.0.2
   nunjucks: ^3.2.0
   prettier: ^1.19.1
+  rimraf: ^3.0.0
   rollup: ^1.27.14
   rollup-plugin-terser: ^5.2.0
   rollup-plugin-typescript2: ^0.25.3
