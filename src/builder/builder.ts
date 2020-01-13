@@ -6,7 +6,15 @@ import {
   PartType,
   Ring,
   StaticSector,
+  Gap,
 } from "../parts/parts";
+import { assert } from "../util/assert";
+
+type Refs = Record<string, SVGElement>;
+interface Rendered {
+  el: SVGElement;
+  refs: Refs;
+}
 
 function radians(degrees: number) {
   return (degrees / 180) * Math.PI;
@@ -14,6 +22,24 @@ function radians(degrees: number) {
 
 function toFixed(x: number, digits: number) {
   return Number(x.toFixed(digits));
+}
+
+function addRef(refs: Refs, name: unknown, el: SVGElement) {
+  if (name === undefined) {
+    return refs;
+  }
+  assert(typeof name === "string", "A ref must be a string.");
+  assert(!refs.hasOwnProperty(name), "Duplicate ref: " + name);
+  const ref = name as string;
+  refs[ref] = el;
+  return refs;
+}
+
+function mergeRefs(baseRefs: Refs, otherRefs: Refs) {
+  Object.keys(otherRefs).forEach(ref => {
+    addRef(baseRefs, ref, otherRefs[ref]);
+  });
+  return baseRefs;
 }
 
 export function renderContent(content: Content, x: number, y: number) {
@@ -34,24 +60,32 @@ export function renderContent(content: Content, x: number, y: number) {
   return h.g({ transform: `translate(${x}, ${y})` }, [content]);
 }
 
-export function renderCircle(circle: Circle, x: number, y: number) {
+export function renderCircle(circle: Circle, x: number, y: number): Rendered {
   const el = h.circle(x, y, circle.radius, circle.attrs);
+  const refs = addRef({}, circle.attrs.ref, el);
   if (circle.content === undefined) {
-    return el;
+    return { el, refs };
   }
-  return h.g({}, [el, renderContent(circle.content, x, y)]);
+
+  const group = h.g({}, [el, renderContent(circle.content, x, y)]);
+  return { el: group, refs };
 }
 
-export function renderRing(ring: Ring, pos: number) {
-  const sectors = ring.sectors.map(x => renderSector(ring.width, pos, x));
-  return h.g(ring.attrs, sectors);
+export function renderRing(ring: Ring, pos: number): Rendered {
+  const allRefs = {};
+  const sectors = ring.sectors.map(x => {
+    const { el, refs } = renderSector(ring.width, pos, x);
+    mergeRefs(allRefs, refs);
+    return el;
+  });
+  return { el: h.g(ring.attrs, sectors), refs: allRefs };
 }
 
 export function renderSector(
   width: number,
   innerRadius: number,
   sector: StaticSector,
-) {
+): Rendered {
   const R = innerRadius + width;
   const r = innerRadius;
 
@@ -78,32 +112,42 @@ export function renderSector(
     transform: `rotate(${sector.offset}, 0, 0)`,
     ...sector.attrs,
   });
+  const refs = addRef({}, sector.attrs.ref, el);
   if (sector.content === undefined) {
-    return el;
+    return { el, refs };
   }
 
   const centerAngle = radians(sector.offset + sector.angle / 2);
   const centerX = toFixed((r + width / 2) * Math.sin(centerAngle), 3);
   const centerY = toFixed((r + width / 2) * -Math.cos(centerAngle), 3);
-  return h.g({}, [el, renderContent(sector.content, centerX, centerY)]);
+  const group = h.g({}, [el, renderContent(sector.content, centerX, centerY)]);
+  return { el: group, refs };
 }
 
-export function renderMenu(menu: Menu) {
+function renderPart(
+  part: Circle | Gap | Ring,
+  pos: number,
+): { el: SVGElement | undefined; refs: Refs; newPos: number } {
+  switch (part.type) {
+    case PartType.Circle:
+      return { ...renderCircle(part, 0, 0), newPos: pos + part.radius };
+    case PartType.Gap:
+      return { el: undefined, refs: {}, newPos: pos + part.width };
+    case PartType.Ring:
+      return { ...renderRing(part, pos), newPos: pos + part.width };
+  }
+}
+
+export function renderMenu(menu: Menu): Rendered {
   let pos = 0;
   const elements = [];
-  for (const el of menu.structure) {
-    switch (el.type) {
-      case PartType.Circle:
-        elements.push(renderCircle(el, 0, 0));
-        pos += el.radius;
-        break;
-      case PartType.Gap:
-        pos += el.width;
-        break;
-      case PartType.Ring:
-        elements.push(renderRing(el, pos));
-        pos += el.width;
-        break;
+  const allRefs: Refs = {};
+  for (const part of menu.structure) {
+    const { el, refs, newPos } = renderPart(part, pos);
+    mergeRefs(allRefs, refs);
+    pos = newPos;
+    if (el) {
+      elements.push(el);
     }
   }
 
@@ -117,5 +161,7 @@ export function renderMenu(menu: Menu) {
     },
     [h.g({ transform: `translate(${size / 2}, ${size / 2})` }, elements)],
   );
-  return el;
+  addRef(allRefs, menu.attrs.ref, el);
+
+  return { el, refs: allRefs };
 }

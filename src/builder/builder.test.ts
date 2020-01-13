@@ -11,10 +11,11 @@ import {
 } from "../parts/parts";
 import * as h from "./h";
 import { AnyObject } from "../util/util";
+import { AssertError } from "../util/assert";
 
 it("renderCircle()", () => {
   const c1 = renderCircle(circle(30), 0, 0);
-  expect(c1).toMatchInlineSnapshot(`
+  expect(c1.el).toMatchInlineSnapshot(`
     <circle
       cx="0"
       cy="0"
@@ -25,7 +26,7 @@ it("renderCircle()", () => {
 
 it("renderCircle() with content", () => {
   const c1 = renderCircle(circle(30, "Hello"), 0, 0);
-  expect(c1).toMatchInlineSnapshot(`
+  expect(c1.el).toMatchInlineSnapshot(`
     <g>
       <circle
         cx="0"
@@ -50,7 +51,7 @@ it("renderCircle() with content", () => {
     0,
     0,
   );
-  expect(c2).toMatchInlineSnapshot(`
+  expect(c2.el).toMatchInlineSnapshot(`
     <g>
       <circle
         cx="0"
@@ -73,7 +74,7 @@ it("renderCircle() with content", () => {
 
 it("renderSector()", () => {
   const s1 = renderSector(100, 30, sector(90, 0) as StaticSector);
-  expect(s1).toMatchInlineSnapshot(`
+  expect(s1.el).toMatchInlineSnapshot(`
     <path
       d="
         M 0 -30
@@ -87,7 +88,7 @@ it("renderSector()", () => {
   `);
 
   const s2 = renderSector(50, 0, sector(120, 60) as StaticSector);
-  expect(s2).toMatchInlineSnapshot(`
+  expect(s2.el).toMatchInlineSnapshot(`
     <path
       d="
         M 0 0
@@ -103,7 +104,7 @@ it("renderSector()", () => {
 
 it("renderSector() with content", () => {
   const s1 = renderSector(100, 30, sector("Foo", 90, 0) as StaticSector);
-  expect(s1).toMatchInlineSnapshot(`
+  expect(s1.el).toMatchInlineSnapshot(`
     <g>
       <path
         d="
@@ -133,7 +134,7 @@ it("renderSector() with content", () => {
     30,
     sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector,
   );
-  expect(s2).toMatchInlineSnapshot(`
+  expect(s2.el).toMatchInlineSnapshot(`
     <g>
       <path
         d="
@@ -161,7 +162,7 @@ it("renderSector() with content", () => {
 
 it("renderRing()", () => {
   const r1 = renderRing(ring(100, 0, 0, [dsector(1, 0), dsector(2, 1)]), 0);
-  expect(r1).toMatchInlineSnapshot(`
+  expect(r1.el).toMatchInlineSnapshot(`
     <g>
       <path
         d="
@@ -187,7 +188,7 @@ it("renderRing()", () => {
   `);
 
   const r2 = renderRing(ring(100, 30, d(1), [dsector(2), sector(30, 60)]), 0);
-  expect(r2).toMatchInlineSnapshot(`
+  expect(r2.el).toMatchInlineSnapshot(`
     <g>
       <path
         d="
@@ -213,7 +214,7 @@ it("renderRing()", () => {
   `);
 });
 
-it("build()", () => {
+it("renderMenu()", () => {
   const m1 = renderMenu(
     menu([
       circle(25),
@@ -222,7 +223,7 @@ it("build()", () => {
     ]),
   );
 
-  expect(m1).toMatchInlineSnapshot(`
+  expect(m1.el).toMatchInlineSnapshot(`
     <svg
       height="250"
       viewBox="0 0 250 250"
@@ -276,7 +277,7 @@ it("build()", () => {
     menu([circle(50), ring(100, d(1), d(0.5), [sector(30), sector(d(1))])]),
   );
 
-  expect(m2).toMatchInlineSnapshot(`
+  expect(m2.el).toMatchInlineSnapshot(`
     <svg
       height="300"
       viewBox="0 0 300 300"
@@ -317,29 +318,60 @@ it("build()", () => {
   `);
 });
 
+it("Refs", () => {
+  const m1 = renderMenu(
+    menu(
+      [
+        circle(30, { ref: "circleEl" }),
+        ring(40, [sector("Sec1", { ref: "sectorEl1" })]),
+        ring(50, [sector("Sec2", { ref: "sectorEl2" })]),
+      ],
+      { ref: "menuEl" },
+    ),
+  );
+
+  expect(m1.refs.circleEl.nodeName).toBe("circle");
+  expect(m1.refs.sectorEl1.nodeName).toBe("path");
+  expect(m1.refs.sectorEl2.nodeName).toBe("path");
+  expect(m1.refs.menuEl.nodeName).toBe("svg");
+
+  expect(
+    () => renderMenu(menu([circle(50, { ref: "foo" })], { ref: "foo" })),
+    "Duplicate refs",
+  ).toThrow(AssertError);
+
+  expect(
+    () => renderMenu(menu([circle(50)], { ref: 123 })),
+    "Non-string ref",
+  ).toThrow(AssertError);
+});
+
 it("Rendering a menu part with attributes", () => {
   const circleWithAttributes = (attrs: AnyObject) =>
     renderCircle(circle(50, attrs), 0, 0);
 
   const c1 = circleWithAttributes({ id: 3 });
-  expect(c1.getAttribute("id"), "Plain id attribute").toBe("3");
+  expect(c1.el.getAttribute("id"), "Plain id attribute").toBe("3");
 
   const c2 = circleWithAttributes({ style: "fill: red;" });
-  expect(c2.getAttribute("style"), "style as a string").toBe("fill: red;");
+  expect(c2.el.getAttribute("style"), "style as a string").toBe("fill: red;");
 
   const c3 = circleWithAttributes({ style: { stroke: "red" } });
-  expect(c3.getAttribute("style"), "style as an object").toBe("stroke: red;");
+  expect(c3.el.getAttribute("style"), "style as an object").toBe(
+    "stroke: red;",
+  );
 
   const c4 = circleWithAttributes({ class: "foo bar" });
-  expect(c4.getAttribute("class"), "Classes separated by one space").toBe(
+  expect(c4.el.getAttribute("class"), "Classes separated by one space").toBe(
     "foo bar",
   );
 
   const c5 = circleWithAttributes({ className: "one    two three-four" });
-  expect(c5.getAttribute("class"), "Classes separated by multiple spaces").toBe(
-    "one two three-four",
-  );
+  expect(
+    c5.el.getAttribute("class"),
+    "Classes separated by multiple spaces",
+  ).toBe("one two three-four");
 
   const c6 = circleWithAttributes({ textContent: "foo" });
-  expect(c6.textContent, "Special handling of textContent").toBe("foo");
+  expect(c6.el.textContent, "Special handling of textContent").toBe("foo");
 });

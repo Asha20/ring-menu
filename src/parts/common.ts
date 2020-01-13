@@ -1,4 +1,4 @@
-import { Brand } from "../util/util";
+import { Brand, AnyObject } from "../util/util";
 import { assert } from "../util/assert";
 
 export enum PartType {
@@ -14,7 +14,7 @@ export type Content = string | SVGElement;
 
 export interface Part {
   type: PartType;
-  attrs: Object;
+  attrs: AnyObject;
   content: Content | undefined;
 }
 
