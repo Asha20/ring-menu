@@ -61,7 +61,7 @@ export function renderContent(content: Content, x: number, y: number) {
 }
 
 export function renderCircle(circle: Circle, x: number, y: number): Rendered {
-  const el = h.circle(x, y, circle.radius, circle.attrs);
+  const el = h.circle(x, y, circle.radius, { ...circle.attrs, tabindex: 0 });
   const refs = addRef({}, circle.attrs.ref, el);
   if (circle.content === undefined) {
     return { el, refs };
@@ -111,6 +111,7 @@ export function renderSector(
   const el = h.path(d, {
     transform: `rotate(${sector.offset}, 0, 0)`,
     ...sector.attrs,
+    tabindex: 0,
   });
   const refs = addRef({}, sector.attrs.ref, el);
   if (sector.content === undefined) {
