@@ -108,3 +108,6 @@ dist
 
 ## Built ES6 files
 es6/
+
+## Build website files
+public/

@@ -1,0 +1,70 @@
+{% set page = 'angles-and-offsets.html' %}
+{% extends '_base.njk' %}
+
+{% block page %}
+  {{ heading('h1', 'Angles and offsets') }}
+
+  {{ heading('h2', 'Static angles') }}
+
+  <p>While having sectors divide the ring equally by default might be useful in some cases, sometimes you'll want to specify the angle of each sector yourself. You can do that like so:</p>
+
+  {{ example('
+    const menu = RM.menu([
+      RM.gap(40),
+      RM.ring(100, [
+        RM.sector("30", 30, {fill: "lightblue"}),
+        RM.sector("40", 40, {fill: "lightgreen"}),
+        RM.sector("50", 50, {fill: "lightsalmon"}),
+      ]),
+    ]);
+    const svg = RM.build(menu);
+  ')}}
+
+  <p>Here we've constructed sectors of angles of 30, 40 and 50 degrees. The sum of the sector angles doesn't have to be equal to 360 degrees for them to render, but it must not be larger than 360.</p>
+
+  {{ heading('h2', 'Static offsets') }}
+
+  <p>What if we wanted to have empty space between sectors? We can do by specifying an offset on a sector:</p>
+
+  {{ example('
+    const menu = RM.menu([
+      RM.gap(40),
+      RM.ring(100, [
+        RM.sector("1", 30, 20, {fill: "lightblue"}),
+        RM.sector("2", 40, 50, {fill: "lightgreen"}),
+        RM.sector("3", 50, {fill: "lightsalmon"}),
+      ]),
+    ]);
+    const svg = RM.build(menu);
+  ')}}
+
+  <p>In this example we have two offsets, one of 20 degrees and the other one of 50 degrees; resulting in a 20 degree gap between sectors 1 and 2, as well as a 50 degree gap between sectors 2 and 3.</p>
+
+  <p>Optionally, we can set a <em>separator</em> on the ring. If a sector doesn't have its offset specified, it will use the <em>separator</em> of its parent ring (which defaults to zero if unspecified).</p>
+
+  {{ example('
+    const menu = RM.menu([
+      RM.gap(40),
+      RM.ring(100, 20, [
+        RM.sector("1", 30, {fill: "lightblue"}),
+        RM.sector("2", 40, 100, {fill: "lightgreen"}),
+        RM.sector("3", 50, {fill: "lightsalmon"}),
+      ]),
+    ]);
+    const svg = RM.build(menu);
+  ')}}
+
+  <p>Here, the offsets of sectors 1 and 3 are unspecified, so they inherit the ring's separator of 20 degrees, while sector 2 uses its own offset of 100 degrees.</p>
+
+  <p>If we want to offset the entire ring by some amount, we can define the offset of the ring right after the separator.</p>
+
+  {{ example('
+    const menu = RM.menu([
+      RM.ring(100, 0, 45, [
+        RM.sector("1",{fill: "lightblue"}),
+        RM.sector("2", {fill: "lightgreen"}),
+      ]),
+    ]);
+    const svg = RM.build(menu);
+  ')}}
+{% endblock %}

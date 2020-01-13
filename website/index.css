@@ -1,0 +1,67 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.example {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+pre.example__code,
+.example__result {
+  flex: auto;
+}
+
+pre.example__code {
+  min-width: 50%;
+  margin: 0;
+}
+
+.example__result {
+  min-width: 50%;
+  padding: 20px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+path {
+  stroke: black;
+  fill: light
+}
+
+text {
+  fill: black;
+}
+
+.permalink {
+  text-decoration: none;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav a {
+  text-decoration: none;
+}
+
+.token.operator {
+  background: none;
+}
