@@ -21,11 +21,20 @@ function filterFalsy(array) {
   return array.filter(x => x);
 }
 
+const banner = `
+/*!
+ * RingMenu v${pkg.version}
+ * (c) 2020 Vukašin Stepanović
+ * Released under the MIT License.
+ */
+`;
+
 export default async function() {
   const common = {
     input: "src/ring-menu.ts",
     output: {
       sourcemap: true,
+      banner,
     },
     plugins: filterFalsy([
       ts(),
