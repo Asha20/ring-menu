@@ -7,7 +7,7 @@ import {
   menu,
   ring,
   sector,
-  StaticSector,
+  StaticSector
 } from "../parts/parts";
 import * as h from "./h";
 import { AnyObject } from "../util/util";
@@ -20,6 +20,7 @@ it("renderCircle()", () => {
       cx="0"
       cy="0"
       r="30"
+      tabindex="0"
     />
   `);
 });
@@ -32,6 +33,7 @@ it("renderCircle() with content", () => {
         cx="0"
         cy="0"
         r="30"
+        tabindex="0"
       />
       <text
         dominant-baseline="middle"
@@ -49,7 +51,7 @@ it("renderCircle() with content", () => {
   const c2 = renderCircle(
     circle(30, h.circle(0, 0, 10, { fill: "red" })),
     0,
-    0,
+    0
   );
   expect(c2.el).toMatchInlineSnapshot(`
     <g>
@@ -57,6 +59,7 @@ it("renderCircle() with content", () => {
         cx="0"
         cy="0"
         r="30"
+        tabindex="0"
       />
       <g
         transform="translate(0, 0)"
@@ -83,6 +86,7 @@ it("renderSector()", () => {
         l -100 0.01
         A 30 30 0 0 0 0 -30
       "
+      tabindex="0"
       transform="rotate(0, 0, 0)"
     />
   `);
@@ -97,6 +101,7 @@ it("renderSector()", () => {
         l -43.304 -24.996
         A 0 0 0 0 0 0 0
       "
+      tabindex="0"
       transform="rotate(60, 0, 0)"
     />
   `);
@@ -114,6 +119,7 @@ it("renderSector() with content", () => {
         l -100 0.01
         A 30 30 0 0 0 0 -30
       "
+        tabindex="0"
         transform="rotate(0, 0, 0)"
       />
       <text
@@ -132,7 +138,7 @@ it("renderSector() with content", () => {
   const s2 = renderSector(
     100,
     30,
-    sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector,
+    sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector
   );
   expect(s2.el).toMatchInlineSnapshot(`
     <g>
@@ -144,6 +150,7 @@ it("renderSector() with content", () => {
         l -100 0.01
         A 30 30 0 0 0 0 -30
       "
+        tabindex="0"
         transform="rotate(0, 0, 0)"
       />
       <g
@@ -172,6 +179,7 @@ it("renderRing()", () => {
         l -100 0.01
         A 0 0 0 0 0 0 0
       "
+        tabindex="0"
         transform="rotate(0, 0, 0)"
       />
       <path
@@ -182,6 +190,7 @@ it("renderRing()", () => {
         l -0.01 -100
         A 0 0 0 0 0 0 0
       "
+        tabindex="0"
         transform="rotate(90, 0, 0)"
       />
     </g>
@@ -198,6 +207,7 @@ it("renderRing()", () => {
         l 86.598 -50.009
         A 0 0 0 1 0 0 0
       "
+        tabindex="0"
         transform="rotate(120, 0, 0)"
       />
       <path
@@ -208,6 +218,7 @@ it("renderRing()", () => {
         l -49.991 86.608
         A 0 0 0 0 0 0 0
       "
+        tabindex="0"
         transform="rotate(390, 0, 0)"
       />
     </g>
@@ -219,8 +230,8 @@ it("renderMenu()", () => {
     menu([
       circle(25),
       gap(50),
-      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)]),
-    ]),
+      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)])
+    ])
   );
 
   expect(m1.el).toMatchInlineSnapshot(`
@@ -236,6 +247,7 @@ it("renderMenu()", () => {
           cx="0"
           cy="0"
           r="25"
+          tabindex="0"
         />
         <g>
           <path
@@ -246,6 +258,7 @@ it("renderMenu()", () => {
         l -50 0.005
         A 75 75 0 0 0 0 -75
       "
+            tabindex="0"
             transform="rotate(0, 0, 0)"
           />
           <path
@@ -256,6 +269,7 @@ it("renderMenu()", () => {
         l -24.996 43.304
         A 75 75 0 0 0 0 -75
       "
+            tabindex="0"
             transform="rotate(90, 0, 0)"
           />
           <path
@@ -266,6 +280,7 @@ it("renderMenu()", () => {
         l -38.299 32.143
         A 75 75 0 0 0 0 -75
       "
+            tabindex="0"
             transform="rotate(120, 0, 0)"
           />
         </g>
@@ -274,7 +289,7 @@ it("renderMenu()", () => {
   `);
 
   const m2 = renderMenu(
-    menu([circle(50), ring(100, d(1), d(0.5), [sector(30), sector(d(1))])]),
+    menu([circle(50), ring(100, d(1), d(0.5), [sector(30), sector(d(1))])])
   );
 
   expect(m2.el).toMatchInlineSnapshot(`
@@ -290,6 +305,7 @@ it("renderMenu()", () => {
           cx="0"
           cy="0"
           r="50"
+          tabindex="0"
         />
         <g>
           <path
@@ -300,6 +316,7 @@ it("renderMenu()", () => {
         l -49.991 86.608
         A 50 50 0 0 0 0 -50
       "
+            tabindex="0"
             transform="rotate(55, 0, 0)"
           />
           <path
@@ -310,6 +327,7 @@ it("renderMenu()", () => {
         l -93.973 -34.193
         A 50 50 0 0 0 0 -50
       "
+            tabindex="0"
             transform="rotate(195, 0, 0)"
           />
         </g>
@@ -324,10 +342,10 @@ it("Refs", () => {
       [
         circle(30, { ref: "circleEl" }),
         ring(40, [sector("Sec1", { ref: "sectorEl1" })]),
-        ring(50, [sector("Sec2", { ref: "sectorEl2" })]),
+        ring(50, [sector("Sec2", { ref: "sectorEl2" })])
       ],
-      { ref: "menuEl" },
-    ),
+      { ref: "menuEl" }
+    )
   );
 
   expect(m1.refs.circleEl.nodeName).toBe("circle");
@@ -337,12 +355,12 @@ it("Refs", () => {
 
   expect(
     () => renderMenu(menu([circle(50, { ref: "foo" })], { ref: "foo" })),
-    "Duplicate refs",
+    "Duplicate refs"
   ).toThrow(AssertError);
 
   expect(
     () => renderMenu(menu([circle(50)], { ref: 123 })),
-    "Non-string ref",
+    "Non-string ref"
   ).toThrow(AssertError);
 });
 
@@ -358,18 +376,18 @@ it("Rendering a menu part with attributes", () => {
 
   const c3 = circleWithAttributes({ style: { stroke: "red" } });
   expect(c3.el.getAttribute("style"), "style as an object").toBe(
-    "stroke: red;",
+    "stroke: red;"
   );
 
   const c4 = circleWithAttributes({ class: "foo bar" });
   expect(c4.el.getAttribute("class"), "Classes separated by one space").toBe(
-    "foo bar",
+    "foo bar"
   );
 
   const c5 = circleWithAttributes({ className: "one    two three-four" });
   expect(
     c5.el.getAttribute("class"),
-    "Classes separated by multiple spaces",
+    "Classes separated by multiple spaces"
   ).toBe("one two three-four");
 
   const c6 = circleWithAttributes({ textContent: "foo" });
