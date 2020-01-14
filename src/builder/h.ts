@@ -12,6 +12,9 @@ function hs<T extends keyof SVGElementTagNameMap>(tagName: T) {
 export function setAttributes<T extends SVGElement>(el: T, attrs: AnyObject) {
   Object.keys(attrs).forEach(key => {
     const value = attrs[key];
+    if (key === "ref") {
+      return;
+    }
     if (key === "class" || key === "className") {
       el.classList.add(...value.split(/\s+/));
       return;

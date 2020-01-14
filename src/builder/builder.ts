@@ -72,13 +72,16 @@ export function renderCircle(circle: Circle, x: number, y: number): Rendered {
 }
 
 export function renderRing(ring: Ring, pos: number): Rendered {
-  const allRefs = {};
+  const allRefs: Refs = {};
   const sectors = ring.sectors.map(x => {
     const { el, refs } = renderSector(ring.width, pos, x);
     mergeRefs(allRefs, refs);
     return el;
   });
-  return { el: h.g(ring.attrs, sectors), refs: allRefs };
+
+  const el = h.g(ring.attrs, sectors);
+  addRef(allRefs, ring.attrs.ref, el);
+  return { el, refs: allRefs };
 }
 
 export function renderSector(

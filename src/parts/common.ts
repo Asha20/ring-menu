@@ -1,7 +1,7 @@
 import { Brand, AnyObject } from "../util/util";
 import { assert } from "../util/assert";
 
-export const enum PartType {
+export enum PartType {
   Circle = "circle",
   Gap = "gap",
   Ring = "ring",

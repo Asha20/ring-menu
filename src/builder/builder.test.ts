@@ -7,7 +7,7 @@ import {
   menu,
   ring,
   sector,
-  StaticSector
+  StaticSector,
 } from "../parts/parts";
 import * as h from "./h";
 import { AnyObject } from "../util/util";
@@ -51,7 +51,7 @@ it("renderCircle() with content", () => {
   const c2 = renderCircle(
     circle(30, h.circle(0, 0, 10, { fill: "red" })),
     0,
-    0
+    0,
   );
   expect(c2.el).toMatchInlineSnapshot(`
     <g>
@@ -138,7 +138,7 @@ it("renderSector() with content", () => {
   const s2 = renderSector(
     100,
     30,
-    sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector
+    sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector,
   );
   expect(s2.el).toMatchInlineSnapshot(`
     <g>
@@ -230,8 +230,8 @@ it("renderMenu()", () => {
     menu([
       circle(25),
       gap(50),
-      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)])
-    ])
+      ring(50, 0, 0, [sector(90), sector(30), sector(50, 20)]),
+    ]),
   );
 
   expect(m1.el).toMatchInlineSnapshot(`
@@ -289,7 +289,7 @@ it("renderMenu()", () => {
   `);
 
   const m2 = renderMenu(
-    menu([circle(50), ring(100, d(1), d(0.5), [sector(30), sector(d(1))])])
+    menu([circle(50), ring(100, d(1), d(0.5), [sector(30), sector(d(1))])]),
   );
 
   expect(m2.el).toMatchInlineSnapshot(`
@@ -340,27 +340,31 @@ it("Refs", () => {
   const m1 = renderMenu(
     menu(
       [
-        circle(30, { ref: "circleEl" }),
-        ring(40, [sector("Sec1", { ref: "sectorEl1" })]),
-        ring(50, [sector("Sec2", { ref: "sectorEl2" })])
+        circle(30, { ref: "circle", class: "circle" }),
+        ring(40, [sector("Sec1", { ref: "sector1", class: "sector1" })], {
+          ref: "ring",
+          class: "ring",
+        }),
+        ring(50, [sector("Sec2", { ref: "sector2", class: "sector2" })]),
       ],
-      { ref: "menuEl" }
-    )
+      { ref: "menu", class: "menu" },
+    ),
   );
 
-  expect(m1.refs.circleEl.nodeName).toBe("circle");
-  expect(m1.refs.sectorEl1.nodeName).toBe("path");
-  expect(m1.refs.sectorEl2.nodeName).toBe("path");
-  expect(m1.refs.menuEl.nodeName).toBe("svg");
+  expect(m1.refs.circle.classList.contains("circle")).toBeTruthy();
+  expect(m1.refs.sector1.classList.contains("sector1")).toBeTruthy();
+  expect(m1.refs.sector2.classList.contains("sector2")).toBeTruthy();
+  expect(m1.refs.ring.classList.contains("ring")).toBeTruthy();
+  expect(m1.refs.menu.classList.contains("menu")).toBeTruthy();
 
   expect(
     () => renderMenu(menu([circle(50, { ref: "foo" })], { ref: "foo" })),
-    "Duplicate refs"
+    "Duplicate refs",
   ).toThrow(AssertError);
 
   expect(
     () => renderMenu(menu([circle(50)], { ref: 123 })),
-    "Non-string ref"
+    "Non-string ref",
   ).toThrow(AssertError);
 });
 
@@ -376,18 +380,18 @@ it("Rendering a menu part with attributes", () => {
 
   const c3 = circleWithAttributes({ style: { stroke: "red" } });
   expect(c3.el.getAttribute("style"), "style as an object").toBe(
-    "stroke: red;"
+    "stroke: red;",
   );
 
   const c4 = circleWithAttributes({ class: "foo bar" });
   expect(c4.el.getAttribute("class"), "Classes separated by one space").toBe(
-    "foo bar"
+    "foo bar",
   );
 
   const c5 = circleWithAttributes({ className: "one    two three-four" });
   expect(
     c5.el.getAttribute("class"),
-    "Classes separated by multiple spaces"
+    "Classes separated by multiple spaces",
   ).toBe("one two three-four");
 
   const c6 = circleWithAttributes({ textContent: "foo" });
