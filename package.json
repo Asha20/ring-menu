@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rimraf dist/ es6/ && rollup -c --environment BUILD:production && node scripts/build-website.js",
     "start": "rollup -c --watch",
-    "website:build": "node scripts/build-website.js",
+    "website:build": "rimraf public/ && node scripts/build-website.js",
     "website:watch": "node scripts/watch-website.js",
     "test": "jest"
   },

@@ -19,15 +19,16 @@
 <body>
   {% macro example(code) %}
   <article class="example">
-    <pre class="example__code"><code class="language-javascript">{{ code }}</code></pre>
+    <pre class="example__code"><code class="language-javascript">{{ code | escape }}</code></pre>
     <section class="example__result"></section>
   </article>
   {% endmacro %}
 
   {% macro heading(type, title) %}
-    <{{type}} id="{{title | joinStr}}">
-      <a class="permalink" href="#{{title | joinStr}}">#</a> {{ title }}
-    </{{type}}>
+    <div class="heading {{ type }}">
+      <a class="permalink" href="#{{title | joinStr}}">#</a>
+      <{{type}} id="{{title | joinStr}}">{{ title }}</{{type}}>
+    </div>
   {% endmacro %}
 
   {% macro navLink(link, text, currentPage) %}
@@ -41,10 +42,7 @@
   {% macro nav(currentPage) %}
     <nav>
       <ul>
-        {{ navLink('anatomy.html', 'Anatomy', currentPage) }}
-        {{ navLink('angles-and-offsets.html', 'Angles and offsets', currentPage) }}
-        {{ navLink('dynamic-values.html', 'Dynamic values', currentPage) }}
-        {{ navLink('interactivity.html', 'Interactivity', currentPage) }}
+        {{ navLink('usage.html', 'Usage', currentPage) }}
       </ul>
     </nav>
   {% endmacro %}

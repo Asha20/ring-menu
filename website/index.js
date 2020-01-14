@@ -32,7 +32,12 @@
 
   const examples = qsa(".example");
 
+  const deindented = new Set();
   Prism.hooks.add("before-highlight", env => {
+    if (deindented.has(env.element)) {
+      return;
+    }
+    deindented.add(env.element);
     env.code = deindent(env.code);
   });
 

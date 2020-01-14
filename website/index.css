@@ -22,10 +22,16 @@ p, em {
   color: #333;
 }
 
+.heading {
+  display: flex;
+  align-items: center;
+}
+
 .permalink {
   color: #555;
   text-decoration: none;
-  font-size: 120%;
+  font-size: 150%;
+  margin-right: 0.5em;
   transition: color 0.25s, text-shadow 0.25s ease-in-out;
 }
 
@@ -54,6 +60,10 @@ pre.example__code,
 pre.example__code {
   min-width: 50%;
   margin: 0;
+}
+
+pre code {
+  font-size: 80%;
 }
 
 .example__result {
@@ -126,4 +136,17 @@ text {
   nav li {
     width: 100%;
   }
+}
+
+.h1 { counter-reset: h2counter; }
+.h2 { counter-reset: h3counter; }
+
+.h2 h2:before {
+  counter-increment: h2counter;
+  content: counter(h2counter) ".\0000a0\0000a0";
+}
+
+.h3 h3:before {
+  counter-increment: h3counter;
+  content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
 }
