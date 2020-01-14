@@ -15,6 +15,9 @@ export function setAttributes<T extends SVGElement>(el: T, attrs: AnyObject) {
     if (key === "ref") {
       return;
     }
+    if (value === undefined || value === null) {
+      return;
+    }
     if (key === "class" || key === "className") {
       el.classList.add(...value.split(/\s+/));
       return;

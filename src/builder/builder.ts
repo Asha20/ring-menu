@@ -17,6 +17,10 @@ interface Rendered {
   refs: Refs;
 }
 
+interface RenderOptions {
+  includeTabIndexes: boolean;
+}
+
 function radians(degrees: number) {
   return (degrees / 180) * Math.PI;
 }
@@ -71,8 +75,16 @@ export function renderContent(content: Content, x: number, y: number) {
   return h.g({ transform: `translate(${x}, ${y})` }, [content]);
 }
 
-export function renderCircle(circle: Circle, x: number, y: number): Rendered {
-  const el = h.circle(x, y, circle.radius, { ...circle.attrs, tabindex: 0 });
+export function renderCircle(
+  circle: Circle,
+  x: number,
+  y: number,
+  options: RenderOptions,
+): Rendered {
+  const el = h.circle(x, y, circle.radius, {
+    ...circle.attrs,
+    tabindex: options.includeTabIndexes ? 0 : undefined,
+  });
   const refs = addRef({}, circle.attrs.ref, el);
   if (circle.content === undefined) {
     return { el, refs };
@@ -86,10 +98,14 @@ export function renderCircle(circle: Circle, x: number, y: number): Rendered {
   return { el: group, refs };
 }
 
-export function renderRing(ring: Ring, pos: number): Rendered {
+export function renderRing(
+  ring: Ring,
+  pos: number,
+  options: RenderOptions,
+): Rendered {
   const allRefs: Refs = {};
   const sectors = ring.sectors.map(x => {
-    const { el, refs } = renderSector(ring.width, pos, x);
+    const { el, refs } = renderSector(ring.width, pos, x, options);
     mergeRefs(allRefs, refs);
     return el;
   });
@@ -103,6 +119,7 @@ export function renderSector(
   width: number,
   innerRadius: number,
   sector: StaticSector,
+  options: RenderOptions,
 ): Rendered {
   const R = innerRadius + width;
   const r = innerRadius;
@@ -129,7 +146,7 @@ export function renderSector(
   const el = h.path(d, {
     transform: `rotate(${sector.offset}, 0, 0)`,
     ...sector.attrs,
-    tabindex: 0,
+    tabindex: options.includeTabIndexes ? 0 : undefined,
   });
   const refs = addRef({}, sector.attrs.ref, el);
   if (sector.content === undefined) {
@@ -150,23 +167,35 @@ export function renderSector(
 function renderPart(
   part: Circle | Gap | Ring,
   pos: number,
+  options: RenderOptions,
 ): { el: SVGElement | undefined; refs: Refs; newPos: number } {
   switch (part.type) {
     case PartType.Circle:
-      return { ...renderCircle(part, 0, 0), newPos: pos + part.radius };
+      return {
+        ...renderCircle(part, 0, 0, options),
+        newPos: pos + part.radius,
+      };
     case PartType.Gap:
       return { el: undefined, refs: {}, newPos: pos + part.width };
     case PartType.Ring:
-      return { ...renderRing(part, pos), newPos: pos + part.width };
+      return { ...renderRing(part, pos, options), newPos: pos + part.width };
   }
 }
 
-export function renderMenu(menu: Menu): Rendered {
+export const defaultOptions: RenderOptions = {
+  includeTabIndexes: false,
+};
+
+export function renderMenu(
+  menu: Menu,
+  options: Partial<RenderOptions> = {},
+): Rendered {
+  const mergedOptions: RenderOptions = { ...defaultOptions, ...options };
   let pos = 0;
   const elements = [];
   const allRefs: Refs = {};
   for (const part of menu.structure) {
-    const { el, refs, newPos } = renderPart(part, pos);
+    const { el, refs, newPos } = renderPart(part, pos, mergedOptions);
     mergeRefs(allRefs, refs);
     pos = newPos;
     if (el) {

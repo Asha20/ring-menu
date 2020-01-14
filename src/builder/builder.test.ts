@@ -1,4 +1,10 @@
-import { renderCircle, renderMenu, renderRing, renderSector } from "./builder";
+import {
+  renderCircle,
+  renderMenu,
+  renderRing,
+  renderSector,
+  defaultOptions,
+} from "./builder";
 import {
   circle,
   dsector,
@@ -15,26 +21,24 @@ import { AnyObject } from "../util/util";
 import { AssertError } from "../util/assert";
 
 it("renderCircle()", () => {
-  const c1 = renderCircle(circle(30), 0, 0);
+  const c1 = renderCircle(circle(30), 0, 0, defaultOptions);
   expect(c1.el).toMatchInlineSnapshot(`
     <circle
       cx="0"
       cy="0"
       r="30"
-      tabindex="0"
     />
   `);
 });
 
 it("renderCircle() with content", () => {
-  const c1 = renderCircle(circle(30, "Hello"), 0, 0);
+  const c1 = renderCircle(circle(30, "Hello"), 0, 0, defaultOptions);
   expect(c1.el).toMatchInlineSnapshot(`
     <g>
       <circle
         cx="0"
         cy="0"
         r="30"
-        tabindex="0"
       />
       <text
         dominant-baseline="middle"
@@ -53,6 +57,7 @@ it("renderCircle() with content", () => {
     circle(30, h.circle(0, 0, 10, { fill: "red" })),
     0,
     0,
+    defaultOptions,
   );
   expect(c2.el).toMatchInlineSnapshot(`
     <g>
@@ -60,7 +65,6 @@ it("renderCircle() with content", () => {
         cx="0"
         cy="0"
         r="30"
-        tabindex="0"
       />
       <g
         transform="translate(0, 0)"
@@ -77,7 +81,12 @@ it("renderCircle() with content", () => {
 });
 
 it("renderSector()", () => {
-  const s1 = renderSector(100, 30, sector(90, 0) as StaticSector);
+  const s1 = renderSector(
+    100,
+    30,
+    sector(90, 0) as StaticSector,
+    defaultOptions,
+  );
   expect(s1.el).toMatchInlineSnapshot(`
     <path
       d="
@@ -87,12 +96,16 @@ it("renderSector()", () => {
         l -100 0.01
         A 30 30 0 0 0 0 -30
       "
-      tabindex="0"
       transform="rotate(0, 0, 0)"
     />
   `);
 
-  const s2 = renderSector(50, 0, sector(120, 60) as StaticSector);
+  const s2 = renderSector(
+    50,
+    0,
+    sector(120, 60) as StaticSector,
+    defaultOptions,
+  );
   expect(s2.el).toMatchInlineSnapshot(`
     <path
       d="
@@ -102,14 +115,18 @@ it("renderSector()", () => {
         l -43.304 -24.996
         A 0 0 0 0 0 0 0
       "
-      tabindex="0"
       transform="rotate(60, 0, 0)"
     />
   `);
 });
 
 it("renderSector() with content", () => {
-  const s1 = renderSector(100, 30, sector("Foo", 90, 0) as StaticSector);
+  const s1 = renderSector(
+    100,
+    30,
+    sector("Foo", 90, 0) as StaticSector,
+    defaultOptions,
+  );
   expect(s1.el).toMatchInlineSnapshot(`
     <g>
       <path
@@ -120,7 +137,6 @@ it("renderSector() with content", () => {
         l -100 0.01
         A 30 30 0 0 0 0 -30
       "
-        tabindex="0"
         transform="rotate(0, 0, 0)"
       />
       <text
@@ -140,6 +156,7 @@ it("renderSector() with content", () => {
     100,
     30,
     sector(h.circle(0, 0, 10, { fill: "blue" }), 90, 0) as StaticSector,
+    defaultOptions,
   );
   expect(s2.el).toMatchInlineSnapshot(`
     <g>
@@ -151,7 +168,6 @@ it("renderSector() with content", () => {
         l -100 0.01
         A 30 30 0 0 0 0 -30
       "
-        tabindex="0"
         transform="rotate(0, 0, 0)"
       />
       <g
@@ -169,7 +185,11 @@ it("renderSector() with content", () => {
 });
 
 it("renderRing()", () => {
-  const r1 = renderRing(ring(100, 0, 0, [dsector(1, 0), dsector(2, 1)]), 0);
+  const r1 = renderRing(
+    ring(100, 0, 0, [dsector(1, 0), dsector(2, 1)]),
+    0,
+    defaultOptions,
+  );
   expect(r1.el).toMatchInlineSnapshot(`
     <g>
       <path
@@ -180,7 +200,6 @@ it("renderRing()", () => {
         l -100 0.01
         A 0 0 0 0 0 0 0
       "
-        tabindex="0"
         transform="rotate(0, 0, 0)"
       />
       <path
@@ -191,13 +210,16 @@ it("renderRing()", () => {
         l -0.01 -100
         A 0 0 0 0 0 0 0
       "
-        tabindex="0"
         transform="rotate(90, 0, 0)"
       />
     </g>
   `);
 
-  const r2 = renderRing(ring(100, 30, d(1), [dsector(2), sector(30, 60)]), 0);
+  const r2 = renderRing(
+    ring(100, 30, d(1), [dsector(2), sector(30, 60)]),
+    0,
+    defaultOptions,
+  );
   expect(r2.el).toMatchInlineSnapshot(`
     <g>
       <path
@@ -208,7 +230,6 @@ it("renderRing()", () => {
         l 86.598 -50.009
         A 0 0 0 1 0 0 0
       "
-        tabindex="0"
         transform="rotate(120, 0, 0)"
       />
       <path
@@ -219,7 +240,6 @@ it("renderRing()", () => {
         l -49.991 86.608
         A 0 0 0 0 0 0 0
       "
-        tabindex="0"
         transform="rotate(390, 0, 0)"
       />
     </g>
@@ -248,7 +268,6 @@ it("renderMenu()", () => {
           cx="0"
           cy="0"
           r="25"
-          tabindex="0"
         />
         <g>
           <path
@@ -259,7 +278,6 @@ it("renderMenu()", () => {
         l -50 0.005
         A 75 75 0 0 0 0 -75
       "
-            tabindex="0"
             transform="rotate(0, 0, 0)"
           />
           <path
@@ -270,7 +288,6 @@ it("renderMenu()", () => {
         l -24.996 43.304
         A 75 75 0 0 0 0 -75
       "
-            tabindex="0"
             transform="rotate(90, 0, 0)"
           />
           <path
@@ -281,7 +298,6 @@ it("renderMenu()", () => {
         l -38.299 32.143
         A 75 75 0 0 0 0 -75
       "
-            tabindex="0"
             transform="rotate(120, 0, 0)"
           />
         </g>
@@ -306,7 +322,6 @@ it("renderMenu()", () => {
           cx="0"
           cy="0"
           r="50"
-          tabindex="0"
         />
         <g>
           <path
@@ -317,7 +332,6 @@ it("renderMenu()", () => {
         l -49.991 86.608
         A 50 50 0 0 0 0 -50
       "
-            tabindex="0"
             transform="rotate(55, 0, 0)"
           />
           <path
@@ -328,7 +342,6 @@ it("renderMenu()", () => {
         l -93.973 -34.193
         A 50 50 0 0 0 0 -50
       "
-            tabindex="0"
             transform="rotate(195, 0, 0)"
           />
         </g>
@@ -377,7 +390,7 @@ it("Refs", () => {
 
 it("Rendering a menu part with attributes", () => {
   const circleWithAttributes = (attrs: AnyObject) =>
-    renderCircle(circle(50, attrs), 0, 0);
+    renderCircle(circle(50, attrs), 0, 0, defaultOptions);
 
   const c1 = circleWithAttributes({ id: 3 });
   expect(c1.el.getAttribute("id"), "Plain id attribute").toBe("3");
@@ -403,4 +416,21 @@ it("Rendering a menu part with attributes", () => {
 
   const c6 = circleWithAttributes({ textContent: "foo" });
   expect(c6.el.textContent, "Special handling of textContent").toBe("foo");
+});
+
+it("tabIndexes", () => {
+  const m1 = renderMenu(
+    menu([
+      circle(50, { ref: "circle" }),
+      ring(50, [
+        sector("1", { ref: "sector1" }),
+        sector("2", { ref: "sector2" }),
+      ]),
+    ]),
+    { includeTabIndexes: true },
+  );
+
+  expect(m1.refs.circle.getAttribute("tabindex")).toBe("0");
+  expect(m1.refs.sector1.getAttribute("tabindex")).toBe("0");
+  expect(m1.refs.sector2.getAttribute("tabindex")).toBe("0");
 });
