@@ -41,11 +41,6 @@ pre.example__code {
 
 path {
   stroke: black;
-  fill: light
-}
-
-text {
-  fill: black;
 }
 
 .permalink {

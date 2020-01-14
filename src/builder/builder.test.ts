@@ -37,7 +37,7 @@ it("renderCircle() with content", () => {
       />
       <text
         dominant-baseline="middle"
-        fill="white"
+        fill="black"
         style="user-select: none; webkit-user-select: none;"
         text-anchor="middle"
         x="0"
@@ -124,7 +124,7 @@ it("renderSector() with content", () => {
       />
       <text
         dominant-baseline="middle"
-        fill="white"
+        fill="black"
         style="user-select: none; webkit-user-select: none;"
         text-anchor="middle"
         x="56.569"
