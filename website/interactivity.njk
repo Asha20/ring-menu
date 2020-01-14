@@ -1,0 +1,60 @@
+{% set page = 'interactivity.html' %}
+{% set title = 'Interactivity | RingMenu' %}
+{% set description = 'Explains the usage of refs to refer to DOM elements more easily.' %}
+{% extends '_base.njk' %}
+
+{% block page %}
+  {{ heading('h1', 'Interactivity') }}
+  
+  {{ heading('h2', 'Refs') }}
+
+  <p>Sometimes you might want to interact with a part of the menu, like for example to add an event listener. Instead of having to add a class to the part and then query the DOM for it, you may use the special <code>ref</code> attribute like so:</p>
+
+  {{ example('
+    const menu = RM.menu([
+      RM.gap(50),
+      RM.ring(75, [
+        RM.sector("Rotate", {fill: "lightgreen", ref: "rotate"}),
+        RM.sector("Reset", {fill: "lightblue", ref: "reset"}),
+      ], {ref: "ring"}),
+    ]);
+
+    let angle = 0;
+    const {el, refs} = RM.build(menu);
+    refs.rotate.addEventListener("click", () => {
+      angle += 15;
+      refs.ring.style = `transform: rotate(${angle}deg)`;
+    });
+    refs.reset.addEventListener("click", () => {
+      angle = 0;
+      refs.ring.style = `transform: rotate(${angle}deg)`;
+    });
+  ')}}
+
+  <p>Remember that in SVG, text is rendered by using the <code>&lt;text&gt;</code> element. If you would like to set attributes or a ref on a piece of text, you can use the <code>RM.text</code> function like so:</p>
+
+  {{ example('
+    const d = RM.dynamic;
+
+    const menu = RM.menu([
+      RM.gap(50),
+      RM.ring(75, 0, d(0.5), [
+        RM.sector("Increment", {fill: "lightgreen", ref: "inc"}),
+        RM.sector("Decrement", {fill: "lightgreen", ref: "dec"}),
+        RM.sector(RM.text("0", {ref: "counter"}), {fill: "lightblue"}),
+      ]),
+    ]);
+
+    let count = 0;
+    const {el, refs} = RM.build(menu);
+    refs.inc.addEventListener("click", () => {
+      count += 1;
+      refs.counter.textContent = String(count);
+    });
+    refs.dec.addEventListener("click", () => {
+      count -= 1;
+      refs.counter.textContent = String(count);
+    });
+  ')}}
+
+{% endblock %}
