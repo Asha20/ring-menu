@@ -1,5 +1,6 @@
 import * as h from "./h";
 import {
+  Text,
   Circle,
   Content,
   Menu,
@@ -42,9 +43,18 @@ function mergeRefs(baseRefs: Refs, otherRefs: Refs) {
   return baseRefs;
 }
 
+function isText(x: unknown): x is Text {
+  return (
+    typeof x === "object" && x !== null && (x as any).type === PartType.Text
+  );
+}
+
 export function renderContent(content: Content, x: number, y: number) {
-  if (typeof content === "string") {
-    const el = h.text(content, x, y, {
+  if (typeof content === "string" || isText(content)) {
+    const text = isText(content) ? content.text : content;
+    const attrs = isText(content) ? content.attrs : {};
+
+    const el = h.text(text, x, y, {
       "text-anchor": "middle",
       "dominant-baseline": "middle",
       fill: "black",
@@ -53,6 +63,7 @@ export function renderContent(content: Content, x: number, y: number) {
         msUserSelect: "none",
         webkitUserSelect: "none",
       },
+      ...attrs,
     });
     return el;
   }
@@ -67,7 +78,11 @@ export function renderCircle(circle: Circle, x: number, y: number): Rendered {
     return { el, refs };
   }
 
-  const group = h.g({}, [el, renderContent(circle.content, x, y)]);
+  const content = renderContent(circle.content, x, y);
+  const group = h.g({}, [el, content]);
+  if (isText(circle.content)) {
+    addRef(refs, circle.content.attrs.ref, content);
+  }
   return { el: group, refs };
 }
 
@@ -124,7 +139,11 @@ export function renderSector(
   const centerAngle = radians(sector.offset + sector.angle / 2);
   const centerX = toFixed((r + width / 2) * Math.sin(centerAngle), 3);
   const centerY = toFixed((r + width / 2) * -Math.cos(centerAngle), 3);
-  const group = h.g({}, [el, renderContent(sector.content, centerX, centerY)]);
+  const content = renderContent(sector.content, centerX, centerY);
+  if (isText(sector.content)) {
+    addRef(refs, sector.content.attrs.ref, content);
+  }
+  const group = h.g({}, [el, content]);
   return { el: group, refs };
 }
 

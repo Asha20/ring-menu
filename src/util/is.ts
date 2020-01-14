@@ -1,4 +1,4 @@
-import { Angle, Content } from "../parts/parts";
+import { Angle, Content, PartType } from "../parts/common";
 import { isDynamic } from "./util";
 
 export function number(x: unknown): x is number {
@@ -23,5 +23,11 @@ export function angle(x: unknown): x is Angle {
 }
 
 export function content(x: unknown): x is Content {
-  return typeof x === "string" || x instanceof SVGElement;
+  return (
+    typeof x === "string" ||
+    (typeof x === "object" &&
+      x !== null &&
+      (x as any).type === PartType.Text) ||
+    x instanceof SVGElement
+  );
 }

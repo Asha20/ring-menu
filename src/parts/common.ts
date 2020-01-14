@@ -1,7 +1,9 @@
 import { Brand, AnyObject } from "../util/util";
+import { Text } from "./text";
 import { assert } from "../util/assert";
 
 export enum PartType {
+  Text = "text",
   Circle = "circle",
   Gap = "gap",
   Ring = "ring",
@@ -10,7 +12,7 @@ export enum PartType {
 }
 
 export type StaticAngle = Brand<number, "StaticAngle">;
-export type Content = string | SVGElement;
+export type Content = string | Text | SVGElement;
 
 export interface Part {
   type: PartType;

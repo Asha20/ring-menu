@@ -8,6 +8,7 @@ import {
   ring,
   sector,
   StaticSector,
+  text,
 } from "../parts/parts";
 import * as h from "./h";
 import { AnyObject } from "../util/util";
@@ -345,7 +346,12 @@ it("Refs", () => {
           ref: "ring",
           class: "ring",
         }),
-        ring(50, [sector("Sec2", { ref: "sector2", class: "sector2" })]),
+        ring(50, [
+          sector(text("text", { ref: "text", class: "text" }), {
+            ref: "sector2",
+            class: "sector2",
+          }),
+        ]),
       ],
       { ref: "menu", class: "menu" },
     ),
@@ -354,6 +360,7 @@ it("Refs", () => {
   expect(m1.refs.circle.classList.contains("circle")).toBeTruthy();
   expect(m1.refs.sector1.classList.contains("sector1")).toBeTruthy();
   expect(m1.refs.sector2.classList.contains("sector2")).toBeTruthy();
+  expect(m1.refs.text.classList.contains("text")).toBeTruthy();
   expect(m1.refs.ring.classList.contains("ring")).toBeTruthy();
   expect(m1.refs.menu.classList.contains("menu")).toBeTruthy();
 
