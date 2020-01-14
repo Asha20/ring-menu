@@ -11,7 +11,7 @@ import {
 } from "../parts/parts";
 import { assert } from "../util/assert";
 
-type Refs = Record<string, SVGElement>;
+type Refs = Record<string, { wrapper: SVGElement; self: SVGElement }>;
 interface Rendered {
   el: SVGElement;
   refs: Refs;
@@ -29,20 +29,26 @@ function toFixed(x: number, digits: number) {
   return Number(x.toFixed(digits));
 }
 
-function addRef(refs: Refs, name: unknown, el: SVGElement) {
+function addRef(
+  refs: Refs,
+  name: unknown,
+  wrapper: SVGElement,
+  self: SVGElement,
+): Refs {
   if (name === undefined) {
     return refs;
   }
   assert(typeof name === "string", "A ref must be a string.");
   assert(!refs.hasOwnProperty(name), "Duplicate ref: " + name);
   const ref = name as string;
-  refs[ref] = el;
+  refs[ref] = { wrapper, self };
   return refs;
 }
 
 function mergeRefs(baseRefs: Refs, otherRefs: Refs) {
   Object.keys(otherRefs).forEach(ref => {
-    addRef(baseRefs, ref, otherRefs[ref]);
+    const other = otherRefs[ref];
+    addRef(baseRefs, ref, other.wrapper, other.self);
   });
   return baseRefs;
 }
@@ -85,15 +91,16 @@ export function renderCircle(
     ...circle.attrs,
     tabindex: options.includeTabIndexes ? 0 : undefined,
   });
-  const refs = addRef({}, circle.attrs.ref, el);
+
   if (circle.content === undefined) {
-    return { el, refs };
+    return { el, refs: addRef({}, circle.attrs.ref, el, el) };
   }
 
   const content = renderContent(circle.content, x, y);
   const group = h.g({}, [el, content]);
+  const refs = addRef({}, circle.attrs.ref, group, el);
   if (isText(circle.content)) {
-    addRef(refs, circle.content.attrs.ref, content);
+    addRef(refs, circle.content.attrs.ref, group, content);
   }
   return { el: group, refs };
 }
@@ -111,7 +118,7 @@ export function renderRing(
   });
 
   const el = h.g(ring.attrs, sectors);
-  addRef(allRefs, ring.attrs.ref, el);
+  addRef(allRefs, ring.attrs.ref, el, el);
   return { el, refs: allRefs };
 }
 
@@ -148,19 +155,20 @@ export function renderSector(
     ...sector.attrs,
     tabindex: options.includeTabIndexes ? 0 : undefined,
   });
-  const refs = addRef({}, sector.attrs.ref, el);
   if (sector.content === undefined) {
-    return { el, refs };
+    return { el, refs: addRef({}, sector.attrs.ref, el, el) };
   }
 
   const centerAngle = radians(sector.offset + sector.angle / 2);
   const centerX = toFixed((r + width / 2) * Math.sin(centerAngle), 3);
   const centerY = toFixed((r + width / 2) * -Math.cos(centerAngle), 3);
   const content = renderContent(sector.content, centerX, centerY);
-  if (isText(sector.content)) {
-    addRef(refs, sector.content.attrs.ref, content);
-  }
+
   const group = h.g({}, [el, content]);
+  const refs = addRef({}, sector.attrs.ref, group, el);
+  if (isText(sector.content)) {
+    addRef(refs, sector.content.attrs.ref, group, content);
+  }
   return { el: group, refs };
 }
 
@@ -213,7 +221,7 @@ export function renderMenu(
     },
     [h.g({ transform: `translate(${size / 2}, ${size / 2})` }, elements)],
   );
-  addRef(allRefs, menu.attrs.ref, el);
+  addRef(allRefs, menu.attrs.ref, el, el);
 
   return { el, refs: allRefs };
 }

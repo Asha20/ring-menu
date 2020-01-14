@@ -370,12 +370,12 @@ it("Refs", () => {
     ),
   );
 
-  expect(m1.refs.circle.classList.contains("circle")).toBeTruthy();
-  expect(m1.refs.sector1.classList.contains("sector1")).toBeTruthy();
-  expect(m1.refs.sector2.classList.contains("sector2")).toBeTruthy();
-  expect(m1.refs.text.classList.contains("text")).toBeTruthy();
-  expect(m1.refs.ring.classList.contains("ring")).toBeTruthy();
-  expect(m1.refs.menu.classList.contains("menu")).toBeTruthy();
+  expect(m1.refs.circle.self.classList.contains("circle")).toBeTruthy();
+  expect(m1.refs.sector1.self.classList.contains("sector1")).toBeTruthy();
+  expect(m1.refs.sector2.self.classList.contains("sector2")).toBeTruthy();
+  expect(m1.refs.text.self.classList.contains("text")).toBeTruthy();
+  expect(m1.refs.ring.self.classList.contains("ring")).toBeTruthy();
+  expect(m1.refs.menu.self.classList.contains("menu")).toBeTruthy();
 
   expect(
     () => renderMenu(menu([circle(50, { ref: "foo" })], { ref: "foo" })),
@@ -430,7 +430,7 @@ it("tabIndexes", () => {
     { includeTabIndexes: true },
   );
 
-  expect(m1.refs.circle.getAttribute("tabindex")).toBe("0");
-  expect(m1.refs.sector1.getAttribute("tabindex")).toBe("0");
-  expect(m1.refs.sector2.getAttribute("tabindex")).toBe("0");
+  expect(m1.refs.circle.self.getAttribute("tabindex")).toBe("0");
+  expect(m1.refs.sector1.self.getAttribute("tabindex")).toBe("0");
+  expect(m1.refs.sector2.self.getAttribute("tabindex")).toBe("0");
 });

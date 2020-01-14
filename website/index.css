@@ -18,7 +18,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6,
-p, em {
+p, em, li {
   color: #333;
 }
 
@@ -41,7 +41,7 @@ p, em {
   text-shadow: 1px 1px black;
 }
 
-p code {
+p code, ul code {
   font-size: 70%;
   color: rgb(77, 77, 255);
 }

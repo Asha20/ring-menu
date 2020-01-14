@@ -21,6 +21,17 @@
 
   <p>Circles are optional and can only be found in the very center of a menu.</p>
 
+  {{ heading('h3', 'Text') }}
+
+  <p>If you'd also like to be able to specify attributes for the <code>&lt;text&gt;</code> element, use <code>RM.text</code>:</p>
+
+  {{ example('
+    const menu = RM.menu([
+      RM.circle(50, RM.text("Circle", {fill: "blue"}), {fill: "papayawhip"}),
+    ]);
+    const { el } = RM.build(menu);
+  ')}}
+
   {{ heading('h3', 'Rings and sectors') }}
 
   <p>Menus are mostly made out of <em>rings</em>. A <em>ring</em> is a collection of <em>sectors</em> which are all on the same distance from the center of the menu. A <em>sector</em> is an SVG <code>&lt;path&gt;</code> element. Sectors are rendered clockwise in the order they're provided to the ring.</p>
@@ -311,39 +322,42 @@
 
     let angle = 0;
     const {el, refs} = RM.build(menu);
-    refs.rotate.addEventListener("click", () => {
+    refs.rotate.wrapper.addEventListener("click", () => {
       angle += 15;
-      refs.ring.style = `transform: rotate(${angle}deg)`;
+      refs.ring.wrapper.style = `transform: rotate(${angle}deg)`;
     });
-    refs.reset.addEventListener("click", () => {
+    refs.reset.wrapper.addEventListener("click", () => {
       angle = 0;
-      refs.ring.style = `transform: rotate(${angle}deg)`;
+      refs.ring.wrapper.style = `transform: rotate(${angle}deg)`;
     });
   ')}}
 
-  <p>Remember that in SVG, text is rendered by using the <code>&lt;text&gt;</code> element. If you would like to set attributes or a ref on a piece of text, you can use the <code>RM.text</code> function like so:</p>
+  <p>Along with the resulting SVG in the <code>el</code> property, you also get a <code>refs</code>, which is an object whose keys are the <code>ref</code> strings you've specified, and the values are the SVG elements themselves.</p>
+
+  <p>Note that each ref actually has two properties: <code>wrapper</code> and <code>self</code>. Let's say we had a circle. We want the number inside the circle to increase whenever the circle is clicked. We would do that like so:</p>
 
   {{ example('
-    const d = RM.dynamic;
-
     const menu = RM.menu([
-      RM.gap(50),
-      RM.ring(75, 0, d(0.5), [
-        RM.sector("Increment", {fill: "lightgreen", ref: "inc"}),
-        RM.sector("Decrement", {fill: "lightgreen", ref: "dec"}),
-        RM.sector(RM.text("0", {ref: "counter"}), {fill: "lightblue"}),
-      ]),
+      RM.circle(100, RM.text("0", {ref: "count"}), {ref: "click", fill: "lightgreen"}),
     ]);
 
-    let count = 0;
     const {el, refs} = RM.build(menu);
-    refs.inc.addEventListener("click", () => {
+
+    let count = 0;
+    refs.click.wrapper.addEventListener("click", () => {
       count += 1;
-      refs.counter.textContent = String(count);
-    });
-    refs.dec.addEventListener("click", () => {
-      count -= 1;
-      refs.counter.textContent = String(count);
-    });
+      refs.count.self.textContent = String(count);
+    })
   ')}}
+
+  <p>This circle is represented with SVG by using a <code>&lt;circle&gt;</code> and a <code>&lt;text&gt;</code> element. These two are wrapped inside a <code>&lt;g&gt;</code> element to form a logical whole. Since we have a <code>ref: "click"</code> attribute on the circle, the following will be true:</p>
+
+  <ul>
+    <li><code>refs.click.wrapper</code> is the <code>&lt;g&gt;</code> element wrapping the <code>&lt;circle&gt;</code> and the <code>&lt;text&gt;</code>.</li>
+    <li><code>refs.click.self</code> will be the <code>&lt;circle&gt;</code> element.</li>
+  </ul>
+
+  <p>Here we want to add our click handler on the <code>wrapper</code> element. If we would add it on the <code>self</code> element, clicking on the text inside of the circle wouldn't call the handler, resulting in a confusing user experience. This is because the circle and the text elements aren't <em>parent and child</em>, but rather <em>siblings</em>.</p>
+
+  <p>As for the text element, since we want to change its content on every click of the circle, we update the <code>refs.count.self</code> element, as the <code>refs.count.wrapper</code> element also points to the same <code>&lt;g&gt;</code> wrapper.</p>
 {% endblock %}
