@@ -11,7 +11,13 @@ import {
 } from "../parts/parts";
 import { assert } from "../util/assert";
 
-type Refs = Record<string, { wrapper: SVGElement; self: SVGElement }>;
+interface Refs {
+  [key: string]: {
+    wrapper: SVGElement;
+    self: SVGElement;
+  };
+}
+type AddRef = (name: unknown, wrapper: SVGElement, self: SVGElement) => void;
 interface Rendered {
   el: SVGElement;
   refs: Refs;
@@ -29,28 +35,17 @@ function toFixed(x: number, digits: number) {
   return Number(x.toFixed(digits));
 }
 
-function addRef(
-  refs: Refs,
-  name: unknown,
-  wrapper: SVGElement,
-  self: SVGElement,
-): Refs {
-  if (name === undefined) {
+function withRef(refs: Refs): AddRef {
+  return function _addRef(name, wrapper, self) {
+    if (name === undefined) {
+      return refs;
+    }
+    assert(typeof name === "string", "A ref must be a string.");
+    assert(!refs.hasOwnProperty(name), "Duplicate ref: " + name);
+    const ref = name as string;
+    refs[ref] = { wrapper, self };
     return refs;
-  }
-  assert(typeof name === "string", "A ref must be a string.");
-  assert(!refs.hasOwnProperty(name), "Duplicate ref: " + name);
-  const ref = name as string;
-  refs[ref] = { wrapper, self };
-  return refs;
-}
-
-function mergeRefs(baseRefs: Refs, otherRefs: Refs) {
-  Object.keys(otherRefs).forEach(ref => {
-    const other = otherRefs[ref];
-    addRef(baseRefs, ref, other.wrapper, other.self);
-  });
-  return baseRefs;
+  };
 }
 
 function isText(x: unknown): x is Text {
@@ -86,40 +81,39 @@ export function renderCircle(
   x: number,
   y: number,
   options: RenderOptions,
-): Rendered {
+  addRef?: AddRef,
+) {
   const el = h.circle(x, y, circle.radius, {
     ...circle.attrs,
     tabindex: options.includeTabIndexes ? 0 : undefined,
   });
 
   if (circle.content === undefined) {
-    return { el, refs: addRef({}, circle.attrs.ref, el, el) };
+    addRef?.(circle.attrs.ref, el, el);
+    return el;
   }
 
   const content = renderContent(circle.content, x, y);
   const group = h.g({}, [el, content]);
-  const refs = addRef({}, circle.attrs.ref, group, el);
+  addRef?.(circle.attrs.ref, group, el);
   if (isText(circle.content)) {
-    addRef(refs, circle.content.attrs.ref, group, content);
+    addRef?.(circle.content.attrs.ref, group, content);
   }
-  return { el: group, refs };
+  return group;
 }
 
 export function renderRing(
   ring: Ring,
   pos: number,
   options: RenderOptions,
-): Rendered {
-  const allRefs: Refs = {};
-  const sectors = ring.sectors.map(x => {
-    const { el, refs } = renderSector(ring.width, pos, x, options);
-    mergeRefs(allRefs, refs);
-    return el;
-  });
-
+  addRef?: AddRef,
+) {
+  const sectors = ring.sectors.map(x =>
+    renderSector(ring.width, pos, x, options, addRef),
+  );
   const el = h.g(ring.attrs, sectors);
-  addRef(allRefs, ring.attrs.ref, el, el);
-  return { el, refs: allRefs };
+  addRef?.(ring.attrs.ref, el, el);
+  return el;
 }
 
 export function renderSector(
@@ -127,7 +121,8 @@ export function renderSector(
   innerRadius: number,
   sector: StaticSector,
   options: RenderOptions,
-): Rendered {
+  addRef?: AddRef,
+) {
   const R = innerRadius + width;
   const r = innerRadius;
 
@@ -156,7 +151,8 @@ export function renderSector(
     tabindex: options.includeTabIndexes ? 0 : undefined,
   });
   if (sector.content === undefined) {
-    return { el, refs: addRef({}, sector.attrs.ref, el, el) };
+    addRef?.(sector.attrs.ref, el, el);
+    return el;
   }
 
   const centerAngle = radians(sector.offset + sector.angle / 2);
@@ -165,28 +161,32 @@ export function renderSector(
   const content = renderContent(sector.content, centerX, centerY);
 
   const group = h.g({}, [el, content]);
-  const refs = addRef({}, sector.attrs.ref, group, el);
+  addRef?.(sector.attrs.ref, group, el);
   if (isText(sector.content)) {
-    addRef(refs, sector.content.attrs.ref, group, content);
+    addRef?.(sector.content.attrs.ref, group, content);
   }
-  return { el: group, refs };
+  return group;
 }
 
 function renderPart(
   part: Circle | Gap | Ring,
   pos: number,
   options: RenderOptions,
-): { el: SVGElement | undefined; refs: Refs; newPos: number } {
+  addRef: AddRef,
+): { el: SVGElement | undefined; newPos: number } {
   switch (part.type) {
     case PartType.Circle:
       return {
-        ...renderCircle(part, 0, 0, options),
+        el: renderCircle(part, 0, 0, options, addRef),
         newPos: pos + part.radius,
       };
     case PartType.Gap:
-      return { el: undefined, refs: {}, newPos: pos + part.width };
+      return { el: undefined, newPos: pos + part.width };
     case PartType.Ring:
-      return { ...renderRing(part, pos, options), newPos: pos + part.width };
+      return {
+        el: renderRing(part, pos, options, addRef),
+        newPos: pos + part.width,
+      };
   }
 }
 
@@ -201,10 +201,11 @@ export function renderMenu(
   const mergedOptions: RenderOptions = { ...defaultOptions, ...options };
   let pos = 0;
   const elements = [];
-  const allRefs: Refs = {};
+  const refs: Refs = {};
+  const addRef = withRef(refs);
+
   for (const part of menu.structure) {
-    const { el, refs, newPos } = renderPart(part, pos, mergedOptions);
-    mergeRefs(allRefs, refs);
+    const { el, newPos } = renderPart(part, pos, mergedOptions, addRef);
     pos = newPos;
     if (el) {
       elements.push(el);
@@ -221,7 +222,7 @@ export function renderMenu(
     },
     [h.g({ transform: `translate(${size / 2}, ${size / 2})` }, elements)],
   );
-  addRef(allRefs, menu.attrs.ref, el, el);
+  addRef(menu.attrs.ref, el, el);
 
-  return { el, refs: allRefs };
+  return { el, refs };
 }
