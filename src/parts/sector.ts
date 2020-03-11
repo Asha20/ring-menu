@@ -22,7 +22,7 @@ export function _sector(
   return { type: PartType.Sector, angle, offset, attrs, content };
 }
 
-export function sector(): Sector;
+export function sector(attrs?: AnyObject): Sector;
 export function sector(content: Content, attrs?: AnyObject): Sector;
 export function sector(angle: Angle, offset?: Angle, attrs?: AnyObject): Sector;
 export function sector(
@@ -40,6 +40,7 @@ export function sector(...args: any[]): Sector {
   const [a, b, c, d] = args;
   return matchTuple<Sector>([
     [[], () => _sector()],
+    [[is.object], () => _sector(undefined, undefined, undefined, a)],
     [[is.content], () => _sector(a)],
     [[is.content, is.object], () => _sector(a, undefined, undefined, b)],
     [[is.angle], () => _sector(undefined, a)],

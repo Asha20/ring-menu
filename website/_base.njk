@@ -19,8 +19,8 @@
 <body>
   {% macro example(code) %}
   <article class="example">
-    <pre class="example__code"><code class="language-javascript">{{ code | escape }}</code></pre>
     <section class="example__result"></section>
+    <pre class="example__code"><code class="language-javascript">{{ code | escape }}</code></pre>
   </article>
   {% endmacro %}
 

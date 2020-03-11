@@ -28,8 +28,8 @@ export function circle(...args: any[]): Circle {
   const [a, b, c] = args;
   return matchTuple<Circle>([
     [[is.number], () => _circle(a)],
-    [[is.number, is.object], () => _circle(a, undefined, b)],
     [[is.number, is.content], () => _circle(a, b)],
+    [[is.number, is.object], () => _circle(a, undefined, b)],
     [[is.number, is.content, is.object], () => _circle(a, b, c)],
   ])(args);
 }

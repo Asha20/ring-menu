@@ -360,4 +360,53 @@
   <p>Here we want to add our click handler on the <code>wrapper</code> element. If we would add it on the <code>self</code> element, clicking on the text inside of the circle wouldn't call the handler, resulting in a confusing user experience. This is because the circle and the text elements aren't <em>parent and child</em>, but rather <em>siblings</em>.</p>
 
   <p>As for the text element, since we want to change its content on every click of the circle, we update the <code>refs.count.self</code> element, as the <code>refs.count.wrapper</code> element also points to the same <code>&lt;g&gt;</code> wrapper.</p>
+
+  {{ heading('h2', 'Examples') }}
+
+  {{ heading('h3', 'Color wheel') }}
+
+  <p>This example demonstrates a simple colored wheel where clicking on a sector displays that sector's color in the center circle, as well as colors the ring around the circle in the selected color. Since <code>includeTabIndexes</code> is set to <code>true</code> in the menu options, the menu can also be traversed by using the Tab key. Additional code is added below so that the currently focused sector can be selected by pressing Enter.</p>
+
+  {{ example('
+    const colors1 = ["#FF5858", "#FFA458", "#FFC758", "#FFE258", "#FFFF58", "#BAEE52", "#46CC46", "#359999", "#4765AB", "#624AB0", "#8541AB", "#CD4793"];
+    const colors2 = ["#FF5858", "#FF8858", "#FFA458", "#FFB858", "#FFC758", "#FFD558", "#FFE258", "#FFF058", "#FFFF58", "#DBF655", "#BAEE52", "#92E34E", "#46CC46", "#3CAF7E", "#359999", "#4079A4", "#4765AB", "#4F4FB3", "#624AB0", "#7246AE", "#8641AB", "#A739A7", "#CD4693", "#E44E7B"];
+
+    const colorSector = color => RM.sector({fill: color, class: "color"})
+
+    const menu = RM.menu([
+      RM.circle(50, RM.text("", {fill: "white", ref: "selectedColor"})),
+      RM.gap(25),
+      RM.ring(20, [
+        RM.sector({class: "no-stroke", ref: "colorRing"}),
+      ]),
+      RM.gap(25),
+      RM.ring(100, colors1.map(colorSector)),
+      RM.gap(25),
+      RM.ring(100, colors2.map(colorSector)),
+    ]);
+
+    const {el, refs} = RM.build(menu, {includeTabIndexes: true});
+
+    function updateSelectedColor(color) {
+      refs.colorRing.self.setAttribute("fill", color);
+      refs.selectedColor.self.textContent = color;
+    }
+
+    // Make it so that sectors can be selected using Tab + Enter as well
+    el.addEventListener("keypress", e => {
+      if (e.key === "Enter" && el.contains(document.activeElement)) {
+        document.activeElement.dispatchEvent(new MouseEvent("click", {
+          bubbles: true,
+          cancellable: true,
+        }));
+      }
+    })
+
+    el.addEventListener("click", e => {
+      if (e.target.matches(".color")) {
+        const newColor = e.target.getAttribute("fill");
+        updateSelectedColor(newColor);
+      }
+    });
+  ')}}
 {% endblock %}

@@ -100,6 +100,10 @@ circle, path {
   stroke: black;
 }
 
+.no-stroke {
+  stroke: none;
+}
+
 text {
   font-size: 75%;
 }
