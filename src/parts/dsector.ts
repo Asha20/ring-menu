@@ -1,7 +1,6 @@
 import { Content, dynamic } from "./common";
-import { AnyObject, matchTuple } from "../util/util";
+import { AnyObject, matchTuple, ArgumentType as Arg } from "../util/util";
 import { Sector, _sector } from "./sector";
-import * as is from "../util/is";
 
 function _dsector(
   content?: Content,
@@ -17,7 +16,7 @@ function _dsector(
   );
 }
 
-export function dsector(): Sector;
+export function dsector(attrs?: AnyObject): Sector;
 export function dsector(content: Content, attrs?: AnyObject): Sector;
 export function dsector(
   angleFactor: number,
@@ -34,13 +33,17 @@ export function dsector(...args: any[]): Sector {
   const [a, b, c, d] = args;
   return matchTuple<Sector>([
     [[], () => _dsector()],
-    [[is.content], () => _dsector(a)],
-    [[is.content, is.object], () => _dsector(a, undefined, undefined, b)],
-    [[is.number], () => _dsector(undefined, a)],
-    [[is.number, is.number], () => _dsector(undefined, a, b)],
-    [[is.number, is.number, is.object], () => _dsector(undefined, a, b, c)],
-    [[is.content, is.number], () => _dsector(a, b)],
-    [[is.content, is.number, is.number], () => _dsector(a, b, c)],
-    [[is.content, is.number, is.number, is.object], () => _dsector(a, b, c, d)],
+    [[Arg.Object], () => _dsector(undefined, undefined, undefined, a)],
+    [[Arg.Content], () => _dsector(a)],
+    [[Arg.Content, Arg.Object], () => _dsector(a, undefined, undefined, b)],
+    [[Arg.Number], () => _dsector(undefined, a)],
+    [[Arg.Number, Arg.Number], () => _dsector(undefined, a, b)],
+    [[Arg.Number, Arg.Number, Arg.Object], () => _dsector(undefined, a, b, c)],
+    [[Arg.Content, Arg.Number], () => _dsector(a, b)],
+    [[Arg.Content, Arg.Number, Arg.Number], () => _dsector(a, b, c)],
+    [
+      [Arg.Content, Arg.Number, Arg.Number, Arg.Object],
+      () => _dsector(a, b, c, d),
+    ],
   ])(args);
 }

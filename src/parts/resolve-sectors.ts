@@ -1,5 +1,6 @@
 import { Angle, Sector, StaticAngle } from "./parts";
-import { isDynamic, pipe, map, sum } from "../util/util";
+import { pipe, map, sum } from "../util/util";
+import { dynamic as isDynamic } from "../util/is";
 import { assertValidAngle } from "../util/assert";
 
 export interface StaticSector extends Sector {

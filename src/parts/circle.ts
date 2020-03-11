@@ -1,7 +1,6 @@
 import { Content, Part, PartType } from "./common";
-import { AnyObject, matchTuple } from "../util/util";
+import { AnyObject, matchTuple, ArgumentType as Arg } from "../util/util";
 import { assert } from "../util/assert";
-import * as is from "../util/is";
 
 export interface Circle extends Part {
   type: PartType.Circle;
@@ -27,9 +26,9 @@ export function circle(
 export function circle(...args: any[]): Circle {
   const [a, b, c] = args;
   return matchTuple<Circle>([
-    [[is.number], () => _circle(a)],
-    [[is.number, is.content], () => _circle(a, b)],
-    [[is.number, is.object], () => _circle(a, undefined, b)],
-    [[is.number, is.content, is.object], () => _circle(a, b, c)],
+    [[Arg.Number], () => _circle(a)],
+    [[Arg.Number, Arg.Content], () => _circle(a, b)],
+    [[Arg.Number, Arg.Object], () => _circle(a, undefined, b)],
+    [[Arg.Number, Arg.Content, Arg.Object], () => _circle(a, b, c)],
   ])(args);
 }

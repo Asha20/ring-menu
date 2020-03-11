@@ -12,6 +12,11 @@ it("Correct usage", () => {
 
   expect(dsector()).toEqual(defaults);
 
+  expect(dsector({ fill: "red" })).toEqual({
+    ...defaults,
+    attrs: { fill: "red" },
+  });
+
   expect(dsector("One")).toEqual({
     ...defaults,
     content: "One",

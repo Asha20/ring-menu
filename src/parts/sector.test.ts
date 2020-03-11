@@ -13,6 +13,11 @@ it("Correct function overloading", () => {
 
   expect(sector()).toEqual(defaults);
 
+  expect(sector({ fill: "red" })).toEqual({
+    ...defaults,
+    attrs: { fill: "red" },
+  });
+
   expect(sector("One")).toEqual({
     ...defaults,
     content: "One",

@@ -1,7 +1,6 @@
 import { Part, PartType, Angle, Content, dynamic } from "./common";
-import { AnyObject, matchTuple } from "../util/util";
+import { AnyObject, matchTuple, ArgumentType as Arg } from "../util/util";
 import { assertValidAngle } from "../util/assert";
-import * as is from "../util/is";
 
 export interface Sector extends Part {
   type: PartType.Sector;
@@ -40,15 +39,18 @@ export function sector(...args: any[]): Sector {
   const [a, b, c, d] = args;
   return matchTuple<Sector>([
     [[], () => _sector()],
-    [[is.object], () => _sector(undefined, undefined, undefined, a)],
-    [[is.content], () => _sector(a)],
-    [[is.content, is.object], () => _sector(a, undefined, undefined, b)],
-    [[is.angle], () => _sector(undefined, a)],
-    [[is.angle, is.angle], () => _sector(undefined, a, b)],
-    [[is.angle, is.angle, is.object], () => _sector(undefined, a, b, c)],
-    [[is.content, is.angle], () => _sector(a, b)],
-    [[is.content, is.angle, is.angle], () => _sector(a, b, c)],
-    [[is.content, is.angle, is.object], () => _sector(a, b, undefined, c)],
-    [[is.content, is.angle, is.angle, is.object], () => _sector(a, b, c, d)],
+    [[Arg.Object], () => _sector(undefined, undefined, undefined, a)],
+    [[Arg.Content], () => _sector(a)],
+    [[Arg.Content, Arg.Object], () => _sector(a, undefined, undefined, b)],
+    [[Arg.Angle], () => _sector(undefined, a)],
+    [[Arg.Angle, Arg.Angle], () => _sector(undefined, a, b)],
+    [[Arg.Angle, Arg.Angle, Arg.Object], () => _sector(undefined, a, b, c)],
+    [[Arg.Content, Arg.Angle], () => _sector(a, b)],
+    [[Arg.Content, Arg.Angle, Arg.Angle], () => _sector(a, b, c)],
+    [[Arg.Content, Arg.Angle, Arg.Object], () => _sector(a, b, undefined, c)],
+    [
+      [Arg.Content, Arg.Angle, Arg.Angle, Arg.Object],
+      () => _sector(a, b, c, d),
+    ],
   ])(args);
 }

@@ -1,4 +1,4 @@
-import { Dynamic } from "../parts/parts";
+import * as is from "./is";
 
 export type Brand<T, N> = T & { __brand: N };
 export type NonEmptyArray<T> = T[] & { 0: T };
@@ -32,17 +32,50 @@ export function pipe(initial: any, ...fns: Function[]) {
   return fns.reduce((acc, fn) => fn(acc), initial);
 }
 
-export function isDynamic<T>(x: T | Dynamic): x is Dynamic {
-  return typeof x === "object" && (x as Dynamic).__dynamic === true;
+export enum ArgumentType {
+  Content = "content",
+  Number = "number",
+  Angle = "angle",
+  Object = "object",
+  Array = "array",
+  Unknown = "unknown",
 }
 
-export function matchTuple<T>(pairs: Array<[Function[], () => T]>) {
-  return function _matchTuple(xs: any[]) {
-    for (const [tests, val] of pairs) {
-      if (xs.length === tests.length && xs.every((x, i) => tests[i](x))) {
+export function matchTuple<T>(pairs: Array<[ArgumentType[], () => T]>) {
+  return function _matchTuple(xs: unknown[]) {
+    const results: ArgumentType[] = [];
+
+    const tests: Array<[Function, ArgumentType]> = [
+      [is.content, ArgumentType.Content],
+      [is.number, ArgumentType.Number],
+      [is.angle, ArgumentType.Angle],
+      [is.object, ArgumentType.Object],
+      [is.array, ArgumentType.Array],
+      [() => true, ArgumentType.Unknown],
+    ];
+
+    for (const item of xs) {
+      for (const [test, x] of tests) {
+        if (test(item)) {
+          results.push(x);
+          break;
+        }
+      }
+    }
+
+    for (const [shape, val] of pairs) {
+      if (
+        xs.length === shape.length &&
+        results.every((x, i) => {
+          if (x === ArgumentType.Number && shape[i] === ArgumentType.Angle) {
+            return true;
+          }
+          return x === shape[i];
+        })
+      ) {
         return val();
       }
     }
-    throw new Error("Not all code paths return a value.");
+    throw new Error("Unknown argument order was provided.");
   };
 }

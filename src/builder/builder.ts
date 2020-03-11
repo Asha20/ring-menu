@@ -1,6 +1,5 @@
 import * as h from "./h";
 import {
-  Text,
   Circle,
   Content,
   Menu,
@@ -10,6 +9,7 @@ import {
   Gap,
 } from "../parts/parts";
 import { assert } from "../util/assert";
+import { text as isText } from "../util/is";
 
 interface Refs {
   [key: string]: {
@@ -46,12 +46,6 @@ function withRef(refs: Refs): AddRef {
     refs[ref] = { wrapper, self };
     return refs;
   };
-}
-
-function isText(x: unknown): x is Text {
-  return (
-    typeof x === "object" && x !== null && (x as any).type === PartType.Text
-  );
 }
 
 export function renderContent(content: Content, x: number, y: number) {

@@ -1,9 +1,13 @@
 import { assert } from "../util/assert";
-import { AnyObject, NonEmptyArray, matchTuple } from "../util/util";
+import {
+  AnyObject,
+  NonEmptyArray,
+  matchTuple,
+  ArgumentType as Arg,
+} from "../util/util";
 import { Angle, Part, PartType } from "./common";
 import { resolveSectors, StaticSector } from "./resolve-sectors";
 import { Sector } from "./sector";
-import * as is from "../util/is";
 
 export interface Ring extends Omit<Part, "content"> {
   type: PartType.Ring;
@@ -42,19 +46,19 @@ export function ring(
 export function ring(...args: any[]): Ring {
   const [a, b, c, d, e] = args;
   return matchTuple([
-    [[is.number, is.array], () => _ring(a, undefined, undefined, b)],
+    [[Arg.Number, Arg.Array], () => _ring(a, undefined, undefined, b)],
     [
-      [is.number, is.array, is.object],
+      [Arg.Number, Arg.Array, Arg.Object],
       () => _ring(a, undefined, undefined, b, c),
     ],
-    [[is.number, is.angle, is.array], () => _ring(a, b, undefined, c)],
+    [[Arg.Number, Arg.Angle, Arg.Array], () => _ring(a, b, undefined, c)],
     [
-      [is.number, is.angle, is.array, is.object],
+      [Arg.Number, Arg.Angle, Arg.Array, Arg.Object],
       () => _ring(a, b, undefined, c, d),
     ],
-    [[is.number, is.angle, is.angle, is.array], () => _ring(a, b, c, d)],
+    [[Arg.Number, Arg.Angle, Arg.Angle, Arg.Array], () => _ring(a, b, c, d)],
     [
-      [is.number, is.angle, is.angle, is.array, is.object],
+      [Arg.Number, Arg.Angle, Arg.Angle, Arg.Array, Arg.Object],
       () => _ring(a, b, c, d, e),
     ],
   ])(args);
