@@ -1,2 +1,20 @@
-export * from "./parts/parts";
+export {
+  Angle,
+  Circle,
+  Content,
+  Dynamic,
+  Gap,
+  Menu,
+  Ring,
+  Sector,
+  Text,
+  circle,
+  dsector,
+  dynamic,
+  gap,
+  menu,
+  ring,
+  sector,
+  text,
+} from "./parts/parts";
 export { renderMenu as build } from "./builder/builder";
