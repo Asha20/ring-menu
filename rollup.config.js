@@ -1,5 +1,6 @@
 import ts from "@wessberg/rollup-plugin-ts";
 import pkg from "./package.json";
+import { ScriptTarget } from "typescript";
 
 const PRODUCTION = process.env.BUILD === "production";
 
@@ -36,10 +37,6 @@ export default async function() {
       sourcemap: true,
       banner,
     },
-    plugins: filterFalsy([
-      ts(),
-      PRODUCTION && (await import("rollup-plugin-terser")).terser(),
-    ]),
   };
 
   const iife = merge(common, {
@@ -48,6 +45,10 @@ export default async function() {
       file: pkg.browser,
       format: "iife",
     },
+    plugins: filterFalsy([
+      ts(),
+      PRODUCTION && (await import("rollup-plugin-terser")).terser(),
+    ]),
   });
 
   const es6 = merge(common, {
@@ -55,6 +56,14 @@ export default async function() {
       file: pkg.module,
       format: "es",
     },
+    plugins: [
+      ts({
+        tsconfig: {
+          target: ScriptTarget.ES2015,
+          declaration: true,
+        },
+      }),
+    ],
   });
 
   return filterFalsy([iife, PRODUCTION && es6]);
