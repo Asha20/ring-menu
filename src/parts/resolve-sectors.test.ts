@@ -48,12 +48,12 @@ it("resolveSectors() with static angles", () => {
 
   expect(
     resolveSectors(0, 20, [sector(10), sector(10), sector(10)]),
-    "Separator acts as a default value for sector offsets if missing",
+    "Global offset acts as a default value for sector offsets if missing",
   ).toEqual([sector(10, 0), sector(10, 30), sector(10, 60)]);
 
   expect(
     resolveSectors(0, 20, [sector(10), sector(30, 50), sector(10)]),
-    "Offset of a sector overrides separator when present",
+    "Offset of a sector overrides global offset when present",
   ).toEqual([sector(10, 0), sector(30, 30), sector(10, 110)]);
 });
 
@@ -80,7 +80,7 @@ it("resolveSectors() with dynamic angles", () => {
 
   expect(
     resolveSectors(0, d(1), [dsector(1), dsector(1)]),
-    "Dynamic separator acts as a default value for sector offsets if missing",
+    "Dynamic global offset acts as a default value for sector offsets if missing",
   ).toEqual([sector(90, 0), sector(90, 180)]);
 
   expect(

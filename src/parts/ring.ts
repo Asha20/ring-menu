@@ -19,26 +19,26 @@ type Sectors = NonEmptyArray<Sector>;
 
 function _ring(
   width: number,
-  separator: Angle = 0,
+  globalOfset: Angle = 0,
   offset: Angle = 0,
   sectors: Sectors,
   attrs: AnyObject = {},
 ): Ring {
   assert(sectors.length > 0, "A ring must have at least one sector.");
-  const staticSectors = resolveSectors(offset, separator, sectors);
+  const staticSectors = resolveSectors(offset, globalOfset, sectors);
   return { type: PartType.Ring, width, sectors: staticSectors, attrs };
 }
 
 export function ring(width: number, sectors: Sectors, attrs?: AnyObject): Ring;
 export function ring(
   width: number,
-  separator: Angle,
+  globalOfset: Angle,
   sectors: Sectors,
   attrs?: AnyObject,
 ): Ring;
 export function ring(
   width: number,
-  separator: Angle,
+  globalOfset: Angle,
   offset: Angle,
   sectors: Sectors,
   attrs?: AnyObject,

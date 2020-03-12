@@ -143,7 +143,7 @@
 
   <p>In this example we have two offsets, one of 20 degrees and the other one of 50 degrees; resulting in a 20 degree gap between sectors 1 and 2, as well as a 50 degree gap between sectors 2 and 3.</p>
 
-  <p>Optionally, we can set a <em>separator</em> on the ring. If a sector doesn't have its offset specified, it will use the <em>separator</em> of its parent ring (which defaults to zero if unspecified).</p>
+  <p>Optionally, we can set a <em>global offset</em> on the ring. If a sector doesn't have its offset specified, it will use the <em>global offset</em> of its parent ring (which defaults to zero if unspecified).</p>
 
   {{ example('
     const menu = RM.menu([
@@ -157,9 +157,9 @@
     const { el } = RM.build(menu);
   ')}}
 
-  <p>Here, the offsets of sectors 1 and 3 are unspecified, so they inherit the ring's separator of 20 degrees, while sector 2 uses its own offset of 100 degrees.</p>
+  <p>Here, the offsets of sectors 1 and 3 are unspecified, so they inherit the ring's global offset of 20 degrees, while sector 2 uses its own offset of 100 degrees.</p>
 
-  <p>If we want to offset the entire ring by some amount, we can define the offset of the ring right after the separator.</p>
+  <p>If we want to offset the entire ring by some amount, we can define the offset of the ring right after the global offset.</p>
 
   {{ example('
     const menu = RM.menu([
