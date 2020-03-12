@@ -111,3 +111,6 @@ es6/
 
 ## Build website files
 public/
+
+## TODO files
+*.todo
