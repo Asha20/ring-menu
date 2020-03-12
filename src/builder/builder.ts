@@ -218,5 +218,5 @@ export function renderMenu(
   );
   addRef(menu.attrs.ref, el, el);
 
-  return { el, refs };
+  return { el, refs: Object.freeze(refs) };
 }
