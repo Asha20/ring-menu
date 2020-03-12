@@ -91,7 +91,7 @@ export function renderCircle(
   const group = h.g({}, [el, content]);
   addRef?.(circle.attrs.ref, group, el);
   if (isText(circle.content)) {
-    addRef?.(circle.content.attrs.ref, group, content);
+    addRef?.(circle.content.attrs.ref, content, content);
   }
   return group;
 }

@@ -19,11 +19,11 @@
     const { el } = RM.build(menu);
   ') }}
 
-  <p>Circles are optional and can only be found in the very center of a menu.</p>
+  <p>Circles are optional and can only be found in the very center of a menu. Here we've provided the circle's radius, content and the attributes we want on the circle.</p>
 
   {{ heading('h3', 'Text') }}
 
-  <p>If you'd also like to be able to specify attributes for the <code>&lt;text&gt;</code> element, use <code>RM.text</code>:</p>
+  <p>If you'd like to specify attributes on the text content itself, wrap it in a <code>RM.text</code>:</p>
 
   {{ example('
     const menu = RM.menu([
@@ -34,7 +34,7 @@
 
   {{ heading('h3', 'Rings and sectors') }}
 
-  <p>Menus are mostly made out of <em>rings</em>. A <em>ring</em> is a collection of <em>sectors</em> which are all on the same distance from the center of the menu. A <em>sector</em> is an SVG <code>&lt;path&gt;</code> element. Sectors are rendered clockwise in the order they're provided to the ring.</p>
+  <p>Menus are mostly made out of <em>rings</em>. A <em>ring</em> is a collection of <em>sectors</em> which are all on the same distance from the center of the menu. A <em>sector</em> is an SVG <code>&lt;path&gt;</code> element. Sectors are rendered clockwise starting from the top, in the order they're provided to the ring.</p>
 
   {{ example('
     const menu = RM.menu([
@@ -47,7 +47,7 @@
     const { el } = RM.build(menu);
   ')}}
 
-  <p>Here we specified a ring with a width of 100 pixels that consists of two sectors. Notice how we didn't need to specify the size of our sectors; they split the ring into equal parts by themselves. What if we wanted our ring to have six sectors instead? Also, we've already mentioned that circles are optional, so how about a menu without a circle? Let's give it a try:</p>
+  <p>Here we specified a ring with a width of 100 pixels that consists of two sectors. Notice how we didn't need to specify the size of our sectors; they split the ring into equal parts by themselves. What if we wanted our ring to have six sectors instead? Also, since it's already been mentioned that circles are optional, let's make this menu not have one:</p>
 
   {{ example('
     const menu = RM.menu([
@@ -63,9 +63,9 @@
     const { el } = RM.build(menu);
   ')}}
 
-  <p>As you might have expected, the six sectors will divide the ring equally. Also, because menus are always built from the inside out and we didn't use a circle in this menu, it means that the ring will start from the very center of the menu, resulting in a menu that looks kind of like a pie chart.</p>
+  <p>As you might have expected, the six sectors divide the ring equally. Also, because menus are always built from the inside out and we didn't use a circle in this menu, it means that the ring will start from the very center of the menu, resulting in a menu that looks kind of like a pie chart.</p>
 
-  <p>The great thing about rings is that a menu can have as many of them as you want, and they are all independent one from another. Let's say we wanted a menu that has one ring with three sectors inside, with another ring with two sectors around the first ring. We can construct that menu like so:</p>
+  <p>The great thing about menus is that they can have an arbitrary amount of rings, which are all independent one from another. Let's say we wanted a menu that has one ring with three sectors inside, with another ring with two sectors around the first ring. We can construct that menu like so:</p>
 
   {{ example('
     const menu = RM.menu([
@@ -164,7 +164,7 @@
   {{ example('
     const menu = RM.menu([
       RM.ring(100, 0, 45, [
-        RM.sector("1",{fill: "lightblue"}),
+        RM.sector("1", {fill: "lightblue"}),
         RM.sector("2", {fill: "lightgreen"}),
       ]),
     ]);
@@ -175,7 +175,7 @@
 
   {{ heading('h3', 'Dynamic angles and offsets') }}
 
-  <p>Instead of supplying an angle or an offset as a static value, <code>RingMenu</code> also has the concept of <em>dynamic values</em>. A <em>dynamic value</em> has a <em>factor</em> and represents a part of the whole. The higher the factor of a dynamic value, the bigger part of the whole that particular dynamic value will take. Let's take a look at an example:</p>
+  <p>Instead of supplying an angle or an offset as a static value, <code>ring-menu</code> also has the concept of <em>dynamic values</em>. A <em>dynamic value</em> has a <em>factor</em> and represents a part of the whole. The higher the factor of a dynamic value, the bigger part of the whole that particular dynamic value will take. Let's take a look at an example:</p>
 
   {{ example('
     const d = RM.dynamic;
@@ -235,7 +235,7 @@
 
   <p>Sector 1 is twice as big as sector 2, while the space from sector 1 to sector 2 is twice as small as the space from sector 2 to sector 1. Sectors or offsets of the same dynamic factor will have the same angle.</p>
 
-  <p>For convenience, <code>RingMenu</code> also provides a <code>dsector</code> shortcut for creating a sector where the provided angle and offset are dynamic values by default. You can't provide static values to a <code>dsector</code>. Here's the same example as the previous one, this time using <code>dsector</code>:</p>
+  <p>For convenience, <code>ring-menu</code> also provides a <code>dsector</code> shortcut for creating a sector where the provided angle and offset are dynamic values by default. You can't provide static values to a <code>dsector</code>. Here's the same example as the previous one, this time using <code>dsector</code>:</p>
 
   {{ example('
     const d = RM.dynamic;
@@ -284,9 +284,9 @@
     const { el } = RM.build(menu);
   ')}}
 
-  <p>Remember that dynamic values represent parts of a whole. This whole is the entire 360 degrees minus any static angles or offsets your sector might have. If you were to calculate the offsets manually, you'd first have to calculate the whole and divide it by the number of sectors. Using dynamic values does all of that for you under the hood.</p>
+  <p>Remember that dynamic values represent parts of a whole. This whole is the entire 360 degrees minus any static angles or offsets your sectors might have. If you were to calculate the offsets manually, you'd first have to calculate the whole and divide it by the number of sectors. Using dynamic values does all of that for you under the hood.</p>
 
-  <p>We could just as easily do the opposite; make a ring where the offsets between sectors are static,while the sectors themselves are dynamic:</p>
+  <p>We could just as easily do the opposite; make a ring where the offsets between sectors are static while the sectors themselves are dynamic:</p>
 
   {{ example('
     const d = RM.dynamic;
@@ -350,18 +350,36 @@
     })
   ')}}
 
-  <p>This circle is represented with SVG by using a <code>&lt;circle&gt;</code> and a <code>&lt;text&gt;</code> element. These two are wrapped inside a <code>&lt;g&gt;</code> element to form a logical whole. Since we have a <code>ref: "click"</code> attribute on the circle, the following will be true:</p>
+  <p>Here's what the SVG representation of what the <code>RM.circle</code> looks like:</p>
+
+  {{ svg('
+    <g>
+      <circle></circle>
+      <text>0</text>
+    </g>
+  ')}}
+
+  <p>Notice that the <code>&lt;circle&gt;</code> and the <code>&lt;text&gt;</code> elements aren't <em>parent and child</em>. Nesting the elements in such a way doesn't make sense in SVG. Instead, a <code>&lt;g&gt;</code> element is used to group them into a logical whole, making them <em>siblings</em>.</p>
+
+  <p>The following is true:</p>
 
   <ul>
     <li><code>refs.click.wrapper</code> is the <code>&lt;g&gt;</code> element wrapping the <code>&lt;circle&gt;</code> and the <code>&lt;text&gt;</code>.</li>
-    <li><code>refs.click.self</code> will be the <code>&lt;circle&gt;</code> element.</li>
+    <li><code>refs.click.self</code> is the <code>&lt;circle&gt;</code> element.</li>
   </ul>
 
-  <p>Here we want to add our click handler on the <code>wrapper</code> element. If we would add it on the <code>self</code> element, clicking on the text inside of the circle wouldn't call the handler, resulting in a confusing user experience. This is because the circle and the text elements aren't <em>parent and child</em>, but rather <em>siblings</em>.</p>
+  <p>Since we want to increment the counter when the circle is clicked, we'll add the handler on the <code>wrapper</code>. If we would add it on <code>self</code>, the handler would get attached to the <code>&lt;circle&gt;</code>, which means clicking on the <code>&lt;text&gt;</code> inside of the circle would do nothing, resulting in a frustrating user experience.</p>
 
-  <p>As for the text element, since we want to change its content on every click of the circle, we update the <code>refs.count.self</code> element, as the <code>refs.count.wrapper</code> element also points to the same <code>&lt;g&gt;</code> wrapper.</p>
+  <p>As for updating the counter, it doesn't matter whether we update <code>refs.count.self</code> or the <code>refs.count.wrapper</code>, as they both point to the same <code>&lt;text&gt;</code> element.</p>
 
-  <p>An overview of how exactly <code>refs</code> works:</p>
+  <p>As a general rule of thumb:</p>
+
+  <ul>
+    <li>Use <code>wrapper</code> when you're handling the menu part as a logical whole.</li>
+    <li>Use <code>self</code> when you want to perform a specific action on the part itself instead of the wrapper, such as dynamically applying a style.</li>
+  </ul>
+
+  <p>Here's a table showing what elements <code>wrapper</code> and <code>self</code> would point to when the <code>ref</code> attribute is present on a certain menu part. Also note that in the following table, <code>circle</code>, <code>sector</code> and <code>dsector</code> are all shown having some content in them. If any of those elements is created without any content, there's no need for a <code>&lt;g&gt;</code> wrapper, so the <code>wrapper</code> property will point to the same element as <code>self</code> does.</p>
 
   <div class="table-wrapper">
     <table>
@@ -375,6 +393,15 @@
       </thead>
 
       <tbody>
+        <tr>
+          <td>{{ js('RM.text("Content")') }}</td>
+          <td>{{ svg('
+            <text>Content</text>
+          ')}}</td>
+          <td>{{ svg('<text>') }}</td>
+          <td>{{ svg('<text>') }}</td>
+        </tr>
+
         <tr>
           <td>{{ js('RM.circle(50, "Content")') }}</td>
           <td>{{ svg('
@@ -446,13 +473,11 @@
     </table>
   </div>
 
-  <p>Additionally, if a <code>circle</code>, <code>sector</code> or a <code>dsector</code> is created without any content, there's no need for a <code>&lt;g&gt;</code> wrapper around the single generated SVG element, in which case <code>wrapper</code> will point to the same object as <code>self</code> does.</p>
-
   {{ heading('h2', 'Examples') }}
 
   {{ heading('h3', 'Color wheel') }}
 
-  <p>This example demonstrates a simple colored wheel where clicking on a sector displays that sector's color in the center circle, as well as colors the ring around the circle in the selected color. Since <code>includeTabIndexes</code> is set to <code>true</code> in the menu options, the menu can also be traversed by using the Tab key. Additional code is added below so that the currently focused sector can be selected by pressing Enter.</p>
+  <p>This example demonstrates a simple color wheel where clicking on a sector displays that sector's color in the center circle, as well as colors the ring around the circle in the selected color. Since <code>includeTabIndexes</code> is set to <code>true</code> in the menu options, the menu can also be traversed by using the Tab key. Additional code is added below so that the currently focused sector can be selected by pressing Enter.</p>
 
   {{ example('
     const colors1 = ["#FF5858", "#FFA458", "#FFC758", "#FFE258", "#FFFF58", "#BAEE52", "#46CC46", "#359999", "#4765AB", "#624AB0", "#8541AB", "#CD4793"];
