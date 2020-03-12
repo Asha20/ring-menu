@@ -18,7 +18,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6,
-p, em, li {
+p, em, li, th {
   color: #333;
 }
 
@@ -41,8 +41,11 @@ p, em, li {
   text-shadow: 1px 1px black;
 }
 
-p code, ul code {
+p code, ul code, th code {
   font-size: 70%;
+}
+
+p code, ul code {
   color: rgb(77, 77, 255);
 }
 
@@ -106,6 +109,30 @@ circle, path {
 
 text {
   font-size: 75%;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #1a1a1a;
+}
+
+th {
+  font-weight: normal;
+  color: white;
+  padding: 20px;
+}
+
+tbody {
+  background: #2b2b2b;
 }
 
 @media only screen and (min-width: 1000px) {

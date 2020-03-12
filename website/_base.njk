@@ -24,6 +24,14 @@
   </article>
   {% endmacro %}
 
+  {% macro js(code) %}
+    <pre><code class="language-javascript">{{ code | escape }}</code></pre>
+  {% endmacro %}
+
+  {% macro svg(code) %}
+    <pre><code class="language-svg">{{ code | escape }}</code></pre>
+  {% endmacro %}
+
   {% macro heading(type, title) %}
     <div class="heading {{ type }}">
       <a class="permalink" href="#{{title | joinStr}}">#</a>

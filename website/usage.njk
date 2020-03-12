@@ -361,6 +361,93 @@
 
   <p>As for the text element, since we want to change its content on every click of the circle, we update the <code>refs.count.self</code> element, as the <code>refs.count.wrapper</code> element also points to the same <code>&lt;g&gt;</code> wrapper.</p>
 
+  <p>An overview of how exactly <code>refs</code> works:</p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Part</th>
+          <th>SVG representation</th>
+          <th><code>wrapper</code></th>
+          <th><code>self</code></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>{{ js('RM.circle(50, "Content")') }}</td>
+          <td>{{ svg('
+            <g>
+              <circle>
+              <text>Content</text>
+            </g>
+          ')}}</td>
+          <td>{{ svg('<g>') }}</td>
+          <td>{{ svg('<circle>') }}</td>
+        </tr>
+
+        <tr>
+          <td>{{ js('RM.sector("Content")') }}</td>
+          <td>{{ svg('
+            <g>
+              <path></path>
+              <text>Content</text>
+            </g>
+          ')}}</td>
+          <td>{{ svg('<g>') }}</td>
+          <td>{{ svg('<path>') }}</td>
+        </tr>
+
+        <tr>
+          <td>{{ js('RM.dsector("Content")') }}</td>
+          <td>{{ svg('
+            <g>
+              <path></path>
+              <text>Content</text>
+            </g>
+          ')}}</td>
+          <td>{{ svg('<g>') }}</td>
+          <td>{{ svg('<path>') }}</td>
+        </tr>
+
+        <tr>
+          <td>{{ js('
+            RM.ring(150, [
+              // Sectors go here
+            ])
+          ') }}</td>
+          <td>{{ svg('
+            <g>
+              <!-- Sectors go here -->
+            </g>
+          ')}}</td>
+          <td>{{ svg('<g>') }}</td>
+          <td>{{ svg('<g>') }}</td>
+        </tr>
+
+        <tr>
+          <td>{{ js('
+            RM.menu(200, [
+              // Menu parts go here
+            ])
+          ')}}</td>
+          <td>{{ svg('
+            <svg>
+              <g>
+                <!-- Menu parts go here -->
+              </g>
+            </svg>
+          ')}}</td>
+          <td>{{ svg('<g>') }}</td>
+          <td>{{ svg('<g>') }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Additionally, if a <code>circle</code>, <code>sector</code> or a <code>dsector</code> is created without any content, there's no need for a <code>&lt;g&gt;</code> wrapper around the single generated SVG element, in which case <code>wrapper</code> will point to the same object as <code>self</code> does.</p>
+
   {{ heading('h2', 'Examples') }}
 
   {{ heading('h3', 'Color wheel') }}
