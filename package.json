@@ -4,9 +4,12 @@
   "description": "Create interactive ring-shaped SVG menus with ease.",
   "browser": "dist/ring-menu.js",
   "module": "es6/ring-menu.js",
-  "main": "index.js",
+  "files": [
+    "dist/",
+    "es6/"
+  ],
   "scripts": {
-    "build": "rimraf dist/ es6/ && rollup -c --environment BUILD:production && node scripts/build-website.js",
+    "build": "rimraf dist/ es6/ && rollup -c --environment BUILD:production && npm run website:build",
     "start": "rollup -c --watch",
     "website:build": "rimraf public/ && node scripts/build-website.js",
     "website:watch": "node scripts/watch-website.js",
@@ -16,10 +19,15 @@
     "circle",
     "ring",
     "menu",
-    "radial"
+    "radial",
+    "svg"
   ],
   "author": "Vukašin Stepanović <vukasinstepanovic@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Asha20/ring-menu.git"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.25",
     "@types/jest-expect-message": "^1.0.1",
