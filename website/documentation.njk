@@ -524,6 +524,38 @@
       }
     });
   ')}}
+
+  {{ heading('h2', 'API') }}
+
+  {{ ts('
+    function dynamic(factor: number): Dynamic;
+
+    function text(content: string, attrs?: object): Text;
+
+    function circle(radius: number): Circle;
+    function circle(radius: number, attrs?: object): Circle;
+    function circle(radius: number, content?: Content, attrs?: object): Circle;
+
+    function gap(width: number): Gap;
+
+    function sector(attrs?: object): Sector;
+    function sector(content: Content, attrs?: object): Sector;
+    function sector(angle: Angle, offset?: Angle, attrs?: object): Sector;
+    function sector(content?: Content, angle?: Angle, attrs?: object): Sector;
+    function sector(content?: Content, angle?: Angle, offset?: Angle, attrs?: object): Sector;
+
+    function dsector(attrs?: object): Sector;
+    function dsector(content: Content, attrs?: object): Sector;
+    function dsector(angleFactor: number, offsetFactor?: number, attrs?: object): Sector;
+    function dsector(content?: Content, angleFactor?: number, attrs?: object): Sector;
+    function dsector(content?: Content, angleFactor?: number, offsetFactor?: number, attrs?: object): Sector;
+
+    function ring(width: number, sectors: Sectors, attrs?: object): Ring;
+    function ring(width: number, globalOfset: Angle, sectors: Sectors, attrs?: object): Ring;
+    function ring(width: number, globalOfset: Angle, offset: Angle, sectors: Sectors, attrs?: object): Ring;
+
+    function menu(structure: NonEmptyArray<Circle | Gap | Ring>, attrs?: object): Menu;
+  ')}}
 </main>
 
 {{ nav(page) }}
