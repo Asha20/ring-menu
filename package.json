@@ -1,6 +1,6 @@
 {
   "name": "ring-menu",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Create interactive ring-shaped SVG menus with ease.",
   "browser": "dist/ring-menu.js",
   "module": "es6/ring-menu.js",
@@ -14,7 +14,6 @@
     "website:build": "rimraf public/ && node scripts/build-website.js",
     "website:watch": "node scripts/watch-website.js",
     "test": "jest",
-
     "preversion": "npm test"
   },
   "keywords": [
