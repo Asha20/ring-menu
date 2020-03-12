@@ -75,9 +75,16 @@ it("Correct function overloading", () => {
     offset: 20,
   });
 
-  expect(sector("Five", 10, 20, { fill: "pink" })).toEqual({
+  expect(sector("Five", 10, { fill: "red" })).toEqual({
     ...defaults,
     content: "Five",
+    angle: 10,
+    attrs: { fill: "red" },
+  });
+
+  expect(sector("Six", 10, 20, { fill: "pink" })).toEqual({
+    ...defaults,
+    content: "Six",
     angle: 10,
     offset: 20,
     attrs: { fill: "pink" },

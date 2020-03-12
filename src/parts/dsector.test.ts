@@ -69,9 +69,16 @@ it("Correct usage", () => {
     offset: d(20),
   });
 
-  expect(dsector("Five", 10, 20, { fill: "pink" })).toEqual({
+  expect(dsector("Five", 10, { fill: "red" })).toEqual({
     ...defaults,
     content: "Five",
+    angle: d(10),
+    attrs: { fill: "red" },
+  });
+
+  expect(dsector("Six", 10, 20, { fill: "pink" })).toEqual({
+    ...defaults,
+    content: "Six",
     angle: d(10),
     offset: d(20),
     attrs: { fill: "pink" },

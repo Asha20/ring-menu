@@ -26,6 +26,11 @@ export function dsector(
 export function dsector(
   content?: Content,
   angleFactor?: number,
+  attrs?: AnyObject,
+): Sector;
+export function dsector(
+  content?: Content,
+  angleFactor?: number,
   offsetFactor?: number,
   attrs?: AnyObject,
 ): Sector;
@@ -41,6 +46,7 @@ export function dsector(...args: any[]): Sector {
     [[Arg.Number, Arg.Number, Arg.Object], () => _dsector(undefined, a, b, c)],
     [[Arg.Content, Arg.Number], () => _dsector(a, b)],
     [[Arg.Content, Arg.Number, Arg.Number], () => _dsector(a, b, c)],
+    [[Arg.Content, Arg.Number, Arg.Object], () => _dsector(a, b, undefined, c)],
     [
       [Arg.Content, Arg.Number, Arg.Number, Arg.Object],
       () => _dsector(a, b, c, d),
