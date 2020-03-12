@@ -1,0 +1,200 @@
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 24px;
+}
+
+body {
+  padding: 1em;
+  margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, em, li, th {
+  color: #333;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+}
+
+.permalink {
+  color: #555;
+  text-decoration: none;
+  font-size: 150%;
+  margin-right: 0.5em;
+  transition: color 0.25s, text-shadow 0.25s ease-in-out;
+}
+
+.permalink:hover,
+.permalink:focus {
+  color: #333;
+  text-shadow: 1px 1px black;
+}
+
+p code, ul code, th code {
+  font-size: 70%;
+}
+
+p code, ul code {
+  color: rgb(77, 77, 255);
+}
+
+.example {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+pre.example__code,
+.example__result {
+  flex: auto;
+}
+
+pre.example__code {
+  min-width: 50%;
+  margin: 0;
+}
+
+pre code {
+  font-size: 80%;
+}
+
+.example__result {
+  min-width: 50%;
+  padding: 20px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav ul {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+nav li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 120%;
+  min-height: 48px;
+}
+
+nav a {
+  display: block;
+  text-decoration: none;
+}
+
+circle, path {
+  stroke: black;
+}
+
+.no-stroke {
+  stroke: none;
+}
+
+text {
+  font-size: 75%;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: #1a1a1a;
+}
+
+th {
+  font-weight: normal;
+  color: white;
+  padding: 20px;
+}
+
+tbody {
+  background: #2b2b2b;
+}
+
+@media only screen and (min-width: 1000px) {
+  body {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  body {
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  nav li {
+    width: 50%;
+  }
+
+  html {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  nav li {
+    width: 100%;
+  }
+}
+
+.h1 { counter-reset: h2counter; }
+.h2 { counter-reset: h3counter; }
+
+.h2 h2:before {
+  counter-increment: h2counter;
+  content: counter(h2counter) ".\0000a0\0000a0";
+}
+
+.h3 h3:before {
+  counter-increment: h3counter;
+  content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+}
+
+/* Main page */
+
+.demonstration svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.hoverable:hover {
+  cursor: pointer;
+}
+
+.hoverable:hover,
+.hoverable:focus {
+  opacity: 0.5;
+}

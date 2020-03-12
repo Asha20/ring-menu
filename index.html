@@ -1,0 +1,64 @@
+<!doctypehtml><html lang="en"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width,initial-scale=1"><meta name="description"content="Showcase and documentation website for the ring-menu library."><meta http-equiv="X-UA-Compatible"content="ie=edge"><link rel="preload"href="prism.css"as="style"onload='this.onload=null,this.rel="stylesheet"'><link rel="preload"href="index.css"as="style"onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel="stylesheet"href="prism.css"><link rel="stylesheet"href="index.css"></noscript><title>RingMenu</title></head><body><nav><ul><li>Home</li><li><a href="documentation.html">Documentation</a></li><li><a href="https://github.com/Asha20/ring-menu">Repository</a></li></ul></nav><main><h1><code>ring-menu</code></h1><div class="demonstration"></div><h2>Installation</h2><p>For direct use in the browser with a <code>&lt;script&gt;</code> tag:</p><pre><code class="language-html">
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/ring-menu/dist/ring-menu.js&quot;&gt;&lt;/script&gt;
+  </code></pre><p>You can now use the <code>RM</code> global variable like so:</p><pre><code class="language-js">
+    const menu = RM.menu([
+      RM.circle(&quot;Foo&quot;),
+    ]);
+
+    const {el} = RM.build(menu);
+  </code></pre><p>ES6 module version for use with code bundlers:</p><pre><code class="language-none">
+    npm install ring-menu
+  </code></pre><p>You can now import the module like so:</p><pre><code class="language-js">
+    import * as RM from &quot;ring-menu/es6/ring-menu&quot;;
+
+    const menu = RM.menu([
+      RM.circle(&quot;Foo&quot;),
+    ]);
+
+    const {el} = RM.build(menu);
+  </code></pre></main><script defer="defer"src="https://cdn.jsdelivr.net/combine/npm/prismjs@1.19.0,npm/prismjs@1.19.0/plugins/autoloader/prism-autoloader.min.js"></script><script defer="defer"src="ring-menu.js"onload="window.onRMLoad&&window.onRMLoad()"></script><script defer="defer"src="index.js"></script><script>function onRMLoad() {
+    const colors1 = ["#FF5858", "#FFA458", "#FFC758", "#FFE258", "#FFFF58", "#BAEE52", "#46CC46", "#359999", "#4765AB", "#624AB0", "#8541AB", "#CD4793"];
+    const colors2 = ["#FF5858", "#FF8858", "#FFA458", "#FFB858", "#FFC758", "#FFD558", "#FFE258", "#FFF058", "#FFFF58", "#DBF655", "#BAEE52", "#92E34E", "#46CC46", "#3CAF7E", "#359999", "#4079A4", "#4765AB", "#4F4FB3", "#624AB0", "#7246AE", "#8641AB", "#A739A7", "#CD4693", "#E44E7B"];
+
+    const colorSector = color => RM.sector({fill: color, class: "color hoverable"})
+
+    const menu = RM.menu([
+      RM.circle(50, RM.text("", {fill: "white", ref: "selectedColor"})),
+      RM.gap(25),
+      RM.ring(20, [
+        RM.sector({class: "no-stroke", ref: "colorRing"}),
+      ]),
+      RM.gap(25),
+      RM.ring(100, colors1.map(colorSector)),
+      RM.gap(25),
+      RM.ring(100, 0, RM.dynamic(0.5), colors2.map(colorSector)),
+    ]);
+
+    const {el, refs} = RM.build(menu, {includeTabIndexes: true});
+
+    function updateSelectedColor(color) {
+      refs.colorRing.self.setAttribute("fill", color);
+      refs.selectedColor.self.textContent = color;
+    }
+
+    // Make it so that sectors can be selected using Tab + Enter as well
+    el.addEventListener("keypress", e => {
+      if (e.key === "Enter" && el.contains(document.activeElement)) {
+        document.activeElement.dispatchEvent(new MouseEvent("click", {
+          bubbles: true,
+          cancellable: true,
+        }));
+      }
+    })
+
+    el.addEventListener("click", e => {
+      if (e.target.matches(".color")) {
+        const newColor = e.target.getAttribute("fill");
+        updateSelectedColor(newColor);
+      }
+    });
+
+    document.querySelector(".demonstration").appendChild(el);
+
+    el.style.height = window.getComputedStyle(el).width;
+  }</script></body></html>
