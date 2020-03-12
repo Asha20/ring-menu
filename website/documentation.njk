@@ -1,10 +1,13 @@
-{% set page = 'usage.html' %}
-{% set title = 'Usage | RingMenu' %}
-{% set description = 'An explanation of how to use the RingMenu library.' %}
+{% set page = 'documentation.html' %}
+{% set title = 'Documentation | RingMenu' %}
+{% set description = 'An explanation of how to use the ring-menu library.' %}
 {% extends '_base.njk' %}
 
 {% block page %}
-  {{ heading('h1', 'Usage') }}
+{{ nav(page) }}
+
+<main>
+  {{ heading('h1', 'Documentation') }}
 
   {{ heading('h2', 'Structure of a ring menu') }}
   
@@ -494,7 +497,7 @@
       RM.gap(25),
       RM.ring(100, colors1.map(colorSector)),
       RM.gap(25),
-      RM.ring(100, colors2.map(colorSector)),
+      RM.ring(100, 0, RM.dynamic(0.5), colors2.map(colorSector)),
     ]);
 
     const {el, refs} = RM.build(menu, {includeTabIndexes: true});
@@ -521,4 +524,7 @@
       }
     });
   ')}}
+</main>
+
+{{ nav(page) }}
 {% endblock %}

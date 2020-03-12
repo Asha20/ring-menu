@@ -24,13 +24,15 @@
   </article>
   {% endmacro %}
 
-  {% macro js(code) %}
-    <pre><code class="language-javascript">{{ code | escape }}</code></pre>
+  {% macro highlight(lang, code) %}
+    <pre><code class="language-{{lang}}">{{ code | escape }}</code></pre>
   {% endmacro %}
 
-  {% macro svg(code) %}
-    <pre><code class="language-svg">{{ code | escape }}</code></pre>
-  {% endmacro %}
+  {% macro js(code) %}{{ highlight('js', code) }}{% endmacro %}
+  {% macro ts(code) %}{{ highlight('typescript', code) }}{% endmacro %}
+  {% macro html(code) %}{{ highlight('html', code) }}{% endmacro %}
+  {% macro svg(code) %}{{ highlight('svg', code) }}{% endmacro %}
+  {% macro text(code) %}{{ highlight('none', code) }}{% endmacro %}
 
   {% macro heading(type, title) %}
     <div class="heading {{ type }}">
@@ -50,24 +52,21 @@
   {% macro nav(currentPage) %}
     <nav>
       <ul>
-        {{ navLink('usage.html', 'Usage', currentPage) }}
+        {{ navLink('index.html', 'Home', currentPage) }}
+        {{ navLink('documentation.html', 'Documentation', currentPage) }}
+        {{ navLink('https://github.com/Asha20/ring-menu', 'Repository', currentPage) }}
       </ul>
     </nav>
   {% endmacro %}
 
 
   
-  {{ nav(page) }}
+  {% block page %}{% endblock %}
 
-  <main>
-    {% block page %}{% endblock %}
-  </main>
-
-  {{ nav(page) }}
-
-  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.18.0/prism.min.js"></script>
-  <script defer src="ring-menu.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/prismjs@1.19.0,npm/prismjs@1.19.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script defer src="ring-menu.js" onload="window.onRMLoad && window.onRMLoad()"></script>
   <script defer src="index.js"></script>
+  {% block scripts %}{% endblock %}
 </body>
 
 </html>

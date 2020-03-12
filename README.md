@@ -28,7 +28,7 @@ ES6 module version for use with code bundlers:
 npm install ring-menu
 ```
 
-You can now import the ES6 code like so:
+You can now import the module like so:
 
 ```js
 import * as RM from "ring-menu/es6/ring-menu";

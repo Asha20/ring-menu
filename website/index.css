@@ -181,3 +181,20 @@ tbody {
   counter-increment: h3counter;
   content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
 }
+
+/* Main page */
+
+.demonstration svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.hoverable:hover {
+  cursor: pointer;
+}
+
+.hoverable:hover,
+.hoverable:focus {
+  opacity: 0.5;
+}
