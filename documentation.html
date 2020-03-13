@@ -1,14 +1,14 @@
-<!doctypehtml><html lang="en"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width,initial-scale=1"><meta name="description"content="An explanation of how to use the ring-menu library."><meta http-equiv="X-UA-Compatible"content="ie=edge"><link rel="preload"href="prism.css"as="style"onload='this.onload=null,this.rel="stylesheet"'><link rel="preload"href="index.css"as="style"onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel="stylesheet"href="prism.css"><link rel="stylesheet"href="index.css"></noscript><title>Documentation | RingMenu</title></head><body><nav><ul><li><a href="index.html">Home</a></li><li>Documentation</li><li><a href="https://github.com/Asha20/ring-menu">Repository</a></li></ul></nav><main><div class="heading h1"><a class="permalink"href="#Documentation">#</a><h1 id="Documentation">Documentation</h1></div><div class="heading h2"><a class="permalink"href="#Structure_of_a_ring_menu">#</a><h2 id="Structure_of_a_ring_menu">Structure of a ring menu</h2></div><div class="heading h3"><a class="permalink"href="#Circles">#</a><h3 id="Circles">Circles</h3></div><p>Menus are assembled from the inside out. Let's take a look at the simplest menu possible; a menu that only contains one <em>circle</em>.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+<!doctypehtml><html lang="en"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width,initial-scale=1"><meta name="description"content="An explanation of how to use the ring-menu library."><meta http-equiv="X-UA-Compatible"content="ie=edge"><link rel="preload"href="prism.css"as="style"onload='this.onload=null,this.rel="stylesheet"'><link rel="preload"href="index.css"as="style"onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel="stylesheet"href="prism.css"><link rel="stylesheet"href="index.css"></noscript><title>Documentation | RingMenu</title></head><body><nav><ul><li><a href="index.html">Home</a></li><li>Documentation</li><li><a href="https://github.com/Asha20/ring-menu">Repository</a></li></ul></nav><main><div class="heading h1"><a class="permalink"href="#Documentation">#</a><h1 id="Documentation">Documentation</h1></div><div class="heading h2"><a class="permalink"href="#Structure_of_a_ring_menu">#</a><h2 id="Structure_of_a_ring_menu">Structure of a ring menu</h2></div><div class="heading h3"><a class="permalink"href="#Circles">#</a><h3 id="Circles">Circles</h3></div><p>Menus are assembled from the inside out. Let's take a look at the simplest menu possible; a menu that only contains one <em>circle</em>.</p><article class="example"><section class="example__result"style="min-height:100px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.circle(50, &quot;Circle&quot;, {fill: &quot;papayawhip&quot;}),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Circles are optional and can only be found in the very center of a menu. Here we've provided the circle's radius, content and the attributes we want on the circle.</p><div class="heading h3"><a class="permalink"href="#Text">#</a><h3 id="Text">Text</h3></div><p>If you'd like to specify attributes on the text content itself, wrap it in a <code>RM.text</code>:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Circles are optional and can only be found in the very center of a menu. Here we've provided the circle's radius, content and the attributes we want on the circle.</p><div class="heading h3"><a class="permalink"href="#Text">#</a><h3 id="Text">Text</h3></div><p>If you'd like to specify attributes on the text content itself, wrap it in a <code>RM.text</code>:</p><article class="example"><section class="example__result"style="min-height:100px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.circle(50, RM.text(&quot;Circle&quot;, {fill: &quot;blue&quot;}), {fill: &quot;papayawhip&quot;}),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><div class="heading h3"><a class="permalink"href="#Rings_and_sectors">#</a><h3 id="Rings_and_sectors">Rings and sectors</h3></div><p>Menus are mostly made out of <em>rings</em>. A <em>ring</em> is a collection of <em>sectors</em> which are all on the same distance from the center of the menu. A <em>sector</em> is an SVG <code>&lt;path&gt;</code> element. Sectors are rendered clockwise starting from the top, in the order they're provided to the ring.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><div class="heading h3"><a class="permalink"href="#Rings_and_sectors">#</a><h3 id="Rings_and_sectors">Rings and sectors</h3></div><p>Menus are mostly made out of <em>rings</em>. A <em>ring</em> is a collection of <em>sectors</em> which are all on the same distance from the center of the menu. A <em>sector</em> is an SVG <code>&lt;path&gt;</code> element. Sectors are rendered clockwise starting from the top, in the order they're provided to the ring.</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.circle(50, &quot;Circle&quot;, {fill: &quot;papayawhip&quot;}),
       RM.ring(100, [
@@ -17,7 +17,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Here we specified a ring with a width of 100 pixels that consists of two sectors. Notice how we didn't need to specify the size of our sectors; they split the ring into equal parts by themselves. What if we wanted our ring to have six sectors instead? Also, since it's already been mentioned that circles are optional, let's make this menu not have one:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Here we specified a ring with a width of 100 pixels that consists of two sectors. Notice how we didn't need to specify the size of our sectors; they split the ring into equal parts by themselves. What if we wanted our ring to have six sectors instead? Also, since it's already been mentioned that circles are optional, let's make this menu not have one:</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.ring(150, [
         RM.sector(&quot;Sector 1&quot;, {fill: &quot;lightblue&quot;}),
@@ -29,7 +29,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>As you might have expected, the six sectors divide the ring equally. Also, because menus are always built from the inside out and we didn't use a circle in this menu, it means that the ring will start from the very center of the menu, resulting in a menu that looks kind of like a pie chart.</p><p>The great thing about menus is that they can have an arbitrary amount of rings, which are all independent one from another. Let's say we wanted a menu that has one ring with three sectors inside, with another ring with two sectors around the first ring. We can construct that menu like so:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>As you might have expected, the six sectors divide the ring equally. Also, because menus are always built from the inside out and we didn't use a circle in this menu, it means that the ring will start from the very center of the menu, resulting in a menu that looks kind of like a pie chart.</p><p>The great thing about menus is that they can have an arbitrary amount of rings, which are all independent one from another. Let's say we wanted a menu that has one ring with three sectors inside, with another ring with two sectors around the first ring. We can construct that menu like so:</p><article class="example"><section class="example__result"style="min-height:400px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.ring(100, [
         RM.sector(&quot;Inner 1&quot;, {fill: &quot;lightblue&quot;}),
@@ -42,7 +42,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><div class="heading h3"><a class="permalink"href="#Gaps">#</a><h3 id="Gaps">Gaps</h3></div><p>What if we wanted to include some space between the two rings in the previous example? We can do that by using a <em>gap</em>. A <em>gap</em> is simply a ring of empty space. A menu can have an arbitrary amount of gaps.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><div class="heading h3"><a class="permalink"href="#Gaps">#</a><h3 id="Gaps">Gaps</h3></div><p>What if we wanted to include some space between the two rings in the previous example? We can do that by using a <em>gap</em>. A <em>gap</em> is simply a ring of empty space. A menu can have an arbitrary amount of gaps.</p><article class="example"><section class="example__result"style="min-height:580px"></section><pre class="example__code"><code class="language-javascript">
       const menu = RM.menu([
         RM.gap(40),
         RM.ring(100, [
@@ -57,7 +57,7 @@
         ]),
       ]);
       const { el } = RM.build(menu);
-    </code></pre></article><p>Here we've added a 50 pixel wide gap between the two rings. Notice how we've also added a 40 pixel wide gap before the first ring. If you don't need a <em>circle</em> in the center of your menu, but you also don't want your first ring to start from the center, then use a <em>gap</em>.</p><div class="heading h2"><a class="permalink"href="#Angles_and_offsets">#</a><h2 id="Angles_and_offsets">Angles and offsets</h2></div><div class="heading h3"><a class="permalink"href="#Static_angles">#</a><h3 id="Static_angles">Static angles</h3></div><p>While having sectors divide the ring equally by default might be useful in some cases, sometimes you'll want to specify the angle of each sector yourself. You can do that like so:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+    </code></pre></article><p>Here we've added a 50 pixel wide gap between the two rings. Notice how we've also added a 40 pixel wide gap before the first ring. If you don't need a <em>circle</em> in the center of your menu, but you also don't want your first ring to start from the center, then use a <em>gap</em>.</p><div class="heading h2"><a class="permalink"href="#Angles_and_offsets">#</a><h2 id="Angles_and_offsets">Angles and offsets</h2></div><div class="heading h3"><a class="permalink"href="#Static_angles">#</a><h3 id="Static_angles">Static angles</h3></div><p>While having sectors divide the ring equally by default might be useful in some cases, sometimes you'll want to specify the angle of each sector yourself. You can do that like so:</p><article class="example"><section class="example__result"style="min-height:280px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.gap(40),
       RM.ring(100, [
@@ -67,7 +67,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Here we've constructed sectors of angles of 30, 40 and 50 degrees. The sum of the sector angles doesn't have to be equal to 360 degrees for them to render, but it must not be larger than 360.</p><div class="heading h3"><a class="permalink"href="#Static_offsets">#</a><h3 id="Static_offsets">Static offsets</h3></div><p>What if we wanted to have empty space between sectors? We can do by specifying an offset on a sector:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Here we've constructed sectors of angles of 30, 40 and 50 degrees. The sum of the sector angles doesn't have to be equal to 360 degrees for them to render, but it must not be larger than 360.</p><div class="heading h3"><a class="permalink"href="#Static_offsets">#</a><h3 id="Static_offsets">Static offsets</h3></div><p>What if we wanted to have empty space between sectors? We can do by specifying an offset on a sector:</p><article class="example"><section class="example__result"style="min-height:280px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.gap(40),
       RM.ring(100, [
@@ -77,7 +77,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>In this example we have two offsets, one of 20 degrees and the other one of 50 degrees; resulting in a 20 degree gap between sectors 1 and 2, as well as a 50 degree gap between sectors 2 and 3.</p><p>Optionally, we can set a <em>global offset</em> on the ring. If a sector doesn't have its offset specified, it will use the <em>global offset</em> of its parent ring (which defaults to zero if unspecified).</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>In this example we have two offsets, one of 20 degrees and the other one of 50 degrees; resulting in a 20 degree gap between sectors 1 and 2, as well as a 50 degree gap between sectors 2 and 3.</p><p>Optionally, we can set a <em>global offset</em> on the ring. If a sector doesn't have its offset specified, it will use the <em>global offset</em> of its parent ring (which defaults to zero if unspecified).</p><article class="example"><section class="example__result"style="min-height:280px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.gap(40),
       RM.ring(100, 20, [
@@ -87,7 +87,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Here, the offsets of sectors 1 and 3 are unspecified, so they inherit the ring's global offset of 20 degrees, while sector 2 uses its own offset of 100 degrees.</p><p>If we want to offset the entire ring by some amount, we can define the offset of the ring right after the global offset.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Here, the offsets of sectors 1 and 3 are unspecified, so they inherit the ring's global offset of 20 degrees, while sector 2 uses its own offset of 100 degrees.</p><p>If we want to offset the entire ring by some amount, we can define the offset of the ring right after the global offset.</p><article class="example"><section class="example__result"style="min-height:200px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.ring(100, 0, 45, [
         RM.sector(&quot;1&quot;, {fill: &quot;lightblue&quot;}),
@@ -95,7 +95,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><div class="heading h2"><a class="permalink"href="#Dynamic_values">#</a><h2 id="Dynamic_values">Dynamic values</h2></div><div class="heading h3"><a class="permalink"href="#Dynamic_angles_and_offsets">#</a><h3 id="Dynamic_angles_and_offsets">Dynamic angles and offsets</h3></div><p>Instead of supplying an angle or an offset as a static value, <code>ring-menu</code> also has the concept of <em>dynamic values</em>. A <em>dynamic value</em> has a <em>factor</em> and represents a part of the whole. The higher the factor of a dynamic value, the bigger part of the whole that particular dynamic value will take. Let's take a look at an example:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><div class="heading h2"><a class="permalink"href="#Dynamic_values">#</a><h2 id="Dynamic_values">Dynamic values</h2></div><div class="heading h3"><a class="permalink"href="#Dynamic_angles_and_offsets">#</a><h3 id="Dynamic_angles_and_offsets">Dynamic angles and offsets</h3></div><p>Instead of supplying an angle or an offset as a static value, <code>ring-menu</code> also has the concept of <em>dynamic values</em>. A <em>dynamic value</em> has a <em>factor</em> and represents a part of the whole. The higher the factor of a dynamic value, the bigger part of the whole that particular dynamic value will take. Let's take a look at an example:</p><article class="example"><section class="example__result"style="min-height:200px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -105,7 +105,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>The resulting ring might look familiar; in the beginning of this page, we created a ring with sectors that didn't have defined angles:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>The resulting ring might look familiar; in the beginning of this page, we created a ring with sectors that didn't have defined angles:</p><article class="example"><section class="example__result"style="min-height:200px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -115,7 +115,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>If you don't specify the angle of a sector, it will default to a dynamic value of factor 1. If all sectors in a ring have the same dynamic factor, they will all have equal angles.</p><p>What if we wanted one sector to be twice as large as the other? To do that, we could calculate their angles manually and set them as static values. An easier way would be to make use of dynamic values.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>If you don't specify the angle of a sector, it will default to a dynamic value of factor 1. If all sectors in a ring have the same dynamic factor, they will all have equal angles.</p><p>What if we wanted one sector to be twice as large as the other? To do that, we could calculate their angles manually and set them as static values. An easier way would be to make use of dynamic values.</p><article class="example"><section class="example__result"style="min-height:200px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -125,7 +125,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Sector offsets can be dynamic as well.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Sector offsets can be dynamic as well.</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -135,7 +135,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Sector 1 is twice as big as sector 2, while the space from sector 1 to sector 2 is twice as small as the space from sector 2 to sector 1. Sectors or offsets of the same dynamic factor will have the same angle.</p><p>For convenience, <code>ring-menu</code> also provides a <code>dsector</code> shortcut for creating a sector where the provided angle and offset are dynamic values by default. You can't provide static values to a <code>dsector</code>. Here's the same example as the previous one, this time using <code>dsector</code>:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Sector 1 is twice as big as sector 2, while the space from sector 1 to sector 2 is twice as small as the space from sector 2 to sector 1. Sectors or offsets of the same dynamic factor will have the same angle.</p><p>For convenience, <code>ring-menu</code> also provides a <code>dsector</code> shortcut for creating a sector where the provided angle and offset are dynamic values by default. You can't provide static values to a <code>dsector</code>. Here's the same example as the previous one, this time using <code>dsector</code>:</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -145,7 +145,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>A ring offset can also be a dynamic value.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>A ring offset can also be a dynamic value.</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -157,7 +157,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><div class="heading h3"><a class="permalink"href="#Mixing_dynamic_and_static_values">#</a><h3 id="Mixing_dynamic_and_static_values">Mixing dynamic and static values</h3></div><p>Let's say you wanted a ring of sectors with fixed angles, but you also wanted to make sure that the space between each sector is equal. It's easy with dynamic values:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><div class="heading h3"><a class="permalink"href="#Mixing_dynamic_and_static_values">#</a><h3 id="Mixing_dynamic_and_static_values">Mixing dynamic and static values</h3></div><p>Let's say you wanted a ring of sectors with fixed angles, but you also wanted to make sure that the space between each sector is equal. It's easy with dynamic values:</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -170,7 +170,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>Remember that dynamic values represent parts of a whole. This whole is the entire 360 degrees minus any static angles or offsets your sectors might have. If you were to calculate the offsets manually, you'd first have to calculate the whole and divide it by the number of sectors. Using dynamic values does all of that for you under the hood.</p><p>We could just as easily do the opposite; make a ring where the offsets between sectors are static while the sectors themselves are dynamic:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Remember that dynamic values represent parts of a whole. This whole is the entire 360 degrees minus any static angles or offsets your sectors might have. If you were to calculate the offsets manually, you'd first have to calculate the whole and divide it by the number of sectors. Using dynamic values does all of that for you under the hood.</p><p>We could just as easily do the opposite; make a ring where the offsets between sectors are static while the sectors themselves are dynamic:</p><article class="example"><section class="example__result"style="min-height:300px"></section><pre class="example__code"><code class="language-javascript">
     const d = RM.dynamic;
 
     const menu = RM.menu([
@@ -183,7 +183,7 @@
       ]),
     ]);
     const { el } = RM.build(menu);
-  </code></pre></article><p>We've ensured that the space between each sector is exactly 30 degrees, while also making sector 3 twice as large as the others.</p><div class="heading h2"><a class="permalink"href="#Interactivity">#</a><h2 id="Interactivity">Interactivity</h2></div><div class="heading h3"><a class="permalink"href="#Refs">#</a><h3 id="Refs">Refs</h3></div><p>Sometimes you might want to interact with a part of the menu, like for example to add an event listener. Instead of having to add a class to the part and then query the DOM for it, you may use the special <code>ref</code> attribute like so:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>We've ensured that the space between each sector is exactly 30 degrees, while also making sector 3 twice as large as the others.</p><div class="heading h2"><a class="permalink"href="#Interactivity">#</a><h2 id="Interactivity">Interactivity</h2></div><div class="heading h3"><a class="permalink"href="#Refs">#</a><h3 id="Refs">Refs</h3></div><p>Sometimes you might want to interact with a part of the menu, like for example to add an event listener. Instead of having to add a class to the part and then query the DOM for it, you may use the special <code>ref</code> attribute like so:</p><article class="example"><section class="example__result"style="min-height:250px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.gap(50),
       RM.ring(75, [
@@ -202,7 +202,7 @@
       angle = 0;
       refs.ring.wrapper.style = `transform: rotate(${angle}deg)`;
     });
-  </code></pre></article><p>Along with the resulting SVG in the <code>el</code> property, you also get a <code>refs</code>, which is an object whose keys are the <code>ref</code> strings you've specified, and the values are the SVG elements themselves.</p><p>Note that each ref actually has two properties: <code>wrapper</code> and <code>self</code>. Let's say we had a circle. We want the number inside the circle to increase whenever the circle is clicked. We would do that like so:</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+  </code></pre></article><p>Along with the resulting SVG in the <code>el</code> property, you also get a <code>refs</code>, which is an object whose keys are the <code>ref</code> strings you've specified, and the values are the SVG elements themselves.</p><p>Note that each ref actually has two properties: <code>wrapper</code> and <code>self</code>. Let's say we had a circle. We want the number inside the circle to increase whenever the circle is clicked. We would do that like so:</p><article class="example"><section class="example__result"style="min-height:200px"></section><pre class="example__code"><code class="language-javascript">
     const menu = RM.menu([
       RM.circle(100, RM.text(&quot;0&quot;, {ref: &quot;count&quot;}), {ref: &quot;click&quot;, fill: &quot;lightgreen&quot;}),
     ]);
@@ -254,11 +254,11 @@
                 &lt;!-- Menu parts go here --&gt;
               &lt;/g&gt;
             &lt;/svg&gt;
-          </code></pre></td><td><pre><code class="language-svg">&lt;g&gt;</code></pre></td><td><pre><code class="language-svg">&lt;g&gt;</code></pre></td></tr></tbody></table></div><div class="heading h2"><a class="permalink"href="#Examples">#</a><h2 id="Examples">Examples</h2></div><div class="heading h3"><a class="permalink"href="#Color_wheel">#</a><h3 id="Color_wheel">Color wheel</h3></div><p>This example demonstrates a simple color wheel where clicking on a sector displays that sector's color in the center circle, as well as colors the ring around the circle in the selected color. Since <code>includeTabIndexes</code> is set to <code>true</code> in the menu options, the menu can also be traversed by using the Tab key. Additional code is added below so that the currently focused sector can be selected by pressing Enter.</p><article class="example"><section class="example__result"></section><pre class="example__code"><code class="language-javascript">
+          </code></pre></td><td><pre><code class="language-svg">&lt;g&gt;</code></pre></td><td><pre><code class="language-svg">&lt;g&gt;</code></pre></td></tr></tbody></table></div><div class="heading h2"><a class="permalink"href="#Examples">#</a><h2 id="Examples">Examples</h2></div><div class="heading h3"><a class="permalink"href="#Color_wheel">#</a><h3 id="Color_wheel">Color wheel</h3></div><p>This example demonstrates a simple color wheel where clicking on a sector displays that sector's color in the center circle, as well as colors the ring around the circle in the selected color. Since <code>includeTabIndexes</code> is set to <code>true</code> in the menu options, the menu can also be traversed by using the Tab key. Additional code is added below so that the currently focused sector can be selected by pressing Enter.</p><article class="example"><section class="example__result"style="min-height:690px"></section><pre class="example__code"><code class="language-javascript">
     const colors1 = [&quot;#FF5858&quot;, &quot;#FFA458&quot;, &quot;#FFC758&quot;, &quot;#FFE258&quot;, &quot;#FFFF58&quot;, &quot;#BAEE52&quot;, &quot;#46CC46&quot;, &quot;#359999&quot;, &quot;#4765AB&quot;, &quot;#624AB0&quot;, &quot;#8541AB&quot;, &quot;#CD4793&quot;];
     const colors2 = [&quot;#FF5858&quot;, &quot;#FF8858&quot;, &quot;#FFA458&quot;, &quot;#FFB858&quot;, &quot;#FFC758&quot;, &quot;#FFD558&quot;, &quot;#FFE258&quot;, &quot;#FFF058&quot;, &quot;#FFFF58&quot;, &quot;#DBF655&quot;, &quot;#BAEE52&quot;, &quot;#92E34E&quot;, &quot;#46CC46&quot;, &quot;#3CAF7E&quot;, &quot;#359999&quot;, &quot;#4079A4&quot;, &quot;#4765AB&quot;, &quot;#4F4FB3&quot;, &quot;#624AB0&quot;, &quot;#7246AE&quot;, &quot;#8641AB&quot;, &quot;#A739A7&quot;, &quot;#CD4693&quot;, &quot;#E44E7B&quot;];
 
-    const colorSector = color =&gt; RM.sector({fill: color, class: &quot;color&quot;})
+    const colorSector = color =&gt; RM.sector({fill: color, class: &quot;color hoverable&quot;})
 
     const menu = RM.menu([
       RM.circle(50, RM.text(&quot;&quot;, {fill: &quot;white&quot;, ref: &quot;selectedColor&quot;})),

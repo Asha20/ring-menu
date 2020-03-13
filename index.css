@@ -60,6 +60,10 @@ pre.example__code,
   flex: auto;
 }
 
+.example__result {
+  box-sizing: content-box;
+}
+
 pre.example__code {
   min-width: 50%;
   margin: 0;
